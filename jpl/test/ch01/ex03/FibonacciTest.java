@@ -1,4 +1,4 @@
-package ch01.ex04;
+package ch01.ex03;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
@@ -10,30 +10,31 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SqureTest {
+import ch01.ex03.Fibonacci;
+
+public class FibonacciTest {
 	private PrintStream printStream;
 	private ByteArrayOutputStream byteArrayOutputStream;
 
 	@Before
-	public void bofore() {
+	public void setUp() {
 		byteArrayOutputStream = new ByteArrayOutputStream();
 		printStream = new PrintStream(byteArrayOutputStream);
 		System.setOut(printStream);
 	}
 
 	@Test
-	public void testSqure() {
-		Squre.main(null);
+	public void testHelloWorld() {
+		Fibonacci.main(null);
 		System.out.flush();
-
-		String[] arrayStr = byteArrayOutputStream.toString().split(System.lineSeparator());
-		for (int i = 0; i < Squre.UPPER_LIMIT; i++) {
-			assertThat(Integer.parseInt(arrayStr[i]), is(i * i));
-		}
+		String expected = "Fibonacci" + System.lineSeparator();
+		String actual = byteArrayOutputStream.toString().substring(0,expected.length());
+		assertThat(actual, is(expected));
 	}
 
 	@After
 	public void end() {
 		System.setOut(printStream);
 	}
+
 }

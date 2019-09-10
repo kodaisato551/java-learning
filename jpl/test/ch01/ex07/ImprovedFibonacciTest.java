@@ -1,4 +1,4 @@
-package ch01.ex0３;
+package ch01.ex07;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
@@ -10,9 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch01.ex03.Fibonacci;
-
-public class FibonacciTest {
+public class ImprovedFibonacciTest {
 	private PrintStream printStream;
 	private ByteArrayOutputStream byteArrayOutputStream;
 
@@ -24,17 +22,29 @@ public class FibonacciTest {
 	}
 
 	@Test
-	public void testHelloWorld() {
-		Fibonacci.main(null);
+	public void testImprovedFibonacci() {
+		ImprovedFibonacci.main(null);
 		System.out.flush();
-		String expected = "Fibonacci" + System.lineSeparator();
-		String actual = byteArrayOutputStream.toString().substring(0,expected.length());
-		assertThat(actual, is(expected));
+
+		int lo = 1;
+		int hi = 1;
+		String mark;
+		String[] actualArray = byteArrayOutputStream.toString().split(System.lineSeparator());
+		assertThat(actualArray[0], is("1: " + lo));
+		for (int i = 2; i <= ImprovedFibonacci.MAX_INTEGER; i++) {
+			if (hi % 2 == 0)
+				mark = " *";
+			else
+				mark = "";
+			assertThat(actualArray[i - 1], is(i + ": " + hi + mark));
+			hi = lo + hi;
+			lo = hi - lo;
+		}
+
 	}
 
 	@After
 	public void end() {
 		System.setOut(printStream);
 	}
-
 }
