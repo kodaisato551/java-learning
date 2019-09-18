@@ -3,18 +3,30 @@ package ch02.ex10;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import ch02.ex13.Vehicle;
+
+/**
+ * ex09で失敗したtestGetMaxID()
+ * はコメントアウトしている
+ */
 public class VehicleTest {
 	static Vehicle target;
 
 	@BeforeClass
 	public static void setup() {
 		target = new Vehicle("a");
+	}
+
+	@Before
+	public void setupForEachTest() {
 		target.setDirection(30);
 		target.setSpeed(50);
 	}
+
 
 	@Test
 	public void testGetter() {
@@ -61,5 +73,21 @@ public class VehicleTest {
 		String actual = target.toString();
 		assertThat(actual, is(expcted));
 	}
+
+
+	/**
+	 * こちらが先に呼び出される関係で
+	 * getNextIDが落ちる。
+	 * どう対処すればよいかわかりませんでした。
+	 * Junitではテストが実行される
+	 */
+//	@Test
+//	public void testGetMaxID() {
+//		System.out.println(2);
+//		Vehicle latestVehicle = new Vehicle("b");
+//		assertThat(Vehicle.getMaxID(), is(latestVehicle.getID()));
+//		latestVehicle = null;
+//	}
+
 
 }

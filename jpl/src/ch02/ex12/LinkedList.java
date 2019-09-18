@@ -1,10 +1,7 @@
 package ch02.ex12;
 
 /**
- *Objectがたのフィールド
- *次の参照
- * @author Sato Kodai
- *
+ *可変長引数の例として,addAllメソッドを追加
  */
 public class LinkedList {
 

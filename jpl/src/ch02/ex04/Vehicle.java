@@ -33,24 +33,24 @@ public class Vehicle {
 		return speed;
 	}
 
-	public void setSpeed(double mSpeed) {
-		this.speed = mSpeed;
+	public void setSpeed(double speed) {
+		this.speed = speed;
 	}
 
 	public double getDirection() {
 		return direction;
 	}
 
-	public void setDirection(double mDirection) {
-		this.direction = mDirection;
+	public void setDirection(double direction) {
+		this.direction = direction;
 	}
 
 	public String getOwner() {
 		return owner;
 	}
 
-	public void setOwner(String mOwner) {
-		this.owner = mOwner;
+	public void setOwner(String owner) {
+		this.owner = owner;
 	}
 
 	public static int getNextID() {

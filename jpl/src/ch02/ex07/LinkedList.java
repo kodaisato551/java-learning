@@ -1,11 +1,6 @@
 package ch02.ex07;
 
-/**
- *Objectがたのフィールド
- *次の参照
- * @author Sato Kodai
- *
- */
+
 public class LinkedList {
 
 	private Object element;

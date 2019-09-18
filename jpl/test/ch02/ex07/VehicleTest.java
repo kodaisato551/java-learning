@@ -3,6 +3,7 @@ package ch02.ex07;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -12,6 +13,10 @@ public class VehicleTest {
 	@BeforeClass
 	public static void setup() {
 		target = new Vehicle("a");
+	}
+
+	@Before
+	public void setupForEachTest() {
 		target.setDirection(30);
 		target.setSpeed(50);
 	}
