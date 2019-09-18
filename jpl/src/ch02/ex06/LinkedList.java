@@ -2,15 +2,22 @@ package ch02.ex06;
 
 import ch02.ex05.Vehicle;
 
-
+/**
+ * LinkedListにVehicleをつなげてmainメソッドで表示する
+ *
+ */
 public class LinkedList {
 
 	private Object element;
 	private LinkedList next;
 
 	public static void main(String[] args) {
-		Vehicle v1 = new Vehicle(10, 20, "a");
-		Vehicle v2 = new Vehicle(30, 40, "b");
+		Vehicle v1 = new Vehicle("a");
+		v1.setDirection(10);
+		v1.setSpeed(20);
+		Vehicle v2 = new Vehicle("b");
+		v2.setDirection(30);
+		v2.setSpeed(40);
 		LinkedList l2 = new LinkedList(v2, null);
 		LinkedList l1 = new LinkedList(v1, l2);
 

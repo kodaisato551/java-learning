@@ -15,11 +15,8 @@ public class Vehicle {
 	}
 
 	public Vehicle(String owner) {
-		System.out.println(nextID);
 		this.owner = owner;
-		ID = nextID;
-		nextID++;
-
+		ID = nextID++;
 	}
 
 	public double getSpeed() {

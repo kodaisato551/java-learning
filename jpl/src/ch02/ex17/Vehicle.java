@@ -20,18 +20,13 @@ public class Vehicle {
 	private static final double DIGREE_MIN = -180.0;
 	private static final double DIGREE_MAX = 180.0;
 
-
-
 	public Vehicle() {
 		this("");
 	}
 
 	public Vehicle(String owner) {
-		System.out.println(nextID);
 		this.owner = owner;
-		ID = nextID;
-		nextID++;
-
+		ID = nextID++;
 	}
 
 	public double getSpeed() {
@@ -47,10 +42,9 @@ public class Vehicle {
 	}
 
 	public void setDirection(double direction) throws IllegalArgumentException {
-		if(direction > DIGREE_MIN && direction <= DIGREE_MAX) {
+		if (direction > DIGREE_MIN && direction <= DIGREE_MAX) {
 			this.direction = direction;
-		}
-		else {
+		} else {
 			throw new IllegalArgumentException("argument must be (-pi,pi]");
 		}
 	}
@@ -78,7 +72,7 @@ public class Vehicle {
 		Vehicle v2 = new Vehicle("b");
 		System.out.println(v2.toString());
 
-		v2.turn(50,TURN_LEFT );
+		v2.turn(50, TURN_LEFT);
 		System.out.println(v2.getDirection());
 	}
 
@@ -108,27 +102,24 @@ public class Vehicle {
 	 * @param rotationMode
 	 * @throws IllegalArgumentException
 	 */
-	public void turn(double rotationAngle,int rotationMode) throws IllegalArgumentException{
+	public void turn(double rotationAngle, int rotationMode) throws IllegalArgumentException {
 		rotationAngle = Math.abs(rotationAngle) % 360;
 		double direction = this.direction;
-		if(rotationMode == TURN_LEFT) {
-			direction+=rotationAngle;
-			if(direction>180.0) {
+		if (rotationMode == TURN_LEFT) {
+			direction += rotationAngle;
+			if (direction > 180.0) {
 				direction -= 360.0;
 			}
 			this.direction = direction;
-		}
-		else if(rotationMode == TURN_RIGHT) {
-			direction -=rotationAngle;
-			if(direction < -180) {
-				direction +=360.0;
+		} else if (rotationMode == TURN_RIGHT) {
+			direction -= rotationAngle;
+			if (direction < -180) {
+				direction += 360.0;
 			}
 			this.direction = direction;
-		}
-		else {
+		} else {
 			throw new IllegalArgumentException("mode must be 0 or 1");
 		}
 	}
-
 
 }

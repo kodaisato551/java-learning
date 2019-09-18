@@ -21,12 +21,13 @@ public class Vehicle {
 	 */
 	private final int ID;
 
-	public Vehicle(double speed, double direction, String owner) {
-		this.speed = speed;
-		this.direction = direction;
+	public Vehicle() {
+		this("");
+	}
+
+	public Vehicle(String owner) {
 		this.owner = owner;
-		ID = nextID;
-		nextID++;
+		ID = nextID++;
 	}
 
 	public double getSpeed() {

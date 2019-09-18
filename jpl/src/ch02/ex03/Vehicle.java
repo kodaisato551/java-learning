@@ -10,9 +10,11 @@ public class Vehicle {
 
 	private int ID;
 
-	public Vehicle(double speed, double direction, String owner) {
-		this.speed = speed;
-		this.direction = direction;
+	public Vehicle() {
+		this("");
+	}
+
+	public Vehicle(String owner) {
 		this.owner = owner;
 		ID = nextID++;
 	}
@@ -30,7 +32,7 @@ public class Vehicle {
 	}
 
 	public void setDirection(double direction) {
-		this.direction =direction;
+		this.direction = direction;
 	}
 
 	public String getOwner() {

@@ -19,17 +19,13 @@ public class Vehicle {
 	private static final double DIGREE_MIN = -180.0;
 	private static final double DIGREE_MAX = 180.0;
 
-
-
 	public Vehicle() {
 		this("");
 	}
 
 	public Vehicle(String owner) {
 		this.owner = owner;
-		ID = nextID;
-		nextID++;
-
+		ID = nextID++;
 	}
 
 	public double getSpeed() {
@@ -45,10 +41,9 @@ public class Vehicle {
 	}
 
 	public void setDirection(double direction) throws IllegalArgumentException {
-		if(direction > DIGREE_MIN && direction <= DIGREE_MAX) {
+		if (direction > DIGREE_MIN && direction <= DIGREE_MAX) {
 			this.direction = direction;
-		}
-		else {
+		} else {
 			throw new IllegalArgumentException("argument must be (-pi,pi]");
 		}
 	}
@@ -68,15 +63,15 @@ public class Vehicle {
 	public int getID() {
 		return ID;
 	}
+
 	/**
 	 * コマンドライン引数が１つ場合に実行する
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		if(args.length == 1) {
+		if (args.length == 1) {
 			System.out.println(new Vehicle(args[0]).getOwner());
-		}
-		else {
+		} else {
 			System.out.println("argument must be 1");
 		}
 	}
@@ -107,27 +102,24 @@ public class Vehicle {
 	 * @param rotationMode
 	 * @throws IllegalArgumentException
 	 */
-	public void turn(double rotationAngle,int rotationMode) throws IllegalArgumentException{
+	public void turn(double rotationAngle, int rotationMode) throws IllegalArgumentException {
 		rotationAngle = Math.abs(rotationAngle) % 360;
 		double direction = this.direction;
-		if(rotationMode == TURN_LEFT) {
-			direction+=rotationAngle;
-			if(direction>180.0) {
+		if (rotationMode == TURN_LEFT) {
+			direction += rotationAngle;
+			if (direction > 180.0) {
 				direction -= 360.0;
 			}
 			this.direction = direction;
-		}
-		else if(rotationMode == TURN_RIGHT) {
-			direction -=rotationAngle;
-			if(direction < -180) {
-				direction +=360.0;
+		} else if (rotationMode == TURN_RIGHT) {
+			direction -= rotationAngle;
+			if (direction < -180) {
+				direction += 360.0;
 			}
 			this.direction = direction;
-		}
-		else {
+		} else {
 			throw new IllegalArgumentException("mode must be 0 or 1");
 		}
 	}
-
 
 }

@@ -1,5 +1,10 @@
 package ch02.ex05;
 
+/**
+ * Vehicleにmainを描いて数個の乗り物作成そのフィールド値を生成
+ * @author Sato Kodai
+ *
+ */
 public class Vehicle {
 
 	private double speed;
@@ -10,12 +15,13 @@ public class Vehicle {
 
 	private final int ID;
 
-	public Vehicle(double speed, double direction, String owner) {
-		this.speed = speed;
-		this.direction = direction;
+	public Vehicle() {
+		this("");
+	}
+
+	public Vehicle(String owner) {
 		this.owner = owner;
-		ID = nextID;
-		nextID++;
+		ID = nextID++;
 	}
 
 	public double getSpeed() {
@@ -51,10 +57,13 @@ public class Vehicle {
 	}
 
 	public static void main(String[] args) {
-		Vehicle v1 = new Vehicle(10, 20, "a");
+		Vehicle v1 = new Vehicle("a");
+		v1.setDirection(10);
+		v1.setSpeed(20);
 		System.out.println(v1.getVehicleStaus());
-
-		Vehicle v2 = new Vehicle(30, 40, "b");
+		Vehicle v2 = new Vehicle("b");
+		v2.setDirection(30);
+		v2.setSpeed(40);
 		System.out.println(v2.getVehicleStaus());
 	}
 

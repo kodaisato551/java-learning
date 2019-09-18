@@ -12,7 +12,7 @@ public class VehicleTest {
 
 	@BeforeClass
 	public static void setup() {
-		target = new Vehicle(50, 30, "a");
+		target = new Vehicle("a");
 	}
 
 	@Before
