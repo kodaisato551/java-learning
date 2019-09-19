@@ -6,7 +6,6 @@ import static org.hamcrest.MatcherAssert.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,8 +23,6 @@ public class ImprovedFibonacciTest {
 	@Test
 	public void testImprovedFibonacci() {
 		ImprovedFibonacci.main(null);
-		System.out.flush();
-
 		int lo = 1;
 		int hi = 1;
 		String mark;
@@ -43,8 +40,4 @@ public class ImprovedFibonacciTest {
 
 	}
 
-	@After
-	public void end() {
-		System.setOut(printStream);
-	}
 }

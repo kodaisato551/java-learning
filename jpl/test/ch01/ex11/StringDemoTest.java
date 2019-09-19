@@ -6,7 +6,6 @@ import static org.hamcrest.MatcherAssert.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,18 +23,12 @@ public class StringDemoTest {
 	@Test
 	public void testImprovedFibonacci() {
 		StringDemo.main(null);
-		System.out.flush();
 
 		String actual = byteArrayOutputStream.toString();
 		String expected = "Name = Sato Kodai" + System.lineSeparator();
 
 		assertThat(actual, is(expected));
 
-	}
-
-	@After
-	public void end() {
-		System.setOut(printStream);
 	}
 
 }

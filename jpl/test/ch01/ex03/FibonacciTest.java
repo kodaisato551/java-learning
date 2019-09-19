@@ -6,11 +6,8 @@ import static org.hamcrest.MatcherAssert.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import ch01.ex03.Fibonacci;
 
 public class FibonacciTest {
 	private PrintStream printStream;
@@ -26,15 +23,9 @@ public class FibonacciTest {
 	@Test
 	public void testHelloWorld() {
 		Fibonacci.main(null);
-		System.out.flush();
 		String expected = "Fibonacci" + System.lineSeparator();
-		String actual = byteArrayOutputStream.toString().substring(0,expected.length());
+		String actual = byteArrayOutputStream.toString().substring(0, expected.length());
 		assertThat(actual, is(expected));
-	}
-
-	@After
-	public void end() {
-		System.setOut(printStream);
 	}
 
 }

@@ -6,7 +6,6 @@ import static org.hamcrest.MatcherAssert.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -53,11 +52,6 @@ public class LinkedListTest {
 		for (int i = 0; i < 2; i++) {
 			assertThat(actualArray[i], is(String.valueOf(i)));
 		}
-	}
-
-	@After
-	public void end() {
-		System.setOut(printStream);
 	}
 
 }
