@@ -1,4 +1,4 @@
-package ch02.ex17;
+package ch03.ex01;
 
 /**
  *
@@ -95,7 +95,7 @@ public class Vehicle {
 	}
 
 	/**
-	 *	 *  マイナスで入力した場合、絶対値に変換されます。
+	 *	 マイナスで入力した場合、絶対値に変換されます。
 	 *  360度以上の値が入力された場合３６０の剰余をとります
 	 * @param rotationAngle
 	 * @param rotationMode
