@@ -37,7 +37,7 @@ public class PassengerVehicle extends Vehicle {
 	public static void main(String[] args) {
 		PassengerVehicle v1 = new PassengerVehicle("a", 5);
 		System.out.println(v1);
-		PassengerVehicle v2 = new PassengerVehicle("b", 2);
-		System.out.println(v2);
+//		PassengerVehicle v2 = new PassengerVehicle("b", 2);
+//		System.out.println(v2);
 	}
 }
