@@ -6,7 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * TODOテスト合格の判定基準があまりにも決め打ちすぎる
+ * TODOテスト合格の判定基準があまりにも決め打ちすぎる何か良い方法はないか
  * @author Sato Kodai
  *
  */
