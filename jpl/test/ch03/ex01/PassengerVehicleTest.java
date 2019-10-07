@@ -23,7 +23,6 @@ public class PassengerVehicleTest {
 				.append("ID : 0\n")
 				.append("Speed : 0.0\n")
 				.append("Direction : 0.0\n")
-				.append("NextID : 1\n")
 				.append("seatNum : 5\n")
 				.append("passengerNum : 0\n").toString();
 		assertThat(actual, is(expected));

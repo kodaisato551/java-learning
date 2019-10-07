@@ -1,11 +1,11 @@
-package ch02.ex17;
+package ch03.ex09;
 
 /**
  *
  *・車を回転する角度と回転方向受け取りdirectionを変更するtrunメソッドの実装
  *・セットできる角度に上限と下限を設ける。その範囲を外れた場合IllegalArgumetExceptionをはく
  */
-public class Vehicle {
+public class Vehicle implements Cloneable {
 
 	private double speed;
 	private double direction;
@@ -94,7 +94,7 @@ public class Vehicle {
 	}
 
 	/**
-	 *	 *  マイナスで入力した場合、絶対値に変換されます。
+	 *	 マイナスで入力した場合、絶対値に変換されます。
 	 *  360度以上の値が入力された場合３６０の剰余をとります
 	 * @param rotationAngle
 	 * @param rotationMode
@@ -118,6 +118,22 @@ public class Vehicle {
 		} else {
 			throw new IllegalArgumentException("mode must be 0 or 1");
 		}
+	}
+
+	/**
+	 * コピーコンストラクタ
+	 * @param original
+	 */
+	protected Vehicle(Vehicle original) {
+		this.owner = original.owner;
+		this.direction = original.direction;
+		this.speed = original.speed;
+		this.ID = nextID++;
+	}
+
+	@Override
+	public Vehicle clone() {
+		return new Vehicle(this);
 	}
 
 }

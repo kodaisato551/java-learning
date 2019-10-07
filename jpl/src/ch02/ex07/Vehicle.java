@@ -64,8 +64,8 @@ public class Vehicle {
 		str.append("Owner : " + this.owner + "\n")
 				.append("ID : " + this.ID + "\n")
 				.append("Speed : " + this.speed + "\n")
-				.append("Direction : " + this.direction + "\n")
-				.append("NextID : " + Vehicle.nextID + "\n");
+				.append("Direction : " + this.direction + "\n");
+
 		return str.toString();
 	}
 

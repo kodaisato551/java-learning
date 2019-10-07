@@ -1,4 +1,4 @@
-package ch03.ex06;
+package ch02.ex18;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
@@ -11,6 +11,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import ch02.ex18.Vehicle;
+
+/**
+ * ex09で失敗したtestGetMaxID()はコメントアウトしている
+ */
 public class VehicleTest {
 	static Vehicle target;
 
@@ -19,7 +24,7 @@ public class VehicleTest {
 
 	@BeforeClass
 	public static void setup() {
-		target = new Vehicle("a", new Battery());
+		target = new Vehicle("a");
 	}
 
 	@Before
@@ -29,8 +34,12 @@ public class VehicleTest {
 		byteArrayOutputStream = new ByteArrayOutputStream();
 		printStream = new PrintStream(byteArrayOutputStream);
 		System.setOut(printStream);
-		Battery battery = new Battery();
-		target.setBattery(battery);
+	}
+
+	@Test
+	public void testMain() {
+		Vehicle.main(new String[] { "sato" });
+		assertThat(byteArrayOutputStream.toString(), is("sato\r\n"));
 	}
 
 	@Test
@@ -65,26 +74,22 @@ public class VehicleTest {
 
 	@Test
 	public void testGetID() {
-		Vehicle v1 = new Vehicle("c", new Battery());
+		Vehicle v1 = new Vehicle();
 		assertThat(target.getID(), is(not(v1.getID())));
 	}
 
 	@Test
 	public void testGetNextID() {
-		Vehicle v1 = new Vehicle("d", new Battery());
+		Vehicle v1 = new Vehicle();
 		assertThat(Vehicle.getNextID(), is(v1.getID() + 1));
 	}
 
-	/**
-	 * mainでインスタンス生成している関係でIDが１になる
-	 */
 	@Test
 	public void testToString() {
 		String expcted = new StringBuilder().append("Owner : " + "a" + "\n")
 				.append("ID : " + 0 + "\n")
 				.append("Speed : " + 50. + "\n")
-				.append("Direction : " + 30. + "\n")
-				.toString();
+				.append("Direction : " + 30. + "\n").toString();
 		String actual = target.toString();
 		assertThat(actual, is(expcted));
 	}
@@ -142,22 +147,16 @@ public class VehicleTest {
 		target.turn(420, 30);
 	}
 
-	@Test
-	public void testStart() {
-		assertThat(target.start(), is(true));
-	}
-
-	@Test
-	public void testCannnotStart() {
-		Battery battery = new Battery();
-		battery.useBattery(100);
-		target.setBattery(battery);
-		assertThat(target.start(), is(false));
-	}
-
+	/**
+	 * こちらが先に呼び出される関係で
+	 * getNextIDが落ちる。
+	 * どう対処すればよいかわかりませんでした。
+	 * Junitではテストが実行される
+	 */
 	@Test
 	public void testGetMaxID() {
-		Vehicle latestVehicle = new Vehicle("b", new Battery());
+		System.out.println(2);
+		Vehicle latestVehicle = new Vehicle("b");
 		assertThat(Vehicle.getMaxID(), is(latestVehicle.getID()));
 		latestVehicle = null;
 	}

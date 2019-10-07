@@ -7,12 +7,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import ch02.ex13.Vehicle;
-
-/**
- * ex09で失敗したtestGetMaxID()
- * はコメントアウトしている
- */
 public class VehicleTest {
 	static Vehicle target;
 
@@ -26,7 +20,6 @@ public class VehicleTest {
 		target.setDirection(30);
 		target.setSpeed(50);
 	}
-
 
 	@Test
 	public void testGetter() {
@@ -54,13 +47,15 @@ public class VehicleTest {
 	}
 
 	@Test
-	public void getID() {
-		assertThat(target.getID(), is(0));
+	public void testGetID() {
+		Vehicle v1 = new Vehicle();
+		assertThat(target.getID(), is(not(v1.getID())));
 	}
 
 	@Test
-	public void getNextID() {
-		assertThat(Vehicle.getNextID(), is(1));
+	public void testGetNextID() {
+		Vehicle v1 = new Vehicle();
+		assertThat(Vehicle.getNextID(), is(v1.getID() + 1));
 	}
 
 	@Test
@@ -68,26 +63,16 @@ public class VehicleTest {
 		String expcted = new StringBuilder().append("Owner : " + "a" + "\n")
 				.append("ID : " + 0 + "\n")
 				.append("Speed : " + 50. + "\n")
-				.append("Direction : " + 30. + "\n")
-				.append("NextID : " + 1 + "\n").toString();
+				.append("Direction : " + 30. + "\n").toString();
 		String actual = target.toString();
 		assertThat(actual, is(expcted));
 	}
 
-
-	/**
-	 * こちらが先に呼び出される関係で
-	 * getNextIDが落ちる。
-	 * どう対処すればよいかわかりませんでした。
-	 * Junitではテストが実行される
-	 */
-//	@Test
-//	public void testGetMaxID() {
-//		System.out.println(2);
-//		Vehicle latestVehicle = new Vehicle("b");
-//		assertThat(Vehicle.getMaxID(), is(latestVehicle.getID()));
-//		latestVehicle = null;
-//	}
-
+	@Test
+	public void testGetMaxID() {
+		Vehicle latestVehicle = new Vehicle("b");
+		assertThat(Vehicle.getMaxID(), is(latestVehicle.getID()));
+		latestVehicle = null;
+	}
 
 }

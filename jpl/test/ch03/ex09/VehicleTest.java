@@ -1,26 +1,16 @@
-package ch02;
+package ch03.ex09;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import ch02.ex18.Vehicle;
-
-/**
- * ex09で失敗したtestGetMaxID()はコメントアウトしている
- */
-public class VehicleTest_ex18 {
+public class VehicleTest {
 	static Vehicle target;
 
-	private PrintStream printStream;
-	private ByteArrayOutputStream byteArrayOutputStream;
 	@BeforeClass
 	public static void setup() {
 		target = new Vehicle("a");
@@ -30,15 +20,6 @@ public class VehicleTest_ex18 {
 	public void setupForEachTest() {
 		target.setDirection(30);
 		target.changeSpeed(50);
-		byteArrayOutputStream = new ByteArrayOutputStream();
-		printStream = new PrintStream(byteArrayOutputStream);
-		System.setOut(printStream);
-	}
-
-	@Test
-	public void testMain() {
-		Vehicle.main(new String[] {"sato"});
-		assertThat(byteArrayOutputStream.toString(), is("sato\r\n"));
 	}
 
 	@Test
@@ -72,28 +53,24 @@ public class VehicleTest_ex18 {
 	}
 
 	@Test
-	public void getID() {
-		assertThat(target.getID(), is(0));
+	public void testGetID() {
+		Vehicle v1 = new Vehicle();
+		assertThat(target.getID(), is(not(v1.getID())));
 	}
 
-	/**
-	 * mainでインスタンス生成している関係でIDが１になる
-	 */
 	@Test
-	public void getNextID() {
-		assertThat(Vehicle.getNextID(), is(1));
+	public void testGetNextID() {
+		Vehicle v1 = new Vehicle();
+		assertThat(Vehicle.getNextID(), is(v1.getID() + 1));
 	}
 
-	/**
-	 * mainでインスタンス生成している関係でIDが１になる
-	 */
 	@Test
 	public void testToString() {
 		String expcted = new StringBuilder().append("Owner : " + "a" + "\n")
 				.append("ID : " + 0 + "\n")
 				.append("Speed : " + 50. + "\n")
 				.append("Direction : " + 30. + "\n")
-				.append("NextID : " + 1 + "\n").toString();
+				.toString();
 		String actual = target.toString();
 		assertThat(actual, is(expcted));
 	}
@@ -105,7 +82,7 @@ public class VehicleTest_ex18 {
 	}
 
 	@Test
-	public void testTurn_leftWithin180(){
+	public void testTurn_leftWithin180() {
 		target.turn(100, Vehicle.TURN_LEFT);
 		assertThat(target.getDirection(), is(130.0));
 	}
@@ -150,24 +127,25 @@ public class VehicleTest_ex18 {
 	public void testTurn_exception() {
 		target.turn(420, 30);
 	}
+
+	@Test
+	public void testGetMaxID() {
+		Vehicle latestVehicle = new Vehicle("b");
+		assertThat(Vehicle.getMaxID(), is(latestVehicle.getID()));
+		latestVehicle = null;
+	}
+
 	/**
-	 * こちらが先に呼び出される関係で
-	 * getNextIDが落ちる。
-	 * どう対処すればよいかわかりませんでした。
-	 * Junitではテストが実行される
+	 * IDが異なるのが正常
 	 */
-//	@Test
-//	public void testGetMaxID() {
-//		System.out.println(2);
-//		Vehicle latestVehicle = new Vehicle("b");
-//		assertThat(Vehicle.getMaxID(), is(latestVehicle.getID()));
-//		latestVehicle = null;
-//	}
-
-
-	@After
-	public void end() {
-		System.setOut(printStream);
+	@Test
+	public void testClone() {
+		Vehicle clonedVehicle = target.clone();
+		assertTrue(clonedVehicle != target);
+		assertTrue(clonedVehicle.getClass() == target.getClass());
+		assertThat(clonedVehicle.getOwner(), is(target.getOwner()));
+		assertThat(clonedVehicle.getDirection(), is(target.getDirection()));
+		assertThat(clonedVehicle.getSpeed(), is(target.getSpeed()));
 	}
 
 }

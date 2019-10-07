@@ -1,7 +1,8 @@
-package ch03.ex04;
+package ch03.ex08;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -43,6 +44,18 @@ public class PassengerVehicleTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testSetPasserngerNum_exception() {
 		target.setPassengerNum(10);
+	}
+
+	@Test
+	public void testClone() {
+		PassengerVehicle clonedVehicle = target.clone();
+		assertTrue(clonedVehicle != target);
+		assertTrue(clonedVehicle.getClass() == target.getClass());
+		assertThat(clonedVehicle.getOwner(), is(target.getOwner()));
+		assertThat(clonedVehicle.getDirection(), is(target.getDirection()));
+		assertThat(clonedVehicle.getSpeed(), is(target.getSpeed()));
+		assertThat(clonedVehicle.getPassengerNum(), is(target.getPassengerNum()));
+		assertThat(clonedVehicle.getSeatNum(), is(target.getSeatNum()));
 	}
 
 }

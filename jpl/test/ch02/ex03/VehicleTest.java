@@ -48,12 +48,14 @@ public class VehicleTest {
 	}
 
 	@Test
-	public void getID() {
-		assertThat(target.getID(), is(0));
+	public void testGetID() {
+		Vehicle v1 = new Vehicle();
+		assertThat(target.getID(), is(not(v1.getID())));
 	}
 
 	@Test
-	public void getNextID() {
-		assertThat(Vehicle.getNextID(), is(1));
+	public void testGetNextID() {
+		Vehicle v1 = new Vehicle();
+		assertThat(Vehicle.getNextID(), is(v1.getID() + 1));
 	}
 }
