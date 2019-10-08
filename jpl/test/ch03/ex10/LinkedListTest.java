@@ -1,7 +1,8 @@
 package ch03.ex10;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -68,7 +69,14 @@ public class LinkedListTest {
 	 */
 	@Test
 	public void testClone() {
-		LinkedList cloneLinkedList = target.clone();
+		LinkedList node = new LinkedList("fuga");
+		LinkedList nodeCloned = node.clone();
+
+		Object actual = node.getElement();
+		Object actualCloned = nodeCloned.getElement();
+
+		assertTrue(actual == actualCloned);
+
 	}
 
 }

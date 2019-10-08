@@ -68,6 +68,16 @@ public class LinkedList implements Cloneable {
 		}
 	}
 
+	public void add(Object element) {
+		LinkedList it = this;
+		while (it.getNext() != null) {
+			it = it.getNext();
+		}
+
+		it.setNext(new LinkedList(element));
+
+	}
+
 	public int size() {
 		int count = 0;
 		LinkedList it = this;
@@ -79,19 +89,24 @@ public class LinkedList implements Cloneable {
 	}
 
 	/**
-	 * TODO　コピーコンストラクタの検討
-	 * @param org
-	 */
-	private LinkedList(LinkedList org) {
-
-	}
-
-	/**
 	 * TODO クローンの実装
 	 * むっずい
 	 */
+	@Override
 	public LinkedList clone() {
-		return new LinkedList(element);
+		try {
+			LinkedList obj = (LinkedList) super.clone();
+			/**
+			 * 次の参照をコピーする
+			 */
+			if (obj.next != null) {
+				obj.next = next.clone();
+			}
+			return obj;
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError(e.toString());
+		}
+
 	}
 
 }
