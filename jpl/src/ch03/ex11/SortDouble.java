@@ -1,13 +1,25 @@
 package ch03.ex11;
 
+/**
+ * TODO てすと書く
+ * @author p000527216
+ *
+ */
 public abstract class SortDouble {
 	private double[] values;
 	private final SortMetrics curMetrics = new SortMetrics();
 
+	private boolean sortCalled;//呼び出し中かどうか
+
 	public final SortMetrics sort(double[] data) {
-		values = data;
-		curMetrics.init();
-		doSort();
+
+		if (!sortCalled) {
+			values = data;
+			curMetrics.init();
+			doSort();
+			sortCalled = true;
+		}
+
 		return getMetrics();
 	}
 

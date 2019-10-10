@@ -9,8 +9,16 @@ package ch03.ex11;
  */
 public class SecurityHole extends SortDouble {
 
+	private boolean called;
+
 	@Override
 	protected void doSort() {
+
+		if (called) {
+			return;
+		}
+
+		double[] data = { 1, 4, 3 };
 		for (int i = 0; i < getDataLength(); i++) {
 			for (int j = i + 1; j < getDataLength(); j++) {
 				if (compare(i, j) > 0) {
@@ -18,8 +26,8 @@ public class SecurityHole extends SortDouble {
 				}
 			}
 		}
-
-		super.probe(0);
+		called = true;
+		super.sort(data);
 	}
 
 }
