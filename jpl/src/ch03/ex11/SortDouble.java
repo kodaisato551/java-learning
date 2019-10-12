@@ -1,8 +1,8 @@
 package ch03.ex11;
 
 /**
- * TODO てすと書く
- * @author p000527216
+ * TODO M:TEST
+ * @author kodaisato
  *
  */
 public abstract class SortDouble {

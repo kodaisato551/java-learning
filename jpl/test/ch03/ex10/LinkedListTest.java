@@ -65,7 +65,7 @@ public class LinkedListTest {
 	/**
 	 * リストに対する変更は他方のリストには影響ないが、
 	 * リストが参照しているオブジェクトに対する変更は、他方のリストから見えます
-	 * TODO 上のテストコードを描く
+	 *
 	 */
 	@Test
 	public void testClone() {

@@ -16,11 +16,28 @@ public class PointTest {
 	}
 
 	@Test
-	public void getXAndY() {
-		target.x = 10;
-		target.y = 11;
-		assertThat(target.getX(), is(10.));
-		assertThat(target.getY(), is(11.));
+	public void testClear() {
+		target.move(10, 20);
+		target.clear();
+		assertThat(target.x, is(0.));
+		assertThat(target.y, is(0.));
+	}
+
+	@Test
+	public void testMove() {
+		target.move(10, 20);
+		assertThat(target.x, is(10.));
+		assertThat(target.y, is(20.));
+	}
+
+	@Test
+	public void testCopy() {
+		Point point = new Point();
+		point.move(20, 30);
+		target.copy(point);
+
+		assertThat(target.x, is(20.));
+		assertThat(target.y, is(30.));
 	}
 
 }

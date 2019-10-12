@@ -1,7 +1,7 @@
 package ch03.ex07;
 
 /**
- * TODO できませんでした。
+ * TODO M:できませんでした。
  * @author Sato Kodai
  *
  */
@@ -59,7 +59,7 @@ public class ColorAttr extends Attr {
 	}
 
 	/**
-	 * TODO hascodeの理解
+	 * TODO M:hascodeの理解
 	 */
 	@Override
 	public int hashCode() {

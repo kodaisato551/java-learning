@@ -84,10 +84,6 @@ public class LinkedListOrg implements Cloneable {
 		return count;
 	}
 
-	/**
-	 * TODO クローンの実装
-	 * むっずい
-	 */
 	@Override
 	public LinkedListOrg clone() {
 		try {

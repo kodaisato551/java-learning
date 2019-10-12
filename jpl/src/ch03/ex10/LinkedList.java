@@ -88,10 +88,6 @@ public class LinkedList implements Cloneable {
 		return count;
 	}
 
-	/**
-	 * TODO クローンの実装
-	 * むっずい
-	 */
 	@Override
 	public LinkedList clone() {
 		try {
