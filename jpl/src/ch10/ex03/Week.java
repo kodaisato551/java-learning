@@ -1,0 +1,5 @@
+package ch10.ex03;
+
+enum Week {
+	MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
+}
