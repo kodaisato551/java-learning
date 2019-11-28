@@ -4,6 +4,7 @@ import java.util.regex.Pattern;
 
 public class StringCount {
 	/**
+	 * TODO M:indexofを使用する
 	 *ch13.ex01と同様
 	 * @param str
 	 * @param key
