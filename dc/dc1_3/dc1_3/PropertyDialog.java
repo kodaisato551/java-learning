@@ -1,12 +1,12 @@
-package dc1_2;
+package dc1_3;
 
 import java.awt.Button;
 import java.awt.Choice;
 import java.awt.Dialog;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Label;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -27,12 +27,12 @@ public class PropertyDialog extends Dialog implements ActionListener {
 	private Choice backGroundColorChoice;
 	private Button button;
 
-	public PropertyDialog(Window dcFrame, SettingChangeNotifier notifier) {
-		this(dcFrame, 500, 600, notifier);
+	public PropertyDialog(Frame owner, SettingChangeNotifier notifier) {
+		this(owner, 500, 600, notifier);
 
 	}
 
-	public PropertyDialog(Window owner, int width, int height, SettingChangeNotifier notifier) {
+	public PropertyDialog(Frame owner, int width, int height, SettingChangeNotifier notifier) {
 		super(owner);
 		setSize(width, height);
 		this.notifier = notifier;
