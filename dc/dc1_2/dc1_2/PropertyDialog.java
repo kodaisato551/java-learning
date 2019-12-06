@@ -37,7 +37,7 @@ public class PropertyDialog extends Dialog implements ActionListener {
 		setSize(width, height);
 		this.notifier = notifier;
 		addWindowListener(new DialogWindowListener());
-		setFont(new Font("Arial", Font.BOLD, 20));
+		setFont(new Font("Arial", Font.CENTER_BASELINE, 20));
 
 		Label l1 = new Label("Font Size:");
 		add(l1);

@@ -134,9 +134,10 @@ public class DCFrame extends Frame implements ActionListener, SettingChangeNotif
 		defineFrameParam();
 		Image back = createImage(getWidth(), getHeight());
 		Graphics buffer = back.getGraphics();
+		buffer.setColor(settingItem.getBackGroundColor());
+		buffer.fillRect(0, 0, getWidth(), getHeight());
 		buffer.setFont(font);
 		buffer.setColor(settingItem.getFontColor());
-		setBackground(settingItem.getBackGroundColor());
 		FontMetrics fm = buffer.getFontMetrics();
 		Rectangle rectText = fm.getStringBounds(text, buffer).getBounds();
 		x = x - rectText.width / 2;

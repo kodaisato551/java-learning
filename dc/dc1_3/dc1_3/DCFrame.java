@@ -5,23 +5,19 @@ import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Menu;
-import java.awt.MenuBar;
 import java.awt.MenuItem;
+import java.awt.Point;
+import java.awt.PopupMenu;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.Logger;
-
-import dc1_2.ConstSettingParam;
-import dc1_2.PropertyDialog;
-import dc1_2.SettingChangeNotifier;
-import dc1_2.SettingItem;
 
 /**
  *・メニューをつけてプロパティダイアログを開ける
@@ -31,19 +27,19 @@ import dc1_2.SettingItem;
  *　－文字色の指定
  *　－時計の背景色の指定
  *
- *TODO ちらつきをなくすようにダブルバッファリングする
+*ちらつきをなくすようにダブルバッファリングする
  *・フォントとフォントサイズを変更すると、時計を表示すべきフレームの大きさを適切に自動変更して正しく表示されるようにする。
- *
- *
- *
  *・FrameではなくWindowクラスを使用して、フレーム枠のないデジタル時計にする
- *TODO マウスの右クリックでポップアップメニューを表示してカスケード形式で選択できるようにする
- *TODO 左クリックしたままデスクトップ上でウインドウを移動させることができる
+ *・マウスの右クリックでポップアップメニューを表示してカスケード形式で選択できるようにする
+ *・ 左クリックしたままデスクトップ上でウインドウを移動させることができる
+ *
+ *TODO w:プロパティダイヤログを表示する際にwindowがバックグラウンドになる
  *
  *
  * @author Sato Kodai
  */
-public class DCFrame extends Window implements ActionListener, SettingChangeNotifier {
+public class DCFrame extends Window implements ActionListener, MouseMotionListener, MouseListener {
+
 	private final SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
 	private int width;
 	private int height;
@@ -51,56 +47,67 @@ public class DCFrame extends Window implements ActionListener, SettingChangeNoti
 	SettingItem settingItem = SettingItem.getInstance();
 
 	private Font font;
-
+	private PopupMenu menu;
 	private PropertyDialog propertyDialog;
+
+	private ActionListener popupItemListener = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String command = e.getActionCommand();
+			logger.info("menue event");
+			if (command.equals("font setting")) {
+				propertyDialog.setVisible(true);
+			} else if (command.equals("terminate")) {
+				logger.info("terminate");
+				System.exit(0);
+			}
+		}
+	};
+
+	private int windowX = 0;
+	private int windowY = 0;
+
+	private final Point startPoint = new Point();
 
 	public DCFrame(Frame frame) {
 		super(frame);
 		setVisible(true);
 		defineFrameParam();
 		setSize(width, height);
-		addWindowCloseEvent();
+		//addWindowCloseEvent();
 
-		/* dialog の設定*/
-		propertyDialog = new PropertyDialog(frame, this);
-		propertyDialog.setSize(500, 600);
+		//dialogの設定
+		propertyDialog = new PropertyDialog(frame);
 		propertyDialog.setVisible(false);
+		initPopupMenu();
+		this.add(menu);
 
+		//右クリックでポップアップを表示
+		addMouseListener(this);
+		addMouseMotionListener(this);
 	}
 
-	/**
-	 * menuebarの作成
-	 * @return
-	 */
-	private MenuBar createMenuBar() {
-		MenuBar mb = new MenuBar();
-		Menu menu = new Menu("setting");
-		MenuItem item = new MenuItem("general");
-
-		item.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				logger.info("menue event");
-				propertyDialog.setVisible(true);
-			}
-		});
+	private void initPopupMenu() {
+		menu = new PopupMenu();
+		MenuItem item = new MenuItem("font setting");
+		MenuItem item2 = new MenuItem("terminate");
+		item.addActionListener(popupItemListener);
+		item2.addActionListener(popupItemListener);
 		menu.add(item);
-		mb.add(menu);
-
-		return mb;
+		menu.add(item2);
 	}
 
 	/**
 	 * windowがCloseするイベントを登録する
 	 */
-	private void addWindowCloseEvent() {
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				System.exit(0);
-			}
-		});
-	}
+	//	private void addWindowCloseEvent() {
+	//		addWindowListener(new WindowAdapter() {
+	//			@Override
+	//			public void windowClosing(WindowEvent e) {
+	//				System.exit(0);
+	//			}
+	//		});
+	//	}
 
 	/**
 	 * 時計の処理
@@ -144,9 +151,10 @@ public class DCFrame extends Window implements ActionListener, SettingChangeNoti
 		defineFrameParam();
 		Image back = createImage(getWidth(), getHeight());
 		Graphics buffer = back.getGraphics();
+		buffer.setColor(settingItem.getBackGroundColor());
+		buffer.fillRect(0, 0, getWidth(), getHeight());
 		buffer.setFont(font);
 		buffer.setColor(settingItem.getFontColor());
-		setBackground(settingItem.getBackGroundColor());
 		FontMetrics fm = buffer.getFontMetrics();
 		Rectangle rectText = fm.getStringBounds(text, buffer).getBounds();
 		x = x - rectText.width / 2;
@@ -169,15 +177,56 @@ public class DCFrame extends Window implements ActionListener, SettingChangeNoti
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-
-		if (propertyDialog == null) {
-			propertyDialog = new PropertyDialog(this, this);
+	public void mouseClicked(MouseEvent e) {
+		if (e.getButton() == MouseEvent.BUTTON3) {
+			menu.show(this, e.getX(), e.getY());
 		}
+
 	}
 
 	@Override
-	public void notifySettingChanged() {
-		//		getGraphics().setFont(new Font("Arial", Font.BOLD, settingItem.getFontSize()));
+	public void mousePressed(MouseEvent e) {
+		// TODO 自動生成されたメソッド・スタブ
+
 	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		Point eventLocation = e.getLocationOnScreen();
+		windowX = eventLocation.x - startPoint.x;
+		windowY = eventLocation.y - startPoint.y;
+		setLocation(windowX, windowY);
+
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
 }

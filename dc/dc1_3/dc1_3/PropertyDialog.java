@@ -17,8 +17,6 @@ public class PropertyDialog extends Dialog implements ActionListener {
 	private int width;
 	private int height;
 
-	SettingChangeNotifier notifier;
-
 	private SettingItem settingItem = SettingItem.getInstance();
 
 	private Choice fontSizeChoice;
@@ -27,15 +25,13 @@ public class PropertyDialog extends Dialog implements ActionListener {
 	private Choice backGroundColorChoice;
 	private Button button;
 
-	public PropertyDialog(Frame owner, SettingChangeNotifier notifier) {
-		this(owner, 500, 600, notifier);
-
+	public PropertyDialog(Frame dcFrame) {
+		this(dcFrame, 700, 800);
 	}
 
-	public PropertyDialog(Frame owner, int width, int height, SettingChangeNotifier notifier) {
+	public PropertyDialog(Frame owner, int width, int height) {
 		super(owner);
 		setSize(width, height);
-		this.notifier = notifier;
 		addWindowListener(new DialogWindowListener());
 		setFont(new Font("Arial", Font.BOLD, 20));
 
@@ -106,7 +102,6 @@ public class PropertyDialog extends Dialog implements ActionListener {
 		settingItem.setFontColor(fontColorChoice.getSelectedItem());
 		settingItem.setBackGroundColor(backGroundColorChoice.getSelectedItem());
 
-		notifier.notifySettingChanged();
 		setVisible(false);
 	}
 

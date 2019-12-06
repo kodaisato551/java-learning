@@ -60,4 +60,9 @@ public class SettingItem {
 		fontColor = SupportedColor.BLACK.getName();
 		backGroundColor = SupportedColor.WHITE.getName();
 	}
+
+	public String info() {
+		return "[fontsize:" + fontSize + ", fontType :" + fontType + ", fontColor:" + fontColor + ", bgColor:"
+				+ backGroundColor;
+	}
 }
