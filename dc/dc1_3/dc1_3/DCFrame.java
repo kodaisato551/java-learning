@@ -4,7 +4,9 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.Menu;
 import java.awt.MenuItem;
 import java.awt.Point;
 import java.awt.PopupMenu;
@@ -16,7 +18,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.logging.Logger;
 
 /**
@@ -33,7 +37,7 @@ import java.util.logging.Logger;
  *・マウスの右クリックでポップアップメニューを表示してカスケード形式で選択できるようにする
  *・ 左クリックしたままデスクトップ上でウインドウを移動させることができる
  *
- *TODO w:プロパティダイヤログを表示する際にwindowがバックグラウンドになる
+ *TODO M:設定を変更する箇所をダイアログ画面ではなく、メニューにする
  *
  *
  * @author Sato Kodai
@@ -49,37 +53,18 @@ public class DCFrame extends Window implements ActionListener, MouseMotionListen
 	private Font font;
 	private PopupMenu menu;
 	private PropertyDialog propertyDialog;
-
-	private ActionListener popupItemListener = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			String command = e.getActionCommand();
-			logger.info("menue event");
-			if (command.equals("font setting")) {
-				propertyDialog.setVisible(true);
-			} else if (command.equals("terminate")) {
-				logger.info("terminate");
-				System.exit(0);
-			}
-		}
-	};
-
-	private int windowX = 0;
-	private int windowY = 0;
-
-	private final Point startPoint = new Point();
+	private final Point startPt = new Point();
 
 	public DCFrame(Frame frame) {
 		super(frame);
 		setVisible(true);
 		defineFrameParam();
 		setSize(width, height);
-		//addWindowCloseEvent();
 
 		//dialogの設定
 		propertyDialog = new PropertyDialog(frame);
 		propertyDialog.setVisible(false);
-		initPopupMenu();
+		initPopUpMenu();
 		this.add(menu);
 
 		//右クリックでポップアップを表示
@@ -87,27 +72,53 @@ public class DCFrame extends Window implements ActionListener, MouseMotionListen
 		addMouseMotionListener(this);
 	}
 
-	private void initPopupMenu() {
+	private void initPopUpMenu() {
 		menu = new PopupMenu();
-		MenuItem item = new MenuItem("font setting");
-		MenuItem item2 = new MenuItem("terminate");
-		item.addActionListener(popupItemListener);
-		item2.addActionListener(popupItemListener);
-		menu.add(item);
-		menu.add(item2);
+		//fontTypeMenuの設定
+		String[] fontType = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+		initMenuInflater("Font Type", Arrays.asList(fontType), e -> {
+			settingItem.setFontType(e.getActionCommand());
+		});
+		//fontColorの設定
+		initMenuInflater("Font Color", SupportedColor.getKeys(), e -> {
+			settingItem.setFontColor(e.getActionCommand());
+		});
+		//fontsizeの設定
+		initMenuInflater("Font Size", FontSize.getKeys(), e -> {
+			settingItem.setFontSize(e.getActionCommand());
+		});
+		//BackGroundColorの設定
+		initMenuInflater("Background Color", SupportedColor.getKeys(), e -> {
+			settingItem.setBackGroundColor(e.getActionCommand());
+		});
+
+		//terminate
+		MenuItem mi = new MenuItem("Terminate");
+		mi.addActionListener(e -> {
+			System.exit(0);
+		});
+		menu.add(mi);
 	}
 
-	/**
-	 * windowがCloseするイベントを登録する
+	/*
+	 * menu生成に関する共通処理をここに記載する.
+	 * menuに対し設定の大項目を追加するまでに至る過程を記述する
+	 * @param 設定値の大項目名前
+	 * @param 具体的な設定値のcollection、各要素はstring型
+	 * @param 各メニューアイテムに対し行いたい処理
 	 */
-	//	private void addWindowCloseEvent() {
-	//		addWindowListener(new WindowAdapter() {
-	//			@Override
-	//			public void windowClosing(WindowEvent e) {
-	//				System.exit(0);
-	//			}
-	//		});
-	//	}
+	private void initMenuInflater(String menuName, Collection<String> settingParam, ActionListener l) {
+		Menu settingMenu = new Menu(menuName);
+		MenuItem[] menuItems = new MenuItem[settingParam.size()];
+		int count = 0;
+		for (String item : settingParam) {
+			menuItems[count] = new MenuItem(item);
+			menuItems[count].addActionListener(l);
+			settingMenu.add(menuItems[count]);
+			count++;
+		}
+		menu.add(settingMenu);
+	}
 
 	/**
 	 * 時計の処理
@@ -181,52 +192,41 @@ public class DCFrame extends Window implements ActionListener, MouseMotionListen
 		if (e.getButton() == MouseEvent.BUTTON3) {
 			menu.show(this, e.getX(), e.getY());
 		}
-
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO 自動生成されたメソッド・スタブ
 
+		startPt.setLocation(e.getPoint());
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO 自動生成されたメソッド・スタブ
-
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO 自動生成されたメソッド・スタブ
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO 自動生成されたメソッド・スタブ
-
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		Point eventLocation = e.getLocationOnScreen();
-		windowX = eventLocation.x - startPoint.x;
-		windowY = eventLocation.y - startPoint.y;
-		setLocation(windowX, windowY);
-
+		Point point = e.getLocationOnScreen();
+		setLocation(point.x - startPt.x, point.y - startPt.y);
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		// TODO 自動生成されたメソッド・スタブ
-
+		System.out.print("Mouse point[x=" + e.getPoint().x + ", y=" + e.getPoint().y + "]  ");
+		System.out.println("Absolute point[x=" + e.getLocationOnScreen().x + ",y=" + e.getLocationOnScreen().y + "] ");
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO 自動生成されたメソッド・スタブ
-
 	}
 
 }
