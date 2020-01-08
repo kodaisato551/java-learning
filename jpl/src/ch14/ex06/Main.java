@@ -1,5 +1,11 @@
 package ch14.ex06;
 
+/**
+ *
+ * TODO M:見直し
+ * @author Sato Kodai
+ *
+ */
 public class Main {
 	public static void main(String[] args) {
 		SyncObject syncObj = new SyncObject();
