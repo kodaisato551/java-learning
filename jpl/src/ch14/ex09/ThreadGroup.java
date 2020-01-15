@@ -40,7 +40,7 @@ public class ThreadGroup {
 		 * parennt list にparentのスレッドグループを追加
 		 */
 		for (int i = (parentList.size() - 1); i >= 0; i--) {
-			System.out.println("ParentThread:" + parentList.get(i).getName());
+
 		}
 	}
 
