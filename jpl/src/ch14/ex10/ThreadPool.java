@@ -91,12 +91,39 @@ public class ThreadPool {
 				throw new IllegalStateException();
 			} else {
 				threads[i].stopThread();
-				PoolWorker tmp = threads[i];
-				threads[i] = null;
-				tmp.interrupt();
+				try {
+					threads[i].join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
+		//waitAllTaskComplete();
+	}
 
+	/**
+	 * wait till all task done
+	 */
+	private void waitAllTaskComplete() {
+		boolean isAllThreadsTerminated = true;
+
+		while (true) {
+			for (int i = 0; i < numberOfThreads; i++) {
+				if (!threads[i].getState().equals(State.TERMINATED)) {
+					System.out.println(threads[i].getName());
+					isAllThreadsTerminated = false;
+					break;
+				}
+			}
+			if (isAllThreadsTerminated) {
+				break;
+			}
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+			}
+
+		}
 	}
 
 	/**
@@ -112,7 +139,7 @@ public class ThreadPool {
 	 * @throws NullPointerException if runnable is null.
 	 * @throws IllegalStateException if this pool has not been started yet.
 	 */
-	public void dispatch(Runnable runnable) {
+	public synchronized void dispatch(Runnable runnable) {
 		Objects.requireNonNull(runnable);
 		if (!isStopped) {
 			while (queueSize >= taskQueue.size()) {
@@ -121,10 +148,9 @@ public class ThreadPool {
 				} catch (InterruptedException e) {
 				}
 			}
-			synchronized (taskQueue) {
-				taskQueue.add(runnable);
-				notifyAll();
-			}
+			taskQueue.add(runnable);
+			notifyAll();
+
 		}
 	}
 
@@ -133,7 +159,7 @@ public class ThreadPool {
 	 * @return
 	 */
 	public synchronized Runnable takeTask() {
-		while (taskQueue.size() <= 0) {
+		while (this.taskQueue.size() <= 0) {
 			try {
 				wait();
 			} catch (InterruptedException e) {
@@ -146,15 +172,16 @@ public class ThreadPool {
 
 	private class PoolWorker extends Thread {
 
-		private volatile boolean isActive = true;
+		private volatile boolean shutdownFlg = false;
 
 		public void stopThread() {
-			this.isActive = false;
+			this.shutdownFlg = true;
+			interrupt();
 		}
 
 		public void run() {
 			Runnable r;
-			while (isActive) {
+			while (!shutdownFlg) {
 				r = takeTask();
 				//execute
 				try {
