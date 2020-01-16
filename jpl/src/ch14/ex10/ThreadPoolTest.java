@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -160,6 +161,7 @@ public class ThreadPoolTest {
 	}
 
 	@Test
+	@Ignore
 	public void testRepeatSimultaneousStarts() {
 		for (int i = 0; i < 5000; i++) {
 			testSimultaneousStarts();
@@ -253,6 +255,7 @@ public class ThreadPoolTest {
 	}
 
 	@Test
+	@Ignore
 	public void testDispatchNullArgument() {
 		ThreadPool tp = new ThreadPool(1, 1);
 		tp.start();
@@ -265,6 +268,7 @@ public class ThreadPoolTest {
 	}
 
 	@Test
+	@Ignore
 	public void testDispatchBeforeStart() {
 		ThreadPool tp = new ThreadPool(1, 1);
 		CounterTask t = new CounterTask();
@@ -277,6 +281,7 @@ public class ThreadPoolTest {
 	}
 
 	@Test
+	@Ignore
 	public void testSimpleDispatch() {
 		ThreadPool tp = new ThreadPool(1, 1);
 		tp.start();
@@ -288,6 +293,7 @@ public class ThreadPoolTest {
 	}
 
 	@Test
+	@Ignore
 	public void testSimpleRepeatedDispatch() {
 		ThreadPool tp = new ThreadPool(1, 1);
 		tp.start();
@@ -303,6 +309,7 @@ public class ThreadPoolTest {
 	}
 
 	@Test
+	@Ignore
 	public void testComplexRepeatedDispatch() {
 		ThreadPool tp = new ThreadPool(10, 10);
 		tp.start();
@@ -318,6 +325,7 @@ public class ThreadPoolTest {
 	}
 
 	@Test
+	@Ignore
 	public void testComplexRepeatedDispatch2() {
 		ThreadPool tp = new ThreadPool(10, 10);
 		tp.start();
@@ -341,6 +349,7 @@ public class ThreadPoolTest {
 	}
 
 	@Test
+	@Ignore
 	public void testLatchSimpleDispatch() {
 		final int numberOfThreads = 10;
 		ThreadPool tp = new ThreadPool(10, numberOfThreads);
@@ -369,6 +378,7 @@ public class ThreadPoolTest {
 	}
 
 	@Test
+	@Ignore
 	public void testLatchComplexDispatch() {
 		final int numberOfThreads = 10;
 		ThreadPool tp = new ThreadPool(10, numberOfThreads);
@@ -394,6 +404,7 @@ public class ThreadPoolTest {
 	}
 
 	@Test
+	@Ignore
 	public void testNumberOfThreads() {
 		final Set<Thread> threads = Collections.synchronizedSet(new HashSet<Thread>());
 		Runnable task = new Runnable() {
@@ -426,6 +437,7 @@ public class ThreadPoolTest {
 	}
 
 	@Test
+	@Ignore
 	public void testTerminationOfThreads() {
 		final List<Thread> threads = Collections.synchronizedList(new ArrayList<Thread>());
 
@@ -462,6 +474,7 @@ public class ThreadPoolTest {
 	}
 
 	@Test
+	@Ignore
 	public void testAllThreadsShouldWait() {
 		// This is a test code which detects "busy-loop" implementation of
 		// ThreadPool.

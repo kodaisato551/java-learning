@@ -6,6 +6,8 @@ package ch14.ex10;
 
 import java.lang.Thread.State;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Simple Thread Pool class.
@@ -30,7 +32,9 @@ public class ThreadPool {
 	private PoolWorker[] threads;
 	private final int queueSize;
 	private final int numberOfThreads;
-	private final ArrayList<Runnable> taskQueue;
+	private final List<Runnable> taskQueue;
+
+	private boolean isStopped = false;
 
 	/**
 	 * Constructs ThreadPool.
@@ -47,11 +51,12 @@ public class ThreadPool {
 		}
 		this.queueSize = queueSize;
 		this.numberOfThreads = numberOfThreads;
-		taskQueue = new ArrayList<>(queueSize);
+		taskQueue = new ArrayList<>();
 		threads = new PoolWorker[numberOfThreads];
 		for (int i = 0; i < numberOfThreads; i++) {
 			threads[i] = new PoolWorker();
 		}
+
 	}
 
 	/**
@@ -80,6 +85,7 @@ public class ThreadPool {
 	 * @throws IllegalStateException if threads has not been started.
 	 */
 	public void stop() {
+		isStopped = true;
 		for (int i = 0; i < numberOfThreads; i++) {
 			if (threads[i].getState().equals(State.NEW)) {
 				throw new IllegalStateException();
@@ -88,9 +94,9 @@ public class ThreadPool {
 				PoolWorker tmp = threads[i];
 				threads[i] = null;
 				tmp.interrupt();
-
 			}
 		}
+
 	}
 
 	/**
@@ -107,60 +113,53 @@ public class ThreadPool {
 	 * @throws IllegalStateException if this pool has not been started yet.
 	 */
 	public void dispatch(Runnable runnable) {
-		synchronized (taskQueue) {
-			taskQueue.add(runnable);
-			taskQueue.notify();
+		Objects.requireNonNull(runnable);
+		if (!isStopped) {
+			while (queueSize >= taskQueue.size()) {
+				try {
+					wait();
+				} catch (InterruptedException e) {
+				}
+			}
+			synchronized (taskQueue) {
+				taskQueue.add(runnable);
+				notifyAll();
+			}
 		}
+	}
+
+	/**
+	 * take task from taskQueue
+	 * @return
+	 */
+	public synchronized Runnable takeTask() {
+		while (taskQueue.size() <= 0) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+			}
+		}
+		Runnable runnable = taskQueue.remove(0);
+		notifyAll();
+		return runnable;
 	}
 
 	private class PoolWorker extends Thread {
 
-		private boolean isActive = true;
+		private volatile boolean isActive = true;
 
 		public void stopThread() {
 			this.isActive = false;
 		}
 
-		//		public void run() {
-		//			Thread thisThread = Thread.currentThread();
-		//			Runnable r;
-		//			while (this == thisThread) {
-		//				synchronized (taskQueue) {
-		//					while (taskQueue.isEmpty()) {
-		//						try {
-		//							taskQueue.wait();
-		//						} catch (InterruptedException e) {
-		//							Thread.currentThread().interrupt();
-		//						}
-		//					}
-		//					r = (Runnable) taskQueue.remove(0);
-		//				}
-		//				try {
-		//					r.run();
-		//				} catch (Exception e) {
-		//				}
-		//			}
-		//		}
-
 		public void run() {
-
 			Runnable r;
 			while (isActive) {
-				synchronized (taskQueue) {
-					while (taskQueue.isEmpty()) {
-						try {
-							taskQueue.wait();
-						} catch (InterruptedException ignored) {
-							Thread.currentThread().interrupt();
-						}
-					}
-					r = (Runnable) taskQueue.remove(0);
-				}
-				// If we don't catch RuntimeException, // the pool could leak threads
+				r = takeTask();
+				//execute
 				try {
 					r.run();
 				} catch (RuntimeException e) {
-					// You might want to log something here
 				}
 			}
 		}
