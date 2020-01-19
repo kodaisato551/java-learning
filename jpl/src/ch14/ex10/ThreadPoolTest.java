@@ -161,6 +161,7 @@ public class ThreadPoolTest {
 	}
 
 	@Test
+	@Ignore
 	public void testRepeatSimultaneousStarts() {
 		for (int i = 0; i < 5000; i++) {
 			testSimultaneousStarts();
@@ -255,7 +256,6 @@ public class ThreadPoolTest {
 	}
 
 	@Test
-	@Ignore
 	public void testDispatchNullArgument() {
 		ThreadPool tp = new ThreadPool(1, 1);
 		tp.start();
@@ -268,7 +268,6 @@ public class ThreadPoolTest {
 	}
 
 	@Test
-	@Ignore
 	public void testDispatchBeforeStart() {
 		ThreadPool tp = new ThreadPool(1, 1);
 		CounterTask t = new CounterTask();
@@ -377,6 +376,29 @@ public class ThreadPoolTest {
 		assertEquals(1, activeThreadCount());
 	}
 
+	/**
+	 * 正常
+	 */
+	@Test
+	public void test() {
+		final int queSize = 10;
+		ThreadPool tPool = new ThreadPool(queSize, 1);
+		tPool.start();
+		tPool.dispatch(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					System.out.println("task running  : " + Thread.currentThread().getName());
+					Thread.sleep(200);
+				} catch (InterruptedException e) {
+					// TODO 自動生成された catch ブロック
+					e.printStackTrace();
+				}
+			}
+		});
+		tPool.stop();
+	}
+
 	@Test
 	@Ignore
 	public void testLatchComplexDispatch() {
@@ -404,7 +426,6 @@ public class ThreadPoolTest {
 	}
 
 	@Test
-	@Ignore
 	public void testNumberOfThreads() {
 		final Set<Thread> threads = Collections.synchronizedSet(new HashSet<Thread>());
 		Runnable task = new Runnable() {
@@ -437,7 +458,6 @@ public class ThreadPoolTest {
 	}
 
 	@Test
-	@Ignore
 	public void testTerminationOfThreads() {
 		final List<Thread> threads = Collections.synchronizedList(new ArrayList<Thread>());
 
