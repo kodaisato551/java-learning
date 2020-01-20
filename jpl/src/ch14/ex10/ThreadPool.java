@@ -76,12 +76,6 @@ public class ThreadPool {
 		isStarting = true;
 		isCallStart = true;
 		for (int i = 0; i < numberOfThreads; i++) {
-			//			if (threads[i].getState().equals(State.NEW)) {
-			//				threads[i].shutdownFlg = false;
-			//				threads[i].start();
-			//			} else {
-			//				throw new IllegalStateException();
-			//			}
 			threads[i].shutdownFlg = false;
 			threads[i].start();
 		}
@@ -101,12 +95,14 @@ public class ThreadPool {
 	 */
 	public void stop() {
 		waitAllTaskComplete();
+
 		//すでにstopがコール済みの場合は例外を吐く
 		if (!isStarting) {
 			throw new IllegalStateException();
 		}
 		System.out.println("stop called taskQuesize : " + taskQueue.size());
 		isStarting = false;
+
 		for (PoolWorker thread : threads) {
 			thread.stopThread();
 		}
@@ -124,6 +120,7 @@ public class ThreadPool {
 				e.printStackTrace();
 			}
 		}
+		notifyAll();
 
 	}
 
@@ -182,11 +179,12 @@ public class ThreadPool {
 	 * @return
 	 */
 	public synchronized Runnable takeTask() {
+		System.out.println("THREAD POOL::take task call " + isStarting);
 		while (this.taskQueue.size() <= 0) {
-			if (!isStarting) {
-				return null;
-			}
 			try {
+				if (!isStarting) {
+					return null;
+				}
 				System.out.println("taking task waiting " + Thread.currentThread().getName());
 				wait();
 			} catch (InterruptedException e) {
@@ -204,11 +202,13 @@ public class ThreadPool {
 		public void stopThread() {
 			this.shutdownFlg = true;
 			try {
-				join();
+				System.out.println("joining...." + this.getName() + "state : " + this.getState());
+				this.join();
+				System.out.println("join done " + this.getName() + " flg : " + shutdownFlg);
 			} catch (InterruptedException e) {
-				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
 			}
+
 		}
 
 		private synchronized boolean getflg() {

@@ -37,6 +37,7 @@ public class ThreadPoolTest {
 		synchronized int waitForRunCount(int count) {
 			while (this.runCount < count) {
 				try {
+					System.out.println("waitForRunCount" + Thread.currentThread().getName());
 					wait();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -161,6 +162,7 @@ public class ThreadPoolTest {
 	}
 
 	@Test
+	@Ignore
 	public void testRepeatSimultaneousStarts() {
 		for (int i = 0; i < 5000; i++) {
 			testSimultaneousStarts();
@@ -279,19 +281,19 @@ public class ThreadPoolTest {
 	}
 
 	@Test
-	@Ignore
 	public void testSimpleDispatch() {
 		ThreadPool tp = new ThreadPool(1, 1);
 		tp.start();
 		CounterTask t = new CounterTask();
 		tp.dispatch(t);
 		t.waitForRunCount(1);
+		System.out
+				.println("main : " + Thread.currentThread().getName() + " [" + Thread.currentThread().getState() + "]");
 		tp.stop();
 		assertEquals(1, activeThreadCount());
 	}
 
 	@Test
-	@Ignore
 	public void testSimpleRepeatedDispatch() {
 		ThreadPool tp = new ThreadPool(1, 1);
 		tp.start();
@@ -307,7 +309,6 @@ public class ThreadPoolTest {
 	}
 
 	@Test
-	@Ignore
 	public void testComplexRepeatedDispatch() {
 		ThreadPool tp = new ThreadPool(10, 10);
 		tp.start();
@@ -323,7 +324,6 @@ public class ThreadPoolTest {
 	}
 
 	@Test
-	@Ignore
 	public void testComplexRepeatedDispatch2() {
 		ThreadPool tp = new ThreadPool(10, 10);
 		tp.start();
@@ -347,7 +347,6 @@ public class ThreadPoolTest {
 	}
 
 	@Test
-	@Ignore
 	public void testLatchSimpleDispatch() {
 		final int numberOfThreads = 10;
 		ThreadPool tp = new ThreadPool(10, numberOfThreads);
@@ -399,7 +398,6 @@ public class ThreadPoolTest {
 	}
 
 	@Test
-	@Ignore
 	public void testLatchComplexDispatch() {
 		final int numberOfThreads = 10;
 		ThreadPool tp = new ThreadPool(10, numberOfThreads);
@@ -493,7 +491,6 @@ public class ThreadPoolTest {
 	}
 
 	@Test
-	@Ignore
 	public void testAllThreadsShouldWait() {
 		// This is a test code which detects "busy-loop" implementation of
 		// ThreadPool.
@@ -514,6 +511,7 @@ public class ThreadPoolTest {
 
 		// Now all threads except this current thread should not be RUNNABLE.
 		int runnable = 0;
+		//100000
 		for (int i = 0; i < 100000; i++) {
 			for (Thread t : threads) {
 				if (t == null || t == current) {
