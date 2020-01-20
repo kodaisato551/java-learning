@@ -4,7 +4,6 @@
  */
 package ch14.ex10;
 
-import java.lang.Thread.State;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -36,7 +35,7 @@ public class ThreadPool {
 	private final List<Runnable> taskQueue;
 
 	private boolean isStarting = false;
-	private boolean isCallStart = false;
+	private volatile boolean isCallStart = false;
 
 	/**
 	 * Constructs ThreadPool.
@@ -69,16 +68,22 @@ public class ThreadPool {
 	 * @throws IllegalStateException if threads has been already started.
 	 */
 	public void start() {
+
+		if (isCallStart) {
+			throw new IllegalStateException();
+		}
 		System.out.println("THREAD POOL ::start() call");
 		isStarting = true;
 		isCallStart = true;
 		for (int i = 0; i < numberOfThreads; i++) {
-			if (threads[i].getState().equals(State.NEW)) {
-				threads[i].shutdownFlg = false;
-				threads[i].start();
-			} else {
-				throw new IllegalStateException();
-			}
+			//			if (threads[i].getState().equals(State.NEW)) {
+			//				threads[i].shutdownFlg = false;
+			//				threads[i].start();
+			//			} else {
+			//				throw new IllegalStateException();
+			//			}
+			threads[i].shutdownFlg = false;
+			threads[i].start();
 		}
 
 		System.out.println("THREAD POOL:: start() done");

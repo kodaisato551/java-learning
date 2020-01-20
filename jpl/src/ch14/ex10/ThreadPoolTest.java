@@ -161,7 +161,6 @@ public class ThreadPoolTest {
 	}
 
 	@Test
-	@Ignore
 	public void testRepeatSimultaneousStarts() {
 		for (int i = 0; i < 5000; i++) {
 			testSimultaneousStarts();
