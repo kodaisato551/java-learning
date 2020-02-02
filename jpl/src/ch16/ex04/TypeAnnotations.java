@@ -7,6 +7,7 @@ import java.lang.reflect.Type;
 public class TypeAnnotations {
 
 	public static void main(String[] args) {
+
 		for (String name : args) {
 			try {
 				Class<?> cls = Class.forName(name);
@@ -16,6 +17,7 @@ public class TypeAnnotations {
 				System.out.println(e);
 			}
 		}
+
 	}
 
 	private static void printAnnotations(Type type) {

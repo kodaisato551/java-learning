@@ -29,6 +29,7 @@ public class TypeDesc {
 		if (type == null || type == Object.class) {// 再帰呼び出し停止：スーパータイプが存在しない
 			return;
 		}
+
 		// TypeをClassオブジェクトに変換する
 		Class<?> cls = null;
 		if (type instanceof Class<?>) {
@@ -38,6 +39,10 @@ public class TypeDesc {
 		} else {
 			throw new Error("Unexpected non-class type");
 		}
+		if (cls.getEnclosingClass() != null) {
+			out.print(cls.getEnclosingClass().toString());
+		}
+
 		// この型を表示
 		for (int i = 0; i < depth; i++) {
 			out.print(" ");
