@@ -1,6 +1,6 @@
 package interpret;
 
-import interpret.ui.MainFrame;
+import interpret.ui.CreateInstanceUIFrame;
 
 /**
  * main
@@ -9,7 +9,7 @@ import interpret.ui.MainFrame;
  */
 public class Interpret {
 	public static void main(String[] args) {
-		MainFrame mainFrame = new MainFrame();
-		mainFrame.setVisible(true);
+		CreateInstanceUIFrame createInstanceUIFrame = new CreateInstanceUIFrame();
+		createInstanceUIFrame.setVisible(true);
 	}
 }

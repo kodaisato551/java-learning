@@ -1,7 +1,6 @@
 package interpret.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Constructor;
@@ -43,19 +42,17 @@ public class MainFrame extends JFrame {
 		JPanel p = new JPanel();
 		p.add(text);
 		p.add(button);
-
-		Container contentPane = getContentPane();
-		contentPane.add(p, BorderLayout.NORTH);
+		getContentPane().add(p, BorderLayout.NORTH);
 
 		list = new JList(model);
 		JScrollPane sp = new JScrollPane();
 		sp.getViewport().setView(list);
-		sp.setPreferredSize(new Dimension(200, 100));
+		sp.setPreferredSize(new Dimension(300, 100));
 
 		JPanel p1 = new JPanel();
 		p1.add(sp);
 
-		getContentPane().add(p1, BorderLayout.CENTER);
+		getContentPane().add(p1, BorderLayout.WEST);
 
 	}
 
@@ -64,7 +61,7 @@ public class MainFrame extends JFrame {
 			System.out.println("class name ** " + text.getText());
 			Constructor<?>[] constructors = Class.forName("java.lang." + text.getText()).getConstructors();
 			for (int i = 0; i < constructors.length - 1; i++) {
-				model.addElement(constructors[i].toGenericString());
+				model.addElement(constructors[i].toString());
 			}
 
 		} catch (ClassNotFoundException e1) {
