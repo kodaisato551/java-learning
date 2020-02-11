@@ -1,11 +1,12 @@
 package interpret.ui;
 
+import interpret.data.ObjectPool;
 import interpret.setting.Consts;
 import interpret.util.LexicalAnalyzer;
+import interpret.util.ReflectUtil;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Constructor;
@@ -24,42 +25,43 @@ public class CreateInstanceUIFrame extends JFrame {
     private JPanel dynamicParamPanel;
     private GridLayout layout;
     private final List<JTextField> inputParams = new ArrayList<>();
-
     private Constructor<?>[] constructors;
+    private int selectedIndex;
+    private List<String> paramList;
+    private JList instanceList;
 
     private final DefaultListModel model = new DefaultListModel<String>();
-    protected DefaultTableModel tableModel = new DefaultTableModel();
+    private final DefaultListModel instanceModel = new DefaultListModel<String>();
 
     public CreateInstanceUIFrame() {
         super(Consts.MAIN_FRAME_TITLE);
-		setBounds(Consts.MAIN_FRAME_SIZE);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLayout();
-		addListers();
-
+        setBounds(Consts.MAIN_FRAME_SIZE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout();
+        addListeners();
     }
 
     private void setLayout() {
-		getContentPane().setLayout(new GridLayout(2, 0, 0, 0));
+        getContentPane().setLayout(new GridLayout(2, 0, 0, 0));
 
         JPanel inputPanel = new JPanel();
-		getContentPane().add(inputPanel);
+        getContentPane().add(inputPanel);
         inputPanel.setLayout(new BorderLayout(0, 0));
 
         JPanel headerPanel = new JPanel();
         inputPanel.add(headerPanel, BorderLayout.NORTH);
         headerPanel.setLayout(new GridLayout(1, 0, 0, 0));
 
-		classNameInputFiled = new JTextField();
+        classNameInputFiled = new JTextField();
         headerPanel.add(classNameInputFiled);
-		classNameInputFiled.setColumns(10);
+        classNameInputFiled.setColumns(10);
 
-		showConstrutorButton = new JButton(Consts.SHOW_CONSTRUCTOR);
+        showConstrutorButton = new JButton(Consts.SHOW_CONSTRUCTOR);
         headerPanel.add(showConstrutorButton);
 
-		arraySizeInputFiled = new JTextField();
+        arraySizeInputFiled = new JTextField();
         headerPanel.add(arraySizeInputFiled);
-		arraySizeInputFiled.setColumns(10);
+        arraySizeInputFiled.setColumns(10);
 
         JButton decideArraySizeButton = new JButton(Consts.DECIDE_ARRAY_SIZE);
         headerPanel.add(decideArraySizeButton);
@@ -75,15 +77,14 @@ public class CreateInstanceUIFrame extends JFrame {
         JScrollPane scrollPane = new JScrollPane();
         construtorsPanel.add(scrollPane);
 
-		constractorList = new JList(model);
+        constractorList = new JList(model);
         scrollPane.setViewportView(constractorList);
 
-		dynamicParamPanel = new JPanel();
-		layout = new GridLayout();
-		layout.setColumns(2);
-		dynamicParamPanel.setLayout(layout);
+        dynamicParamPanel = new JPanel();
+        layout = new GridLayout();
+        layout.setColumns(2);
+        dynamicParamPanel.setLayout(layout);
         construtorsPanel.add(dynamicParamPanel);
-
 
         JPanel footerPanel = new JPanel();
         panel.add(footerPanel, BorderLayout.SOUTH);
@@ -93,30 +94,35 @@ public class CreateInstanceUIFrame extends JFrame {
         footerPanel.add(lblInstanceObjs);
 
         JButton btnCreateInstance = new JButton("create instance");
+        btnCreateInstance.addActionListener(CREATE_INSTANCE);
         footerPanel.add(btnCreateInstance);
 
         JPanel instanceListPanel = new JPanel();
-		getContentPane().add(instanceListPanel);
-        instanceListPanel.setLayout(new GridLayout(1, 0, 0, 0));
+        getContentPane().add(instanceListPanel);
+        instanceListPanel.setLayout(new BorderLayout(0, 0));
 
-        JList instanceList = new JList();
+        instanceList = new JList(instanceModel);
         instanceListPanel.add(instanceList);
+
+        JButton btnShowObject = new JButton("show object");
+        btnShowObject.addActionListener(SHOW_OBJECT);
+        instanceListPanel.add(btnShowObject, BorderLayout.SOUTH);
 
     }
 
-    private void addListers() {
-		showConstrutorButton.addActionListener(SHOW_CONSTRACTOR);
-		constractorList.addListSelectionListener(GET_CONSTRUCTOR_PARAM);
+    private void addListeners() {
+        showConstrutorButton.addActionListener(SHOW_CONSTRACTOR);
+        constractorList.addListSelectionListener(GET_CONSTRUCTOR_PARAM);
     }
 
     /**
-     * show constractor
+     * 　コンストラクタのリストをパネルに表示する
      */
     private final ActionListener SHOW_CONSTRACTOR = (e) -> {
         try {
-			constructors = Class.forName("java.lang." + classNameInputFiled.getText()).getConstructors();
+            constructors = Class.forName("java.lang." + classNameInputFiled.getText()).getConstructors();
             for (int i = 0; i < constructors.length - 1; i++) {
-				model.addElement(constructors[i].toString());
+                model.addElement(constructors[i].toString());
             }
 
         } catch (ClassNotFoundException e1) {
@@ -125,16 +131,18 @@ public class CreateInstanceUIFrame extends JFrame {
     };
 
     /**
-     *
+     * コンストラクタのパラメタを取得
      */
     private final ListSelectionListener GET_CONSTRUCTOR_PARAM = e -> {
         if (e.getValueIsAdjusting()) {
             return;
         }
-        Constructor<?> con = constructors[constractorList.getSelectedIndex()];
-        List<String> paramList = LexicalAnalyzer.findParams(con.toString());
-		deleteComponentFromPanel(dynamicParamPanel);
-		setCompToParamPanel(dynamicParamPanel, paramList);
+        selectedIndex = constractorList.getSelectedIndex();
+        Constructor<?> con = constructors[selectedIndex];
+        //paramList = LexicalAnalyzer.findParams(con.toString());
+        paramList = LexicalAnalyzer.findParams(con.toString());
+        deleteComponentFromPanel(dynamicParamPanel);
+        setCompToParamPanel(dynamicParamPanel, paramList);
     };
 
     /**
@@ -144,7 +152,7 @@ public class CreateInstanceUIFrame extends JFrame {
      * @param jPanel
      */
     private void deleteComponentFromPanel(JPanel jPanel) {
-		inputParams.clear();
+        inputParams.clear();
         Component[] comps = jPanel.getComponents();
         for (Component comp : comps) {
             jPanel.remove(comp);
@@ -161,23 +169,44 @@ public class CreateInstanceUIFrame extends JFrame {
      * @return
      */
     private void setCompToParamPanel(JPanel jPanel, List<String> classes) {
-		inputParams.clear();
+        inputParams.clear();
         System.out.println(classes);
         if (classes == null) {
             return;
         }
-
         if (classes.isEmpty()) {
             return;
         }
-		layout.setRows(classes.size());
+        layout.setRows(classes.size());
         for (int i = 0; i < classes.size(); i++) {
             jPanel.add(new JLabel(classes.get(i)));
-			inputParams.add(new JTextField());
+            inputParams.add(new JTextField());
             jPanel.add(inputParams.get(i));
         }
 
     }
+
+    private final ActionListener CREATE_INSTANCE = e -> {
+        Constructor<?> con = constructors[selectedIndex];
+        try {
+            //Object instance = ReflectUtil.construct(con, LexicalAnalyzer.parse(paramList, inputParams));
+            Object instance = ReflectUtil.construct(con, LexicalAnalyzer.parse(paramList, inputParams));
+            System.out.println("CREATE INSTANCE :: " + instance.getClass().getSimpleName() + "#" + instance.hashCode());
+            ObjectPool.getInstance().add(instance);
+            instanceModel.addElement(instance.getClass().getSimpleName() + "#" + instance.hashCode());
+
+        } catch (NumberFormatException ignore) {
+            JOptionPane.showMessageDialog(this, "Incorrect input");
+        } catch (Throwable throwable) {
+            JOptionPane.showMessageDialog(this, "Invalid");
+        }
+
+    };
+
+    private final ActionListener SHOW_OBJECT = e -> {
+
+
+    };
 
 
 }

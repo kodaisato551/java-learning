@@ -1,9 +1,11 @@
 package interpret.util;
 
+import javax.swing.*;
 import java.util.*;
 
 /**
  * define util method here
+ * 面倒な処理は全部ここ
  */
 public class LexicalAnalyzer {
 
@@ -39,12 +41,7 @@ public class LexicalAnalyzer {
         }
     };
 
-    /**
-     * receives the method's signature and returns a list of arguments
-     *
-     * @param method or constructor string
-     * @return list of param name if no param return null.
-     */
+
     public static List<String> findParams(String signatureString) {
         Objects.requireNonNull(signatureString);
         List<String> paramNames = new ArrayList<>(Arrays.asList(signatureString.split("[(,]", 0)));
@@ -60,7 +57,7 @@ public class LexicalAnalyzer {
     }
 
 
-    public static List<Class<?>> convertClassObjFromString(List<String> paramNames) throws ClassNotFoundException {
+    private static List<Class<?>> convertClassObjFromString(List<String> paramNames) throws ClassNotFoundException {
         List<Class<?>> classes = new ArrayList<>();
         for (String str : paramNames) {
             if (LexicalAnalyzer.primitiveConverter.get(str) != null) {
@@ -72,6 +69,102 @@ public class LexicalAnalyzer {
             }
         }
         return classes;
+    }
+
+
+    /**
+     * String　で受け取ったクラス情報と実態をもとに適切なオブジェクトに変換する
+     *
+     * @param paramClassNameList
+     * @param inputs
+     * @return
+     * @throws ClassNotFoundException,NumberFormatException
+     */
+    public static Object[] parse(List<String> paramClassNameList, List<JTextField> inputs) throws ClassNotFoundException, NumberFormatException {
+        List<String> strings = new ArrayList<>();
+        for (JTextField j : inputs) {
+            strings.add(j.getText());
+        }
+        List<Class<?>> classes = LexicalAnalyzer.convertClassObjFromString(paramClassNameList);
+        List<Object> objs = new ArrayList<>();
+        for (int i = 0; i < paramClassNameList.size(); i++) {
+            LexicalAnalyzer.parseAndInsertToMap(classes.get(i), strings.get(i), objs);
+        }
+        return objs.toArray();
+    }
+
+
+    private static void parseAndInsertToMap(Class<?> clazz, String value, List<Object> objs) throws NumberFormatException {
+
+        if (clazz.isArray()) {
+            String[] tmp = value.split(",");
+            if (clazz == int[].class) {
+                List<Integer> list = new ArrayList<>();
+                for (String str : tmp) {
+                    list.add(Integer.parseInt(str));
+                }
+                objs.add(list.toArray());
+            } else if (clazz == short[].class) {
+                List<Short> list = new ArrayList<>();
+                for (String str : tmp) {
+                    list.add(Short.parseShort(str));
+                }
+                objs.add(list.toArray());
+            } else if (clazz == byte[].class) {
+                List<Byte> list = new ArrayList<>();
+                for (String str : tmp) {
+                    list.add(Byte.parseByte(str));
+                }
+                objs.add(list.toArray());
+            } else if (clazz == double[].class) {
+                List<Double> list = new ArrayList<>();
+                for (String str : tmp) {
+                    list.add(Double.parseDouble(str));
+                }
+                objs.add(list.toArray());
+            } else if (clazz == float[].class) {
+                List<Float> list = new ArrayList<>();
+                for (String str : tmp) {
+                    list.add(Float.parseFloat(str));
+                }
+                objs.add(list.toArray());
+            } else if (clazz == char[].class) {
+                List<Character> list = new ArrayList<>();
+                for (String str : tmp) {
+                    list.add(str.toCharArray()[0]);
+                }
+                objs.add(list.toArray());
+            } else if (clazz == String[].class) {
+                objs.add(tmp);
+            } else {
+                //ほかのOnjの配列
+            }
+
+        } else {
+            if (clazz == int.class) {
+                objs.add(Integer.parseInt(value));
+            } else if (clazz == long.class) {
+                objs.add(Long.parseLong(value));
+            } else if (clazz == short.class) {
+                objs.add(Short.parseShort(value));
+            } else if (clazz == byte.class) {
+                objs.add(Byte.parseByte(value));
+            } else if (clazz == double.class) {
+                objs.add(Double.parseDouble(value));
+            } else if (clazz == float.class) {
+                objs.add(Float.parseFloat(value));
+            } else if (clazz == boolean.class) {
+                objs.add(Boolean.parseBoolean(value));
+            } else if (clazz == char.class) {
+                objs.add(value.toCharArray()[0]);
+            } else if (clazz == String.class) {
+                objs.add(value);
+            } else {
+                // ほかのオブジェクト
+            }
+        }
+
+
     }
 
 
