@@ -15,4 +15,8 @@ public class Consts {
     public static final String SHOW_CONSTRUCTOR = "show constructors";
     public static final String DECIDE_ARRAY_SIZE = "decide array size";
 
+    //invokeUIFrame
+    public static final Rectangle INVOKE_FRAME_SIZE = new Rectangle(200, 200, 800, 600);
+
+
 }

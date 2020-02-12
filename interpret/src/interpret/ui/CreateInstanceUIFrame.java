@@ -33,12 +33,15 @@ public class CreateInstanceUIFrame extends JFrame {
     private final DefaultListModel model = new DefaultListModel<String>();
     private final DefaultListModel instanceModel = new DefaultListModel<String>();
 
+
     public CreateInstanceUIFrame() {
         super(Consts.MAIN_FRAME_TITLE);
         setBounds(Consts.MAIN_FRAME_SIZE);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout();
         addListeners();
+
+
     }
 
     private void setLayout() {
@@ -204,7 +207,8 @@ public class CreateInstanceUIFrame extends JFrame {
     };
 
     private final ActionListener SHOW_OBJECT = e -> {
-
+        InvokeUIFrame invokeUIFrame = new InvokeUIFrame(instanceList.getSelectedIndex());
+        invokeUIFrame.setVisible(true);
 
     };
 

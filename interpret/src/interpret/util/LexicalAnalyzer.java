@@ -13,14 +13,14 @@ public class LexicalAnalyzer {
         private static final long serialVersionUID = 1390406511496673145L;
 
         {
-            put("int", int.class);
-            put("long", long.class);
-            put("short", short.class);
-            put("byte", byte.class);
-            put("double", double.class);
-            put("float", float.class);
-            put("boolean", boolean.class);
-            put("char", char.class);
+			put("int", int.class);
+			put("long", long.class);
+			put("short", short.class);
+			put("byte", byte.class);
+			put("double", double.class);
+			put("float", float.class);
+			put("boolean", boolean.class);
+			put("char", char.class);
         }
 
     };
@@ -29,18 +29,17 @@ public class LexicalAnalyzer {
         private static final long serialVersionUID = -526503688944880084L;
 
         {
-            put("int[]", int[].class);
-            put("long[]", long[].class);
-            put("short[]", short[].class);
-            put("byte[]", byte[].class);
-            put("double[]", double[].class);
-            put("float[]", float[].class);
-            put("boolean[]", boolean[].class);
-            put("char[]", char[].class);
+			put("int[]", int[].class);
+			put("long[]", long[].class);
+			put("short[]", short[].class);
+			put("byte[]", byte[].class);
+			put("double[]", double[].class);
+			put("float[]", float[].class);
+			put("boolean[]", boolean[].class);
+			put("char[]", char[].class);
 
         }
     };
-
 
     public static List<String> findParams(String signatureString) {
         Objects.requireNonNull(signatureString);
@@ -56,7 +55,6 @@ public class LexicalAnalyzer {
 
     }
 
-
     private static List<Class<?>> convertClassObjFromString(List<String> paramNames) throws ClassNotFoundException {
         List<Class<?>> classes = new ArrayList<>();
         for (String str : paramNames) {
@@ -71,7 +69,6 @@ public class LexicalAnalyzer {
         return classes;
     }
 
-
     /**
      * String　で受け取ったクラス情報と実態をもとに適切なオブジェクトに変換する
      *
@@ -80,7 +77,12 @@ public class LexicalAnalyzer {
      * @return
      * @throws ClassNotFoundException,NumberFormatException
      */
-    public static Object[] parse(List<String> paramClassNameList, List<JTextField> inputs) throws ClassNotFoundException, NumberFormatException {
+    public static Object[] parse(List<String> paramClassNameList, List<JTextField> inputs)
+            throws ClassNotFoundException, NumberFormatException {
+
+        if (paramClassNameList == null) {
+            return null;
+        }
         List<String> strings = new ArrayList<>();
         for (JTextField j : inputs) {
             strings.add(j.getText());
@@ -93,8 +95,8 @@ public class LexicalAnalyzer {
         return objs.toArray();
     }
 
-
-    private static void parseAndInsertToMap(Class<?> clazz, String value, List<Object> objs) throws NumberFormatException {
+    private static void parseAndInsertToMap(Class<?> clazz, String value, List<Object> objs)
+            throws NumberFormatException {
 
         if (clazz.isArray()) {
             String[] tmp = value.split(",");
@@ -164,8 +166,6 @@ public class LexicalAnalyzer {
             }
         }
 
-
     }
-
 
 }
