@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +23,17 @@ class InvokeUIFrame extends JFrame {
     private final int objectPoolIndex;//オブジェクトが指し示す
 
     private final DefaultListModel mothodsModel = new DefaultListModel();
+    private final DefaultListModel fieldModel = new DefaultListModel();
     private JList methodJList;
     private final List<JTextField> inputParams = new ArrayList<>();
     private GridLayout layout;
     private JPanel methodParamListPanel;
     private JButton btnInvoke;
+    private JList filedJList;
 
     private Object object;
     private Method[] methods;
+    private Field[] fields;
     private List<String> paramList;
 
     /**
@@ -84,12 +88,15 @@ class InvokeUIFrame extends JFrame {
 
         JPanel filedComp = new JPanel();
         filedPanel.add(filedComp, BorderLayout.CENTER);
+        filedComp.setLayout(new BorderLayout(0, 0));
+
+		filedJList = new JList(fieldModel);
+        filedComp.add(filedJList);
     }
 
     private void setListeners() {
 		methodJList.addListSelectionListener(GET_METHOD_PARAM);
     }
-
 
     /**
      * 初期で渡されたオブジェクトのメソッド一覧をｊListに表示
@@ -97,9 +104,14 @@ class InvokeUIFrame extends JFrame {
     private void init() {
 		object = ObjectPool.getInstance().get(objectPoolIndex);
 		methods = object.getClass().getMethods();
+		fields = object.getClass().getFields();
         for (Method m : methods) {
 			mothodsModel.addElement(m.toGenericString());
         }
+        for (Field f : fields) {
+			fieldModel.addElement(f.toGenericString());
+        }
+
     }
 
     /**
@@ -161,8 +173,8 @@ class InvokeUIFrame extends JFrame {
 
     private final ActionListener INVOKE = (e) -> {
         try {
-            Object returnValue =
-                    ReflectUtil.invoke(object, methods[methodJList.getSelectedIndex()], LexicalAnalyzer.parse(paramList, inputParams));
+            Object returnValue = ReflectUtil.invoke(object, methods[methodJList.getSelectedIndex()],
+                    LexicalAnalyzer.parse(paramList, inputParams));
             if (returnValue == null) {
                 JOptionPane.showMessageDialog(this, "void");
             } else {
