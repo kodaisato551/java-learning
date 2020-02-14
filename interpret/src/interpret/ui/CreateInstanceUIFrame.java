@@ -124,6 +124,7 @@ public class CreateInstanceUIFrame extends JFrame {
     private final ActionListener SHOW_CONSTRACTOR = (e) -> {
         try {
             constructors = Class.forName("java.lang." + classNameInputFiled.getText()).getConstructors();
+            model.clear();
             for (int i = 0; i < constructors.length - 1; i++) {
                 model.addElement(constructors[i].toString());
             }
@@ -141,6 +142,7 @@ public class CreateInstanceUIFrame extends JFrame {
             return;
         }
         selectedIndex = constractorList.getSelectedIndex();
+        if(selectedIndex == -1){return;}
         Constructor<?> con = constructors[selectedIndex];
         //paramList = LexicalAnalyzer.findParams(con.toString());
         paramList = LexicalAnalyzer.findParams(con.toString());
