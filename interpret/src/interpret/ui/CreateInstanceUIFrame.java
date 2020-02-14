@@ -125,7 +125,7 @@ public class CreateInstanceUIFrame extends JFrame {
         try {
             constructors = Class.forName(classNameInputFiled.getText()).getConstructors();
             model.clear();
-            for (int i = 0; i < constructors.length - 1; i++) {
+            for (int i = 0; i < constructors.length; i++) {
                 model.addElement(constructors[i].toString());
             }
 
