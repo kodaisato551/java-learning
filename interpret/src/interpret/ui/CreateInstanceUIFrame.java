@@ -123,7 +123,7 @@ public class CreateInstanceUIFrame extends JFrame {
      */
     private final ActionListener SHOW_CONSTRACTOR = (e) -> {
         try {
-            constructors = Class.forName("java.lang." + classNameInputFiled.getText()).getConstructors();
+            constructors = Class.forName(classNameInputFiled.getText()).getConstructors();
             model.clear();
             for (int i = 0; i < constructors.length - 1; i++) {
                 model.addElement(constructors[i].toString());
