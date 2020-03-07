@@ -15,7 +15,7 @@ public class TranslateByte {
         System.out.println(out.toString());
     }
 
-    public static void translateByte(byte from, byte to, InputStream in, OutputStream out) throws IOException {
+    private static void translateByte(byte from, byte to, InputStream in, OutputStream out) throws IOException {
         int b;
         while ((b = in.read()) != -1) {
             out.write(b == from ? to : b);
