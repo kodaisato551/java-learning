@@ -2,7 +2,8 @@ package ch03.ex08;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertTrue;
+
 
 import org.junit.Before;
 import org.junit.BeforeClass;
