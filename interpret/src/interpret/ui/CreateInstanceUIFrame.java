@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 　TODO　private のフィールドも表示、フィールドの修正を可能にする
  * TODO Packagenameの入力もほしい
  */
 public class CreateInstanceUIFrame extends JFrame {
@@ -142,7 +143,9 @@ public class CreateInstanceUIFrame extends JFrame {
             return;
         }
         selectedIndex = constractorList.getSelectedIndex();
-        if(selectedIndex == -1){return;}
+        if (selectedIndex == -1) {
+            return;
+        }
         Constructor<?> con = constructors[selectedIndex];
         //paramList = LexicalAnalyzer.findParams(con.toString());
         paramList = LexicalAnalyzer.findParams(con.toString());
