@@ -29,6 +29,23 @@ public class ObjectPool {
         return list;
     }
 
+    /**
+     * 特定の型情報をキーとして渡し、その型のObjectのリストを返す
+     * <p>
+     * オブジェクトがない場合は
+     *
+     * @param clazz ほしい型情報
+     * @return
+     */
+    public List<Object> grep(Class<?> clazz) {
+        List<Object> greppedList = new ArrayList<>();
+        for (Object obj : list) {
+            if (obj.getClass() == clazz) {
+                greppedList.add(obj);
+            }
+        }
+        return greppedList;
+    }
 
     public static ObjectPool getInstance() {
         return ObjectPool.instance;

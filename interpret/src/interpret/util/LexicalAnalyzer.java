@@ -1,13 +1,7 @@
 package interpret.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
-import javax.swing.JTextField;
+import javax.swing.*;
+import java.util.*;
 
 /**
  * define util method here
@@ -78,7 +72,7 @@ public class LexicalAnalyzer {
 	/**
 	 * String　で受け取ったクラス情報と実態をもとに適切なオブジェクトに変換する
 	 *
-	 * @param paramClassNameList
+	 * @param paramClassNameList　
 	 * @param inputs
 	 * @return
 	 * @throws ClassNotFoundException,NumberFormatException
