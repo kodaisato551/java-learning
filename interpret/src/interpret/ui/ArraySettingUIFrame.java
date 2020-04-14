@@ -1,16 +1,30 @@
 package interpret.ui;
 
-import interpret.data.ObjectPool;
-import interpret.setting.Consts;
-import interpret.ui.table.ArrayJTable;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.MutableComboBoxModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import interpret.data.ObjectPool;
+import interpret.setting.Consts;
+import interpret.ui.table.ArrayJTable;
 
 public class ArraySettingUIFrame extends JFrame {
 	SpinnerNumberModel spinnerNumberModel;
@@ -23,13 +37,12 @@ public class ArraySettingUIFrame extends JFrame {
 	private List<JTextField> textFields = new ArrayList<>();
 	private List<JComboBox<String>> comboBoxList = new ArrayList<>();
 
-	private static final String HEADER_TITLE[] = {"Index Num", "Select from created object", "Input if primitive"};
+	private static final String HEADER_TITLE[] = { "Index Num", "Select from created object", "Input if primitive" };
 	private JPanel contentPane;
 	private DefaultTableModel defaultTableModel = new DefaultTableModel(HEADER_TITLE, 3);
 	private MutableComboBoxModel<String> defaultComboBoxModel = new DefaultComboBoxModel<>();
 	private JComboBox<String> comboBox = new JComboBox<String>(defaultComboBoxModel);
 	private JPanel comboBoxPanel = new JPanel();
-
 
 	private final ActionListener DECIDE_SIZE = e -> {
 		arraySize = (Integer) spinnerNumberModel.getNumber();
@@ -44,7 +57,6 @@ public class ArraySettingUIFrame extends JFrame {
 
 		}
 	};
-
 
 	/**
 	 * Create the frame.
@@ -76,7 +88,6 @@ public class ArraySettingUIFrame extends JFrame {
 		for (int i = 0; i < 2; i++) {
 			ObjectPool.getInstance().add(new String());
 		}
-
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -110,7 +121,6 @@ public class ArraySettingUIFrame extends JFrame {
 			defaultTableModel.setValueAt(comboBoxList.get(i), i, 1);
 			defaultTableModel.setValueAt(textFields.get(i), i, 2);
 		}
-
 
 	}
 
@@ -152,6 +162,11 @@ public class ArraySettingUIFrame extends JFrame {
 
 		content_panel.add(jPanel, BorderLayout.CENTER);
 
+		JPanel futtre_panel = new JPanel();
+		contentPane.add(futtre_panel, BorderLayout.SOUTH);
+
+		JButton btnCreateArrayInstance = new JButton("Create array instance");
+		futtre_panel.add(btnCreateArrayInstance);
 
 	}
 }
