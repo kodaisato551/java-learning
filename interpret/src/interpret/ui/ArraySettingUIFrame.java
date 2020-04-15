@@ -1,35 +1,28 @@
 package interpret.ui;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.awt.GridLayout;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.MutableComboBoxModel;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
-
 import interpret.data.ObjectPool;
 import interpret.setting.Consts;
 import interpret.ui.table.ArrayJTable;
 
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * TODO ここでインスタンスを生成したら、メインのフレームでのリストを表示させないといけない。メインに何らかの通知を行う？
+ */
 public class ArraySettingUIFrame extends JFrame {
 	SpinnerNumberModel spinnerNumberModel;
 	JSpinner inputArraySize;
 	JButton btnDecideArraySize;
+	JButton btnCreateArrayInstance;
+	private JPanel contentPane;
+	private CreateInstanceUIFrame parentFrame;
 
 	private Class<?> clazz = null;
 	private int arraySize = 0;
@@ -38,13 +31,13 @@ public class ArraySettingUIFrame extends JFrame {
 	private List<JComboBox<String>> comboBoxList = new ArrayList<>();
 
 	private static final String HEADER_TITLE[] = { "Index Num", "Select from created object", "Input if primitive" };
-	private JPanel contentPane;
 	private DefaultTableModel defaultTableModel = new DefaultTableModel(HEADER_TITLE, 3);
 	private MutableComboBoxModel<String> defaultComboBoxModel = new DefaultComboBoxModel<>();
-	private JComboBox<String> comboBox = new JComboBox<String>(defaultComboBoxModel);
-	private JPanel comboBoxPanel = new JPanel();
+	private List<MutableComboBoxModel<String>> comboBoxModelList = new ArrayList<>();
+
 
 	private final ActionListener DECIDE_SIZE = e -> {
+		clearTable();
 		arraySize = (Integer) spinnerNumberModel.getNumber();
 		defaultTableModel.setRowCount(arraySize);
 		configTable(arraySize);
@@ -54,15 +47,44 @@ public class ArraySettingUIFrame extends JFrame {
 		if (arraySize == 0) {
 			JOptionPane.showMessageDialog(this, "Array size must be >0");
 		} else {
+			Object array = Array.newInstance(clazz, arraySize);
+			boolean containNullFromArray = false;
+			for (int i = 0; i < arraySize; i++) {
+				int selectedIndex = comboBoxList.get(i).getSelectedIndex();
+				System.out.println("item selected index : " + selectedIndex);
+				if (selectedIndex == 0) {
 
+					containNullFromArray = true;
+				} else {
+					Object obj = ObjectPool.getInstance().get(selectedIndex - 1);
+					Array.set(array, i, obj);
+				}
+			}
+			if (containNullFromArray) {
+				JOptionPane.showMessageDialog(this, "Null is put in the corresponding element because the element of the array is not selected");
+			}
+			ObjectPool.getInstance().add(array);
+			System.out.println(ObjectPool.getInstance().getAll());
+			/*
+			ここに何かをフレームに通知
+			 */
+
+			if (parentFrame == null) {
+				System.out.println("frame is null");
+			}
+			if (parentFrame.getInstanceModel() == null) {
+				System.out.println("model is null");
+			}
+			parentFrame.getInstanceModel().addElement(array.getClass().getSimpleName() + "#" + array.hashCode());
 		}
 	};
+
 
 	/**
 	 * Create the frame.
 	 */
-	public ArraySettingUIFrame(Class<?> clazz) {
-		inicialize(clazz);
+	public ArraySettingUIFrame(Class<?> clazz, CreateInstanceUIFrame parent) {
+		inicialize(clazz, parent);
 		setLayout();
 		setListener();
 	}
@@ -70,7 +92,8 @@ public class ArraySettingUIFrame extends JFrame {
 	/**
 	 * フィールドの初期化を行います
 	 */
-	private void inicialize(Class<?> clazz) {
+	private void inicialize(Class<?> clazz, CreateInstanceUIFrame parentFrame) {
+		this.parentFrame = parentFrame;
 		spinnerNumberModel = new SpinnerNumberModel(0, null, null, 1);
 		this.clazz = clazz;
 		objectList = ObjectPool.getInstance().grep(clazz);
@@ -79,27 +102,28 @@ public class ArraySettingUIFrame extends JFrame {
 
 	private void setListener() {
 		btnDecideArraySize.addActionListener(DECIDE_SIZE);
+		btnCreateArrayInstance.addActionListener(CREATE_ARRAY);
 	}
 
-	/**
-	 * Launch the application.(for test)
-	 */
-	public static void main(String[] args) {
-		for (int i = 0; i < 2; i++) {
-			ObjectPool.getInstance().add(new String());
-		}
-
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ArraySettingUIFrame frame = new ArraySettingUIFrame(String.class);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	/**
+//	 * Launch the application.(for test)
+//	 */
+//	public static void main(String[] args) {
+//
+//		ObjectPool.getInstance().add("sato");
+//		ObjectPool.getInstance().add("yamada");
+//
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					ArraySettingUIFrame frame = new ArraySettingUIFrame(String.class, new CreateInstanceUIFrame());
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * 配列のサイズを受け次第。tableの設定をする.
@@ -107,25 +131,37 @@ public class ArraySettingUIFrame extends JFrame {
 	 * @param size
 	 */
 	private void configTable(int size) {
-		defaultComboBoxModel.addElement("not selected");
-		for (int i = 0; i < objectList.size(); i++) {
-			Object tmp = objectList.get(i);
-			defaultComboBoxModel.addElement(tmp.getClass().getSimpleName() + "#" + tmp.hashCode());
-		}
 
-		System.out.println("BoxModel : " + defaultComboBoxModel.getSize());
 		for (int i = 0; i < size; i++) {
+
+			MutableComboBoxModel<String> model = new DefaultComboBoxModel<>();
+			model.addElement("not selected");
+			for (int j = 0; j < objectList.size(); j++) {
+				Object tmp = objectList.get(j);
+				model.addElement(tmp.getClass().getSimpleName() + "#" + tmp.hashCode());
+			}
+			comboBoxModelList.add(model);
+			comboBoxList.add(new JComboBox<>(model));
 			textFields.add(new JTextField());
-			comboBoxList.add(new JComboBox<>(defaultComboBoxModel));
 			defaultTableModel.setValueAt(new JLabel(String.valueOf(i)), i, 0);
 			defaultTableModel.setValueAt(comboBoxList.get(i), i, 1);
 			defaultTableModel.setValueAt(textFields.get(i), i, 2);
 		}
 
+
+	}
+
+
+	private void clearTable() {
+		while (defaultComboBoxModel.getSize() > 0) {
+			defaultComboBoxModel.removeElementAt(0);
+		}
+		comboBoxModelList.clear();
+		textFields.clear();
 	}
 
 	private void setLayout() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Consts.MAIN_FRAME_SIZE);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -153,8 +189,6 @@ public class ArraySettingUIFrame extends JFrame {
 		JPanel content_panel = new JPanel();
 		contentPane.add(content_panel, BorderLayout.CENTER);
 
-		comboBoxPanel.add(comboBox);
-
 		ArrayJTable table = new ArrayJTable(defaultTableModel);
 		JScrollPane jScrollPane = new JScrollPane(table);
 		JPanel jPanel = new JPanel();
@@ -165,7 +199,7 @@ public class ArraySettingUIFrame extends JFrame {
 		JPanel futtre_panel = new JPanel();
 		contentPane.add(futtre_panel, BorderLayout.SOUTH);
 
-		JButton btnCreateArrayInstance = new JButton("Create array instance");
+		btnCreateArrayInstance = new JButton("Create array instance");
 		futtre_panel.add(btnCreateArrayInstance);
 
 	}

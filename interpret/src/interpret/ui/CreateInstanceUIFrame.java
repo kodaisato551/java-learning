@@ -1,28 +1,17 @@
 package interpret.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.GridLayout;
-import java.awt.event.ActionListener;
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.event.ListSelectionListener;
-
 import interpret.data.ObjectPool;
 import interpret.setting.Consts;
 import interpret.util.LexicalAnalyzer;
 import interpret.util.ReflectUtil;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 最初の画面。
@@ -38,14 +27,12 @@ public class CreateInstanceUIFrame extends JFrame {
 	private final DefaultListModel instanceModel = new DefaultListModel<String>();
 
 	private JList instanceList;
-	private final ActionListener SHOW_OBJECT = e -> {
-		InvokeUIFrame invokeUIFrame = new InvokeUIFrame(instanceList.getSelectedIndex());
-		invokeUIFrame.setVisible(true);
 
-	};
 	private JTextField classNameInputFiled;
 	private JList constractorList;
 	private JButton showConstrutorButton;
+	private JButton decideArraySizeButton;
+	private JButton btnShowObject;
 	private JPanel dynamicParamPanel;
 	private GridLayout layout;
 	private Constructor<?>[] constructors;
@@ -67,6 +54,19 @@ public class CreateInstanceUIFrame extends JFrame {
 	};
 	//アレイの選択画面
 	private final ActionListener DECIDE_ARRAY = e -> {
+		try {
+			Class<?> clazz = Class.forName(classNameInputFiled.getText());
+			ArraySettingUIFrame frame = new ArraySettingUIFrame(clazz, this);
+			frame.setVisible(true);
+		} catch (ClassNotFoundException ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage());
+		}
+	};
+
+	private final ActionListener SHOW_OBJECT = e -> {
+		InvokeUIFrame invokeUIFrame = new InvokeUIFrame(instanceList.getSelectedIndex());
+		invokeUIFrame.setVisible(true);
+
 	};
 	private int selectedIndex;
 	private List<String> paramList;
@@ -82,7 +82,6 @@ public class CreateInstanceUIFrame extends JFrame {
 			return;
 		}
 		Constructor<?> con = constructors[selectedIndex];
-		//paramList = LexicalAnalyzer.findParams(con.toString());
 		paramList = LexicalAnalyzer.findParams(con.toString());
 		deleteComponentFromPanel(dynamicParamPanel);
 		setCompToParamPanel(dynamicParamPanel, paramList);
@@ -112,6 +111,7 @@ public class CreateInstanceUIFrame extends JFrame {
 	}
 
 	private void setLayout() {
+
 		getContentPane().setLayout(new GridLayout(2, 0, 0, 0));
 
 		JPanel inputPanel = new JPanel();
@@ -129,7 +129,7 @@ public class CreateInstanceUIFrame extends JFrame {
 		showConstrutorButton = new JButton("Show constructors");
 		headerPanel.add(showConstrutorButton);
 
-		JButton decideArraySizeButton = new JButton("Go to the array setting");
+		decideArraySizeButton = new JButton("Go to the array setting");
 		headerPanel.add(decideArraySizeButton);
 
 		JPanel panel = new JPanel();
@@ -170,8 +170,7 @@ public class CreateInstanceUIFrame extends JFrame {
 		instanceList = new JList(instanceModel);
 		instanceListPanel.add(instanceList);
 
-		JButton btnShowObject = new JButton("show object");
-		btnShowObject.addActionListener(SHOW_OBJECT);
+		btnShowObject = new JButton("show object");
 		instanceListPanel.add(btnShowObject, BorderLayout.SOUTH);
 
 	}
@@ -179,6 +178,8 @@ public class CreateInstanceUIFrame extends JFrame {
 	private void addListeners() {
 		showConstrutorButton.addActionListener(SHOW_CONSTRACTOR);
 		constractorList.addListSelectionListener(GET_CONSTRUCTOR_PARAM);
+		decideArraySizeButton.addActionListener(DECIDE_ARRAY);
+		btnShowObject.addActionListener(SHOW_OBJECT);
 	}
 
 	/**
@@ -221,5 +222,10 @@ public class CreateInstanceUIFrame extends JFrame {
 		}
 
 	}
+
+	public DefaultListModel getInstanceModel() {
+		return instanceModel;
+	}
+
 
 }
