@@ -148,6 +148,12 @@ class InvokeUIFrame extends JFrame {
 
 		filedJList = new JList(fieldModel);
 		filedComp.add(filedJList);
+
+		JPanel setFiled_panel = new JPanel();
+		filedComp.add(setFiled_panel, BorderLayout.SOUTH);
+
+		JButton btnSetField = new JButton("Set Field");
+		setFiled_panel.add(btnSetField);
 	}
 
 	private void setListeners() {
