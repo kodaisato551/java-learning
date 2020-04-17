@@ -1,30 +1,19 @@
 package interpret.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.GridLayout;
+import interpret.data.ObjectPool;
+import interpret.setting.Consts;
+import interpret.util.LexicalAnalyzer;
+import interpret.util.ReflectUtil;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionListener;
-
-import interpret.data.ObjectPool;
-import interpret.setting.Consts;
-import interpret.util.LexicalAnalyzer;
-import interpret.util.ReflectUtil;
 
 /**
  * TODO エラーも表示する
@@ -49,6 +38,9 @@ class InvokeUIFrame extends JFrame {
 	private Method[] methods;
 	private Field[] fields;
 	private List<String> paramList;
+	private List<Object> fieldObjectList = new ArrayList<>();
+
+
 	/**
 	 *
 	 */
@@ -87,6 +79,14 @@ class InvokeUIFrame extends JFrame {
 		this.objectPoolIndex = objectPoolIndex;
 		init();
 	}
+
+	InvokeUIFrame(Object object) throws Throwable {
+		setLayouts();
+		setListeners();
+		initForTest(object);
+		this.objectPoolIndex = 0;
+	}
+
 
 	private void setLayouts() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -142,15 +142,16 @@ class InvokeUIFrame extends JFrame {
 		JLabel lblFields = new JLabel("Fields");
 		filedPanel.add(lblFields, BorderLayout.NORTH);
 
-		JPanel filedComp = new JPanel();
-		filedPanel.add(filedComp, BorderLayout.CENTER);
-		filedComp.setLayout(new BorderLayout(0, 0));
-
 		filedJList = new JList(fieldModel);
-		filedComp.add(filedJList);
+		JScrollPane filedComp = new JScrollPane(filedJList);
+		filedPanel.add(filedComp, BorderLayout.CENTER);
+//		filedComp.setLayout(new BorderLayout(0, 0));
+
+
+		//filedComp.add(filedJList);
 
 		JPanel setFiled_panel = new JPanel();
-		filedComp.add(setFiled_panel, BorderLayout.SOUTH);
+		filedPanel.add(setFiled_panel, BorderLayout.SOUTH);
 
 		JButton btnSetField = new JButton("Set Field");
 		setFiled_panel.add(btnSetField);
@@ -167,14 +168,38 @@ class InvokeUIFrame extends JFrame {
 	private void init() {
 		object = ObjectPool.getInstance().get(objectPoolIndex);
 		methods = object.getClass().getMethods();
-		fields = object.getClass().getFields();
+		fields = object.getClass().getDeclaredFields();
+
 		for (Method m : methods) {
 			mothodsModel.addElement(m.toGenericString());
 		}
 		for (Field f : fields) {
-			fieldModel.addElement(f.toGenericString());
+			try {
+				Object o = ReflectUtil.getField(object, f);
+				fieldObjectList.add(o);
+				fieldModel.addElement(f.toGenericString() + " = " + o);
+			} catch (Throwable throwable) {
+				throwable.printStackTrace();
+				JOptionPane.showMessageDialog(this, throwable.getMessage());
+			}
+
 		}
 
+	}
+
+
+	private void initForTest(Object obj) throws Throwable {
+		object = obj;
+		methods = object.getClass().getMethods();
+		fields = object.getClass().getDeclaredFields();
+		for (Method m : methods) {
+			mothodsModel.addElement(m.toGenericString());
+		}
+		for (Field f : fields) {
+			Object o = ReflectUtil.getField(obj, f);
+			fieldObjectList.add(o);
+			fieldModel.addElement(f.toGenericString() + " = " + o);
+		}
 	}
 
 	/**
@@ -218,5 +243,10 @@ class InvokeUIFrame extends JFrame {
 			jPanel.add(inputParams.get(i));
 		}
 
+	}
+
+	public static void main(String[] args) throws Throwable {
+		InvokeUIFrame frame = new InvokeUIFrame("sato");
+		frame.setVisible(true);
 	}
 }

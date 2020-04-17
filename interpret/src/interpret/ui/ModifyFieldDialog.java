@@ -1,14 +1,8 @@
 package interpret.ui;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import java.awt.*;
 
 public class ModifyFieldDialog extends JDialog {
 
