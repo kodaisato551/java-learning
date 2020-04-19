@@ -40,9 +40,6 @@ class InvokeUIFrame extends JFrame {
 	private List<String> paramList;
 	private JButton btnSetField;
 	private List<Object> fieldObjectList = new ArrayList<>();
-
-
-
 	/**
 	 *
 	 */
@@ -71,14 +68,11 @@ class InvokeUIFrame extends JFrame {
 
 	};
 
-
 	/**
 	 * JListで選択したもののフィールドのオブジェクトをDialogに渡す。
 	 */
 	private final ActionListener SET_FIELD = (e) -> {
 		int selectedIndex = fieldJList.getSelectedIndex();
-		Object obj = fieldObjectList.get(selectedIndex);
-
 		ModifyFieldDialog dialog = new ModifyFieldDialog(object, selectedIndex, this);
 		dialog.setVisible(true);
 
@@ -89,10 +83,10 @@ class InvokeUIFrame extends JFrame {
 	 * Create the frame.
 	 */
 	InvokeUIFrame(int objectPoolIndex) {
+		init();
 		setLayouts();
 		setListeners();
 		this.objectPoolIndex = objectPoolIndex;
-		init();
 	}
 
 	InvokeUIFrame(Object object) throws Throwable {
@@ -172,7 +166,7 @@ class InvokeUIFrame extends JFrame {
 		JPanel setFiled_panel = new JPanel();
 		filedPanel.add(setFiled_panel, BorderLayout.SOUTH);
 
-		JButton btnSetField = new JButton("Set Field");
+		btnSetField = new JButton("Set Field");
 		setFiled_panel.add(btnSetField);
 	}
 
@@ -275,7 +269,14 @@ class InvokeUIFrame extends JFrame {
 	public void updateFieldsAt(Object obj, int fieldSelectedIndex) {
 		object = obj;
 		ObjectPool.getInstance().setObject(objectPoolIndex, obj);
-		fieldObjectList.set(fieldSelectedIndex, obj);
-		fieldModel.set(fieldSelectedIndex, fields[fieldSelectedIndex].toGenericString() + " = " + obj);
+		try {
+			Object updateObj = ReflectUtil.getField(obj, fields[fieldSelectedIndex]);
+			System.out.println("update Fld obj : " + updateObj);
+			fieldObjectList.set(fieldSelectedIndex, updateObj);
+			fieldModel.set(fieldSelectedIndex, fields[fieldSelectedIndex].toGenericString() + " = " + updateObj);
+		} catch (Throwable throwable) {
+			JOptionPane.showMessageDialog(this, throwable.getMessage());
+		}
+
 	}
 }

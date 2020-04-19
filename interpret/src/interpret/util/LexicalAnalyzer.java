@@ -41,6 +41,7 @@ public class LexicalAnalyzer {
 		}
 	};
 
+
 	public static List<String> findParams(String signatureString) {
 		Objects.requireNonNull(signatureString);
 		List<String> paramNames = new ArrayList<>(Arrays.asList(signatureString.split("[(,]", 0)));
@@ -90,12 +91,22 @@ public class LexicalAnalyzer {
 		List<Class<?>> classes = LexicalAnalyzer.convertClassObjFromString(paramClassNameList);
 		List<Object> objs = new ArrayList<>();
 		for (int i = 0; i < paramClassNameList.size(); i++) {
-			LexicalAnalyzer.parseAndInsertToMap(classes.get(i), strings.get(i), objs);
+			LexicalAnalyzer.createPrimitiveInstanceFromStringValue(classes.get(i), strings.get(i), objs);
 		}
 		return objs.toArray();
 	}
 
-	private static void parseAndInsertToMap(Class<?> clazz, String value, List<Object> objs)
+	/**
+	 * プリミティブ型のクラスの場合そのクラスのラッパーオブジェクトに変換する。
+	 * Stringで受け取った入力とクラスの情報からそのクラスのオブジェクトを作成する。
+	 * オブジェクトは生成されるリストとして返却される。
+	 *
+	 * @param clazz クラスの情報
+	 * @param value 　そのクラスで
+	 * @param objs  　生成されたオブジェクトのリスト。
+	 * @throws NumberFormatException
+	 */
+	public static void createPrimitiveInstanceFromStringValue(Class<?> clazz, String value, List<Object> objs)
 			throws NumberFormatException {
 
 		if (clazz.isArray()) {

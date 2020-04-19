@@ -1,6 +1,7 @@
 package interpret.ui;
 
 import interpret.data.ObjectPool;
+import interpret.util.LexicalAnalyzer;
 import interpret.util.ReflectUtil;
 
 import javax.swing.*;
@@ -8,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ModifyFieldDialog extends JDialog {
@@ -27,15 +29,32 @@ public class ModifyFieldDialog extends JDialog {
 	private List<Object> objectList;
 
 	private final ActionListener OK_BUTTON = (e) -> {
-		int index = comboBox.getSelectedIndex();
-		Object obj = objectList.get(index);
+		Object updatedValue = null;
+
+
+		if (field.getType().isPrimitive()) {
+			try {
+				List<Object> objs = new ArrayList<>();
+				LexicalAnalyzer.createPrimitiveInstanceFromStringValue(field.getType(), textField.getText(), objs);
+				updatedValue = objs.get(0);
+
+			} catch (NumberFormatException ex) {
+				JOptionPane.showMessageDialog(this, ex.getMessage());
+			}
+		} else {
+			updatedValue = objectList.get(comboBox.getSelectedIndex());
+		}
+		if (updatedValue == null) {
+			JOptionPane.showMessageDialog(this, "update value not set or illegal. try again.");
+			return;
+		}
 		try {
-			ReflectUtil.setField(targetObject, field, obj);
+			ReflectUtil.setField(targetObject, field, updatedValue);
 		} catch (Throwable throwable) {
 			JOptionPane.showMessageDialog(this, throwable.getMessage());
 		}
 		parentFrame.updateFieldsAt(targetObject, fieldIndex);
-
+		this.dispose();
 	};
 
 
@@ -59,9 +78,12 @@ public class ModifyFieldDialog extends JDialog {
 		this.targetObject = targetObject;
 		this.fieldIndex = fieldIndex;
 		this.field = targetObject.getClass().getDeclaredFields()[fieldIndex];
-		objectList = ObjectPool.getInstance().grep(targetObject.getClass());
+		Class<?> clazz = field.getType();
+		objectList = ObjectPool.getInstance().grep(clazz);
+		if (clazz.isPrimitive()) {
+			JOptionPane.showMessageDialog(this, " this filed type is primitive. please input text filed");
+		}
 		this.parentFrame = parentFrame;
-
 	}
 
 
@@ -83,6 +105,11 @@ public class ModifyFieldDialog extends JDialog {
 				comboBox.addItem(ObjectPool.getInstance().getDisplayName(obj));
 			}
 			contentPanel.add(comboBox);
+			//プリミティブの場合非活性にする
+			if (field.getType().isPrimitive()) {
+				comboBox.setEnabled(false);
+			}
+
 		}
 		{
 			textField = new JTextField();
