@@ -49,6 +49,9 @@ public class ModifyFieldDialog extends JDialog {
 			return;
 		}
 		try {
+			System.out.println("Dialog::okButton invoke FIELD:" + ObjectPool.getInstance().getDisplayName(field));
+			System.out.println("Dialog::okButton invoke TARGETOBJ:" + ObjectPool.getInstance().getDisplayName(targetObject));
+
 			ReflectUtil.setField(targetObject, field, updatedValue);
 		} catch (Throwable throwable) {
 			JOptionPane.showMessageDialog(this, throwable.getMessage());

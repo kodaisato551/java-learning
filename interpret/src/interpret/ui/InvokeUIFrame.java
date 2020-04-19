@@ -270,6 +270,9 @@ class InvokeUIFrame extends JFrame {
 		object = obj;
 		ObjectPool.getInstance().setObject(objectPoolIndex, obj);
 		try {
+
+			System.out.println("updateFieldsAt invoke :" + ObjectPool.getInstance().getDisplayName(fields[fieldSelectedIndex]));
+
 			Object updateObj = ReflectUtil.getField(obj, fields[fieldSelectedIndex]);
 			System.out.println("update Fld obj : " + updateObj);
 			fieldObjectList.set(fieldSelectedIndex, updateObj);
