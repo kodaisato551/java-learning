@@ -47,6 +47,22 @@ public class ObjectPool {
         return greppedList;
     }
 
+    /**
+     * index の要素を上書き
+     *
+     * @param index
+     */
+    public void setObject(int index, Object object) {
+        list.set(index, object);
+    }
+
+    /**
+     * 表示用のStringを得る
+     */
+    public String getDisplayName(Object obj) {
+        return obj.getClass().getSimpleName() + "#" + obj.hashCode();
+    }
+
     public static ObjectPool getInstance() {
         return ObjectPool.instance;
     }

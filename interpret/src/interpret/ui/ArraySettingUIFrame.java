@@ -75,7 +75,7 @@ public class ArraySettingUIFrame extends JFrame {
 			if (parentFrame.getInstanceModel() == null) {
 				System.out.println("model is null");
 			}
-			parentFrame.getInstanceModel().addElement(array.getClass().getSimpleName() + "#" + array.hashCode());
+			parentFrame.getInstanceModel().addElement(ObjectPool.getInstance().getDisplayName(array));
 		}
 	};
 
@@ -138,7 +138,7 @@ public class ArraySettingUIFrame extends JFrame {
 			model.addElement("not selected");
 			for (int j = 0; j < objectList.size(); j++) {
 				Object tmp = objectList.get(j);
-				model.addElement(tmp.getClass().getSimpleName() + "#" + tmp.hashCode());
+				model.addElement(ObjectPool.getInstance().getDisplayName(tmp));
 			}
 			comboBoxModelList.add(model);
 			comboBoxList.add(new JComboBox<>(model));

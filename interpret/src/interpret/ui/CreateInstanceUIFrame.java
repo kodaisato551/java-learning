@@ -91,9 +91,9 @@ public class CreateInstanceUIFrame extends JFrame {
 		try {
 			//Object instance = ReflectUtil.construct(con, LexicalAnalyzer.parse(paramList, inputParams));
 			Object instance = ReflectUtil.construct(con, LexicalAnalyzer.parse(paramList, inputParams));
-			System.out.println("CREATE INSTANCE :: " + instance.getClass().getSimpleName() + "#" + instance.hashCode());
+			System.out.println("CREATE INSTANCE :: " + ObjectPool.getInstance().getDisplayName(instance));
 			ObjectPool.getInstance().add(instance);
-			instanceModel.addElement(instance.getClass().getSimpleName() + "#" + instance.hashCode());
+			instanceModel.addElement(ObjectPool.getInstance().getDisplayName(instance));
 		} catch (NumberFormatException e1) {
 			JOptionPane.showMessageDialog(this, e1.getMessage());
 		} catch (Throwable throwable) {
@@ -107,7 +107,6 @@ public class CreateInstanceUIFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout();
 		addListeners();
-
 	}
 
 	private void setLayout() {

@@ -32,13 +32,15 @@ class InvokeUIFrame extends JFrame {
 	private GridLayout layout;
 	private JPanel methodParamListPanel;
 	private JButton btnInvoke;
-	private JList filedJList;
-
+	private JList fieldJList;
+	private JTextField textField;
 	private Object object;
 	private Method[] methods;
 	private Field[] fields;
 	private List<String> paramList;
+	private JButton btnSetField;
 	private List<Object> fieldObjectList = new ArrayList<>();
+
 
 
 	/**
@@ -68,7 +70,20 @@ class InvokeUIFrame extends JFrame {
 		}
 
 	};
-	private JTextField textField;
+
+
+	/**
+	 * JListで選択したもののフィールドのオブジェクトをDialogに渡す。
+	 */
+	private final ActionListener SET_FIELD = (e) -> {
+		int selectedIndex = fieldJList.getSelectedIndex();
+		Object obj = fieldObjectList.get(selectedIndex);
+
+		ModifyFieldDialog dialog = new ModifyFieldDialog(object, selectedIndex, this);
+		dialog.setVisible(true);
+
+	};
+
 
 	/**
 	 * Create the frame.
@@ -87,6 +102,10 @@ class InvokeUIFrame extends JFrame {
 		this.objectPoolIndex = 0;
 	}
 
+	public static void main(String[] args) throws Throwable {
+		InvokeUIFrame frame = new InvokeUIFrame("sato");
+		frame.setVisible(true);
+	}
 
 	private void setLayouts() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -142,8 +161,8 @@ class InvokeUIFrame extends JFrame {
 		JLabel lblFields = new JLabel("Fields");
 		filedPanel.add(lblFields, BorderLayout.NORTH);
 
-		filedJList = new JList(fieldModel);
-		JScrollPane filedComp = new JScrollPane(filedJList);
+		fieldJList = new JList(fieldModel);
+		JScrollPane filedComp = new JScrollPane(fieldJList);
 		filedPanel.add(filedComp, BorderLayout.CENTER);
 //		filedComp.setLayout(new BorderLayout(0, 0));
 
@@ -160,6 +179,7 @@ class InvokeUIFrame extends JFrame {
 	private void setListeners() {
 		methodJList.addListSelectionListener(GET_METHOD_PARAM);
 		btnInvoke.addActionListener(INVOKE);
+		btnSetField.addActionListener(SET_FIELD);
 	}
 
 	/**
@@ -186,7 +206,6 @@ class InvokeUIFrame extends JFrame {
 		}
 
 	}
-
 
 	private void initForTest(Object obj) throws Throwable {
 		object = obj;
@@ -245,8 +264,18 @@ class InvokeUIFrame extends JFrame {
 
 	}
 
-	public static void main(String[] args) throws Throwable {
-		InvokeUIFrame frame = new InvokeUIFrame("sato");
-		frame.setVisible(true);
+	public DefaultListModel<String> getFieldModel() {
+		return fieldModel;
+	}
+
+	/**
+	 * @param obj                変更されるオブジェクト
+	 * @param fieldSelectedIndex オブジェクトが持つgetDeclaredFields()の中でユーザが選択したindex
+	 */
+	public void updateFieldsAt(Object obj, int fieldSelectedIndex) {
+		object = obj;
+		ObjectPool.getInstance().setObject(objectPoolIndex, obj);
+		fieldObjectList.set(fieldSelectedIndex, obj);
+		fieldModel.set(fieldSelectedIndex, fields[fieldSelectedIndex].toGenericString() + " = " + obj);
 	}
 }
