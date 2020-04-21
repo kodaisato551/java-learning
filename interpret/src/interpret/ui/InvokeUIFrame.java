@@ -16,9 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO エラーも表示する
- * TODO アレイ入力も対応する
- * TODO メソッドの検索
+ * TODO メソッドの検索 listmodelの更新でArrayIndexOutOfBoundsExceptionが発生
  */
 class InvokeUIFrame extends JFrame {
 
@@ -40,6 +38,9 @@ class InvokeUIFrame extends JFrame {
 	private List<String> paramList;
 	private JButton btnSetField;
 	private List<Object> fieldObjectList = new ArrayList<>();
+	private JButton btnMethodSearch;
+
+	private List<Integer> indexList = new ArrayList<>();
 	/**
 	 *
 	 */
@@ -47,15 +48,27 @@ class InvokeUIFrame extends JFrame {
 		if (e.getValueIsAdjusting()) {
 			return;
 		}
+		int index;
+		if (indexList.isEmpty()) {
+			index = methodJList.getSelectedIndex();
+		} else {
+			index = indexList.get(methodJList.getSelectedIndex());
+		}
 
-		Method met = methods[methodJList.getSelectedIndex()];
+		Method met = methods[index];
 		paramList = LexicalAnalyzer.findParams(met.toString());
 		deleteComponentFromPanel(methodParamListPanel);
 		setCompToParamPanel(methodParamListPanel, paramList);
 	};
 	private final ActionListener INVOKE = (e) -> {
 		try {
-			Object returnValue = ReflectUtil.invoke(object, methods[methodJList.getSelectedIndex()],
+			int index;
+			if (indexList.isEmpty()) {
+				index = methodJList.getSelectedIndex();
+			} else {
+				index = indexList.get(methodJList.getSelectedIndex());
+			}
+			Object returnValue = ReflectUtil.invoke(object, methods[index],
 					LexicalAnalyzer.parse(paramList, inputParams));
 			if (returnValue == null) {
 				//JOptionPane.showMessageDialog(this, "void");
@@ -76,6 +89,24 @@ class InvokeUIFrame extends JFrame {
 		ModifyFieldDialog dialog = new ModifyFieldDialog(object, selectedIndex, this);
 		dialog.setVisible(true);
 
+	};
+
+	/**
+	 * メソッドの検索
+	 */
+	private final ActionListener FIND_METHOD = (e) -> {
+		indexList = findMethod(textField.getText());
+		mothodsModel.clear();
+
+		if (!indexList.isEmpty()) {
+			for (int index : indexList) {
+				mothodsModel.addElement(methods[index].toGenericString());
+			}
+		} else {
+			for (Method m : methods) {
+				mothodsModel.addElement(m.toGenericString());
+			}
+		}
 	};
 
 
@@ -125,7 +156,7 @@ class InvokeUIFrame extends JFrame {
 		methodSearch_panel.add(textField);
 		textField.setColumns(10);
 
-		JButton btnMethodSearch = new JButton("Find Method");
+		btnMethodSearch = new JButton("Find Method");
 		methodSearch_panel.add(btnMethodSearch);
 
 		JScrollPane methodScrollPane = new JScrollPane();
@@ -171,6 +202,7 @@ class InvokeUIFrame extends JFrame {
 	}
 
 	private void setListeners() {
+		btnMethodSearch.addActionListener(FIND_METHOD);
 		methodJList.addListSelectionListener(GET_METHOD_PARAM);
 		btnInvoke.addActionListener(INVOKE);
 		btnSetField.addActionListener(SET_FIELD);
@@ -258,9 +290,6 @@ class InvokeUIFrame extends JFrame {
 
 	}
 
-	public DefaultListModel<String> getFieldModel() {
-		return fieldModel;
-	}
 
 	/**
 	 * @param obj                変更されるオブジェクト
@@ -282,4 +311,25 @@ class InvokeUIFrame extends JFrame {
 		}
 
 	}
+
+	/**
+	 * @param key
+	 * @return
+	 */
+	private List<Integer> findMethod(String key) {
+		List<Integer> list = new ArrayList<>();
+		if (key.isEmpty()) {
+			return list;
+		}
+
+		for (int i = 0; i < methods.length; i++) {
+			Method m = methods[i];
+			if (m.toGenericString().contains(key)) {
+				list.add(i);
+			}
+		}
+
+		return list;
+	}
+
 }
