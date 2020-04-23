@@ -1,4 +1,4 @@
-package dc2_2;
+package dc2_2.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -12,7 +12,7 @@ public class Utils {
      *
      * @return String
      */
-    static String getCurrentTime() {
+    public static String getCurrentTime() {
         return formatter.format(Calendar.getInstance().getTime());
     }
 

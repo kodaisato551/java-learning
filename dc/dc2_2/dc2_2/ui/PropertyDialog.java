@@ -1,12 +1,9 @@
 package dc2_2.ui;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
+import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
+import java.awt.*;
 
 public class PropertyDialog extends JDialog {
 
@@ -31,9 +28,79 @@ public class PropertyDialog extends JDialog {
 	public PropertyDialog() {
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+		{
+			JPanel fontTypePanel = new JPanel();
+			contentPanel.add(fontTypePanel);
+			fontTypePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+			{
+				JLabel lblNewLabel = new JLabel("Font Type :");
+				fontTypePanel.add(lblNewLabel);
+			}
+			{
+				JComboBox comboBox = new JComboBox();
+				fontTypePanel.add(comboBox);
+			}
+		}
+		{
+			JPanel fontSizePanel = new JPanel();
+			contentPanel.add(fontSizePanel);
+			fontSizePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+			{
+				JLabel lblFontSize = new JLabel("Font Size :");
+				fontSizePanel.add(lblFontSize);
+			}
+			{
+				JSpinner spinner = new JSpinner();
+				fontSizePanel.add(spinner);
+			}
+		}
+		{
+			JPanel fontColorPanel = new JPanel();
+			contentPanel.add(fontColorPanel);
+			fontColorPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+			{
+				JLabel lblFontColor = new JLabel("Font Color : ");
+				fontColorPanel.add(lblFontColor);
+			}
+			{
+				JPanel panel = new JPanel();
+				fontColorPanel.add(panel);
+				{
+					JComboBox comboBox = new JComboBox();
+					panel.add(comboBox);
+				}
+				{
+					JPanel colorPanel = new JPanel();
+					colorPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
+					panel.add(colorPanel);
+				}
+			}
+		}
+		{
+			JPanel backgroundColorPanel = new JPanel();
+			contentPanel.add(backgroundColorPanel);
+			backgroundColorPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+			{
+				JLabel lblBackgroundColor = new JLabel("Background Color : ");
+				backgroundColorPanel.add(lblBackgroundColor);
+			}
+			{
+				JPanel panel = new JPanel();
+				backgroundColorPanel.add(panel);
+				{
+					JComboBox comboBox = new JComboBox();
+					panel.add(comboBox);
+				}
+				{
+					JPanel bgColorPanel = new JPanel();
+					bgColorPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
+					panel.add(bgColorPanel);
+				}
+			}
+		}
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
