@@ -48,18 +48,25 @@ class InvokeUIFrame extends JFrame {
 		if (e.getValueIsAdjusting()) {
 			return;
 		}
-		int index;
-		if (indexList.isEmpty()) {
-			index = methodJList.getSelectedIndex();
-		} else {
-			index = indexList.get(methodJList.getSelectedIndex());
-		}
 
-		Method met = methods[index];
-		paramList = LexicalAnalyzer.findParams(met.toString());
-		deleteComponentFromPanel(methodParamListPanel);
-		setCompToParamPanel(methodParamListPanel, paramList);
-	};
+        try {
+            int index;
+            if (indexList.isEmpty()) {
+                index = methodJList.getSelectedIndex();
+            } else {
+                index = indexList.get(methodJList.getSelectedIndex());
+            }
+
+            Method met = methods[index];
+            paramList = LexicalAnalyzer.findParams(met.toString());
+            deleteComponentFromPanel(methodParamListPanel);
+            setCompToParamPanel(methodParamListPanel, paramList);
+        } catch (IndexOutOfBoundsException ignore) {
+
+        }
+
+
+    };
 	private final ActionListener INVOKE = (e) -> {
 		try {
 			int index;
@@ -96,18 +103,21 @@ class InvokeUIFrame extends JFrame {
 	 */
 	private final ActionListener FIND_METHOD = (e) -> {
 		indexList = findMethod(textField.getText());
-		mothodsModel.clear();
 
-		if (!indexList.isEmpty()) {
-			for (int index : indexList) {
-				mothodsModel.addElement(methods[index].toGenericString());
+
+        if (!indexList.isEmpty()) {
+            DefaultListModel<String> model = new DefaultListModel<>();
+
+            for (int index : indexList) {
+                model.addElement(methods[index].toGenericString());
 			}
-		} else {
-			for (Method m : methods) {
-				mothodsModel.addElement(m.toGenericString());
-			}
-		}
-	};
+            methodJList.setModel(model);
+
+        } else {
+            methodJList.setModel(mothodsModel);
+        }
+
+    };
 
 
 	/**
@@ -128,7 +138,9 @@ class InvokeUIFrame extends JFrame {
 	}
 
 	public static void main(String[] args) throws Throwable {
-		InvokeUIFrame frame = new InvokeUIFrame("sato");
+        Object obj = "sato";
+        ObjectPool.getInstance().add(obj);
+        InvokeUIFrame frame = new InvokeUIFrame(obj);
 		frame.setVisible(true);
 	}
 
