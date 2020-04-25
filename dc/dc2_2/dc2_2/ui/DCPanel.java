@@ -1,6 +1,6 @@
-package dc2_2;
+package dc2_2.ui;
 
-import dc2_2.setting.DefaultSetting;
+import dc2_2.setting.DefaultProperties;
 import dc2_2.util.Utils;
 
 import javax.swing.*;
@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class DCPanel extends JPanel {
 
-    private Font font = DefaultSetting.DEFAULT_FONT;
+    private Font font = DefaultProperties.DEFAULT_FONT;
 
     @Override
     public void paintComponent(Graphics g) {

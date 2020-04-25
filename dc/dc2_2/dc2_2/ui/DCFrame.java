@@ -1,6 +1,6 @@
-package dc2_2;
+package dc2_2.ui;
 
-import dc2_2.setting.DefaultSetting;
+import dc2_2.setting.DefaultProperties;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +18,7 @@ public class DCFrame extends JFrame {
     private DCFrame() {
         super("Digital Clock");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(DefaultSetting.DEFAULT_WINDOW_WIDTH, DefaultSetting.DEFAULT_WINDOW_HEIGHT);
+        setSize(DefaultProperties.DEFAULT_WINDOW_WIDTH, DefaultProperties.DEFAULT_WINDOW_HEIGHT);
         DCPanel panel = new DCPanel();
         setVisible(true);
         getContentPane().add(panel);

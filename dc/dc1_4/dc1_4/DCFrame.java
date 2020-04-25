@@ -1,15 +1,6 @@
 package dc1_4;
 
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Menu;
-import java.awt.MenuBar;
-import java.awt.MenuItem;
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -152,7 +143,8 @@ public class DCFrame extends Frame implements ActionListener, SettingChangeNotif
 	 * @return
 	 */
 	private void defineFrameParam() {
-		font = new Font(settingItem.getFontType(), Font.BOLD, settingItem.getFontSize());
+		font = new Font(
+				settingItem.getFontType(), Font.BOLD, settingItem.getFontSize());
 		FontMetrics fm = getGraphics().getFontMetrics(font);
 		height = fm.getHeight() * ConstSettingParam.getPropHeight();
 		width = fm.stringWidth("00:00:00") * ConstSettingParam.getPropWidth();
