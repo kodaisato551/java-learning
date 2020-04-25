@@ -1,5 +1,7 @@
 package dc2_2.ui;
 
+import dc2_2.setting.DefaultProperties;
+
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
@@ -9,6 +11,10 @@ public class PropertyDialog extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 
+	/* font color */
+	private JLabel lblFontColorName;
+	private JPanel colorPanel;
+	private JColorChooser fontColorChooser;
 	/**
 	 * Launch the application.
 	 */
@@ -69,13 +75,23 @@ public class PropertyDialog extends JDialog {
 				JPanel panel = new JPanel();
 				fontColorPanel.add(panel);
 				{
-					JComboBox comboBox = new JComboBox();
-					panel.add(comboBox);
+					lblFontColorName = new JLabel("Black");
+					panel.add(lblFontColorName);
 				}
 				{
 					JPanel colorPanel = new JPanel();
 					colorPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
 					panel.add(colorPanel);
+				}
+				{
+					JButton btnGoToColorChooser = new JButton("Go to color chooser");
+					btnGoToColorChooser.addActionListener(
+							e -> {
+								fontColorChooser = new JColorChooser(DefaultProperties.DEFAULT_FONT_COLOR);
+								fontColorChooser.setVisible(true);
+							}
+					);
+					panel.add(btnGoToColorChooser);
 				}
 			}
 		}
