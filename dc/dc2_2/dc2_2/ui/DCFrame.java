@@ -10,30 +10,35 @@ public class DCFrame extends JFrame {
 
     private MenuBar menuBar;
     private Menu menu;
+    private MenuItem menuItem;
 
     private ActionListener GO_PROPERTY_SETTING = e -> {
-
+        PropertyDialog dialog = new PropertyDialog();
+        dialog.setVisible(true);
     };
 
-    private DCFrame() {
+    DCFrame() {
         super("Digital Clock");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(DefaultProperties.DEFAULT_WINDOW_WIDTH, DefaultProperties.DEFAULT_WINDOW_HEIGHT);
+        setSize(DefaultProperties.WINDOW_WIDTH, DefaultProperties.WINDOW_HEIGHT);
         DCPanel panel = new DCPanel();
         setVisible(true);
         getContentPane().add(panel);
         setLayouts();
+        setListeners();
     }
 
     private void setLayouts() {
         menuBar = new MenuBar();
-        menu = new Menu("Property Setting");
+        menu = new Menu("Setting");
+        menuItem = new MenuItem("Property");
+        menu.add(menuItem);
         menuBar.add(menu);
         setMenuBar(menuBar);
     }
 
     private void setListeners() {
-        menu.addActionListener(GO_PROPERTY_SETTING);
+        menuItem.addActionListener(GO_PROPERTY_SETTING);
     }
 
 

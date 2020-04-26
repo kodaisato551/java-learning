@@ -1,5 +1,6 @@
 package dc2_2.util;
 
+import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -15,6 +16,14 @@ public class Utils {
     public static String getCurrentTime() {
         return formatter.format(Calendar.getInstance().getTime());
     }
+
+
+    public static Dimension calcFrameSize(FontMetrics fm) {
+        int h = fm.getHeight() * Consts.PROP_HEIGHT;
+        int w = fm.stringWidth("00:00:00") * Consts.PROP_WIDTH;
+        return new Dimension(w, h);
+    }
+
 
     private Utils() {
     }

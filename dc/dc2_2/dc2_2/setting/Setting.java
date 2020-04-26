@@ -6,13 +6,12 @@ public class Setting {
     private Color fontColor;
     private Color bgColor;
     private Font currentFont;
+    private int selectedFontTypeIndex;//FONT_TYPE_LISTの中の現在の設定のインデックス
 
     private static final Setting currentSetting = new Setting();
 
     private Setting() {
-        currentFont = DefaultProperties.DEFAULT_FONT;
-        fontColor = Color.BLACK;
-        bgColor = Color.WHITE;
+        changeDefaultSetting();
     }
 
     public static Setting getInstance() {
@@ -31,6 +30,14 @@ public class Setting {
         return fontColor;
     }
 
+    public void setSelectedFontTypeIndex(int selectedFontTypeIndex) {
+        this.selectedFontTypeIndex = selectedFontTypeIndex;
+    }
+
+    public int getSelectedFontTypeIndex() {
+        return selectedFontTypeIndex;
+    }
+
     public Color getBgColor() {
         return bgColor;
     }
@@ -41,5 +48,12 @@ public class Setting {
 
     public void setBgColor(Color bgColor) {
         this.bgColor = bgColor;
+    }
+
+    public void changeDefaultSetting() {
+        currentFont = DefaultProperties.FONT;
+        fontColor = DefaultProperties.FONT_COLOR;
+        bgColor = DefaultProperties.BG_COLOR;
+        selectedFontTypeIndex = DefaultProperties.FONT_TYPE_INDEX;
     }
 }
