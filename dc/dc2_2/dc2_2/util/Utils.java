@@ -19,8 +19,8 @@ public class Utils {
 
 
     public static Dimension calcFrameSize(FontMetrics fm) {
-        int h = fm.getHeight() * Consts.PROP_HEIGHT;
-        int w = fm.stringWidth("00:00:00") * Consts.PROP_WIDTH;
+        int h = (int) (fm.getHeight() * Consts.PROP_HEIGHT * Consts.PANEL_VS_FRAME_HEIGHT);
+        int w = (int) (fm.stringWidth("00:00:00") * Consts.PROP_WIDTH * Consts.PANEL_VS_FRAME_WIDTH);
         return new Dimension(w, h);
     }
 

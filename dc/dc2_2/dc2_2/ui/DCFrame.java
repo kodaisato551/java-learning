@@ -11,6 +11,7 @@ public class DCFrame extends JFrame {
     private MenuBar menuBar;
     private Menu menu;
     private MenuItem menuItem;
+    private DCPanel dcPanel;
 
     private ActionListener GO_PROPERTY_SETTING = e -> {
         PropertyDialog dialog = new PropertyDialog();
@@ -21,9 +22,9 @@ public class DCFrame extends JFrame {
         super("Digital Clock");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(DefaultProperties.WINDOW_WIDTH, DefaultProperties.WINDOW_HEIGHT);
-        DCPanel panel = new DCPanel();
+        dcPanel = new DCPanel(this);
         setVisible(true);
-        getContentPane().add(panel);
+        getContentPane().add(dcPanel);
         setLayouts();
         setListeners();
     }
@@ -47,6 +48,7 @@ public class DCFrame extends JFrame {
      */
     private void exec() {
         Timer timer = new Timer(1000, e -> {
+            //setSize(dcPanel.getCalFrameSize());
             repaint();
         });
         timer.start();

@@ -9,7 +9,14 @@ import java.awt.*;
 
 public class DCPanel extends JPanel {
 
-    private Font font = DefaultProperties.FONT;
+    private DCFrame frame;
+    private Setting setting = Setting.getInstance();
+
+
+    DCPanel(DCFrame frame) {
+        setSize(DefaultProperties.PANEL_WIDTH, DefaultProperties.PANEL_HEIGHT);
+        this.frame = frame;
+    }
 
     @Override
     public void paintComponent(Graphics g) {
@@ -24,11 +31,11 @@ public class DCPanel extends JPanel {
      * @param text 　表示する文字列
      */
     private void drawStringCenter(Graphics g, String text) {
-        FontMetrics fm = g.getFontMetrics(font);
-        //Dimension size = Utils.calcFrameSize(fm);
         Dimension size = getSize();
-        Dimension calSize = Utils.calcFrameSize(fm);
-        System.out.println(size + " :: " + calSize);
+        FontMetrics fm = getGraphics().getFontMetrics(setting.getCurrentFont());
+        Dimension frameSize = Utils.calcFrameSize(fm);
+        frame.setSize(frameSize);
+
         g.setColor(Setting.getInstance().getBgColor());//BackGroundColor
         g.fillRect(0, 0, getParent().getWidth(), getParent().getHeight());
         g.setColor(Setting.getInstance().getFontColor());//FontColor
