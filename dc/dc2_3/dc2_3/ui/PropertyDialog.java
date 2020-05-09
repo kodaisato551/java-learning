@@ -10,9 +10,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-/**
- * TODO FontTypeとFontTypeのデフォルト値をSettingから反映する
- */
+
 public class PropertyDialog extends JDialog {
 
 
