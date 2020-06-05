@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * TODO メニューをAWTにしない。
+ */
 public class DCFrame extends JFrame {
 
     private MenuBar menuBar;
