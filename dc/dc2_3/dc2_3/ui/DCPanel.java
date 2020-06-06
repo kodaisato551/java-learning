@@ -45,6 +45,8 @@ public class DCPanel extends JPanel implements MouseListener {
         fontColorMenuItem = addPopupMenuItem("Font color", null);
         bgColorMenuItem = addPopupMenuItem("Background color", null);
         terminateMenuItem = addPopupMenuItem("Terminate", e -> System.exit(1));
+
+
     }
 
     private JMenuItem addPopupMenuItem(String name, ActionListener callBack) {

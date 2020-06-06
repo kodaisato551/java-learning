@@ -7,16 +7,6 @@ import javax.swing.*;
 public class DCWindow extends JWindow {
     private final DCPanel dcPanel;
 
-    // Menu
-    private JPopupMenu popUpMenu;
-
-    //Menu items
-    private JMenuItem fontTypeMenuItem;
-    private JMenuItem fontSizeMenuItem;
-    private JMenuItem fontColorMenuItem;
-    private JMenuItem bgColorMenuItem;
-    private JMenuItem terminateMenuItem;
-
 
     public DCWindow() {
         setSize(DefaultProperties.WINDOW_WIDTH, DefaultProperties.WINDOW_HEIGHT);
