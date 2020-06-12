@@ -22,6 +22,14 @@ public class Setting {
         currentFont = new Font(fontType, currentFont.getStyle(), size);
     }
 
+    public void setFontType(String typeName) {
+        currentFont = new Font(typeName, currentFont.getStyle(), currentFont.getSize());
+    }
+
+    public void setFontSize(int size) {
+        currentFont = new Font(currentFont.getFontName(), currentFont.getStyle(), size);
+    }
+
     public Font getCurrentFont() {
         return currentFont;
     }

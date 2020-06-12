@@ -2,15 +2,18 @@ package dc2_3.ui;
 
 import dc2_3.setting.DefaultProperties;
 import dc2_3.setting.Setting;
+import dc2_3.setting.SupportedSettings;
 import dc2_3.util.Utils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.List;
 
-public class DCPanel extends JPanel implements MouseListener {
+public class DCPanel extends JPanel {
 
     private DCWindow frame;
     private Setting setting = Setting.getInstance();
@@ -19,10 +22,10 @@ public class DCPanel extends JPanel implements MouseListener {
     private JPopupMenu popUpMenu;
 
     //Menu items
-    private JMenuItem fontTypeMenuItem;
-    private JMenuItem fontSizeMenuItem;
-    private JMenuItem fontColorMenuItem;
-    private JMenuItem bgColorMenuItem;
+    private JMenu fontTypeMenu;
+    private JMenu fontSizeMenu;
+    private JMenu fontColorMenu;
+    private JMenu bgColorMenu;
     private JMenuItem terminateMenuItem;
 
     DCPanel(DCWindow frame) {
@@ -40,26 +43,59 @@ public class DCPanel extends JPanel implements MouseListener {
 
     private void initPopupMenu() {
         popUpMenu = new JPopupMenu();
-        fontTypeMenuItem = addPopupMenuItem("Font type", null);
-        fontSizeMenuItem = addPopupMenuItem("Font size", null);
-        fontColorMenuItem = addPopupMenuItem("Font color", null);
-        bgColorMenuItem = addPopupMenuItem("Background color", null);
-        terminateMenuItem = addPopupMenuItem("Terminate", e -> System.exit(1));
+        fontTypeMenu = addPopupMenu("Font type");
+        fontSizeMenu = addPopupMenu("Font size");
+        fontColorMenu = addPopupMenu("Font color");
+        bgColorMenu = addPopupMenu("Background color");
+        terminateMenuItem = addPopupMenuItem(popUpMenu, "Terminate", e -> System.exit(1));
 
+        addAllPopupMenuItem(fontTypeMenu, SupportedSettings.FONT_TYPE_LIST, e -> {
+            Setting.getInstance().setFontType(e.getActionCommand());
+        });
+
+        addAllPopupMenuItem(fontSizeMenu, new ArrayList<>(SupportedSettings.FONT_SIZE_MAP.keySet()), e -> {
+            Setting.getInstance().setFontSize(SupportedSettings.FONT_SIZE_MAP.get(e.getActionCommand()));
+        });
+
+        addAllPopupMenuItem(fontColorMenu, new ArrayList<>(SupportedSettings.SUPPORTED_COLOR.keySet()), e -> {
+            Setting.getInstance().setFontColor(SupportedSettings.SUPPORTED_COLOR.get(e.getActionCommand()));
+        });
+
+        addAllPopupMenuItem(bgColorMenu, new ArrayList<>(SupportedSettings.SUPPORTED_COLOR.keySet()), e -> {
+            Setting.getInstance().setBgColor(SupportedSettings.SUPPORTED_COLOR.get(e.getActionCommand()));
+        });
 
     }
 
-    private JMenuItem addPopupMenuItem(String name, ActionListener callBack) {
-        JMenuItem item = new JMenuItem(name);
+    private JMenu addPopupMenu(String name) {
+        JMenu menu = new JMenu(name);
+        popUpMenu.add(menu);
+        return menu;
+    }
+
+
+    private JMenuItem addPopupMenuItem(JComponent parentMenu, String name, ActionListener callBack) {
+        JMenuItem menu = new JMenuItem(name);
         if (callBack != null) {
-            item.addActionListener(callBack);
+            menu.addActionListener(callBack);
         }
-        popUpMenu.add(item);
-        return item;
+        parentMenu.add(menu);
+        return menu;
     }
+
+
+    private void addAllPopupMenuItem(JComponent parentMenu, List<String> settingNames, ActionListener callBack) {
+        for (String settingName : settingNames) {
+            addPopupMenuItem(parentMenu, settingName, callBack);
+        }
+    }
+
 
     private void setListeners() {
-        addMouseListener(this);
+        DragWindowListener listener = new DragWindowListener();
+//        addMouseListener(this);
+        addMouseListener(listener);
+        addMouseMotionListener(listener);
     }
 
     /**
@@ -83,31 +119,34 @@ public class DCPanel extends JPanel implements MouseListener {
         g.drawString(text, x, y);
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        if (SwingUtilities.isRightMouseButton(e)) {
-            System.out.println("right button clicked");
-            popUpMenu.show(e.getComponent(), e.getX(), e.getY());
+    class DragWindowListener extends MouseAdapter {
+        private final Point startPt = new Point();
+        //private Point  loc;
+        private Window window;
+
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            super.mouseClicked(e);
+            if (SwingUtilities.isRightMouseButton(e)) {
+                System.out.println("right button clicked");
+                popUpMenu.show(e.getComponent(), e.getX(), e.getY());
+            }
         }
-    }
 
-    @Override
-    public void mousePressed(MouseEvent e) {
+        @Override
+        public void mousePressed(MouseEvent me) {
+            startPt.setLocation(me.getPoint());
+        }
 
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
+        @Override
+        public void mouseDragged(MouseEvent me) {
+            if (window == null) {
+                window = SwingUtilities.windowForComponent(me.getComponent());
+            }
+            Point eventLocationOnScreen = me.getLocationOnScreen();
+            window.setLocation(eventLocationOnScreen.x - startPt.x,
+                    eventLocationOnScreen.y - startPt.y);
+        }
     }
 }
