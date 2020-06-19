@@ -63,6 +63,16 @@ public class ObjectPool {
         return obj.getClass().getSimpleName() + "#" + obj.hashCode();
     }
 
+
+    public Object getObjFromDisplayName(String nameKey) {
+        for (Object obj : list) {
+            if (getDisplayName(obj).equals(nameKey)) {
+                return obj;
+            }
+        }
+        return null;
+    }
+
     public static ObjectPool getInstance() {
         return ObjectPool.instance;
     }

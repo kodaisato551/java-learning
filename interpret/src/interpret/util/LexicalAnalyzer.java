@@ -1,5 +1,7 @@
 package interpret.util;
 
+import interpret.data.ObjectPool;
+
 import javax.swing.*;
 import java.util.*;
 
@@ -174,6 +176,8 @@ public class LexicalAnalyzer {
 				objs.add(value);
 			} else {
 				// ほかのオブジェクト
+				Object obj = ObjectPool.getInstance().getObjFromDisplayName(value);
+				objs.add(obj);
 			}
 		}
 

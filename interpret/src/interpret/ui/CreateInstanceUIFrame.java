@@ -49,7 +49,7 @@ public class CreateInstanceUIFrame extends JFrame {
 
 		} catch (ClassNotFoundException e1) {
 			e1.printStackTrace();
-			JOptionPane.showMessageDialog(this, e1.getMessage());
+			JOptionPane.showMessageDialog(this, e1.toString());
 		}
 	};
 	//アレイの選択画面
@@ -59,7 +59,7 @@ public class CreateInstanceUIFrame extends JFrame {
 			ArraySettingUIFrame frame = new ArraySettingUIFrame(clazz, this);
 			frame.setVisible(true);
 		} catch (ClassNotFoundException ex) {
-			JOptionPane.showMessageDialog(this, ex.getMessage());
+			JOptionPane.showMessageDialog(this, ex.toString());
 		}
 	};
 
@@ -95,7 +95,7 @@ public class CreateInstanceUIFrame extends JFrame {
 			ObjectPool.getInstance().add(instance);
 			instanceModel.addElement(ObjectPool.getInstance().getDisplayName(instance));
 		} catch (NumberFormatException e1) {
-			JOptionPane.showMessageDialog(this, e1.getMessage());
+			JOptionPane.showMessageDialog(this, e1.toString());
 		} catch (Throwable throwable) {
 			JOptionPane.showMessageDialog(this, throwable.toString());
 		}

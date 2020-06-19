@@ -238,7 +238,7 @@ class InvokeUIFrame extends JFrame {
 				fieldModel.addElement(f.toGenericString() + " = " + o);
 			} catch (Throwable throwable) {
 				throwable.printStackTrace();
-				JOptionPane.showMessageDialog(this, throwable.getMessage());
+				JOptionPane.showMessageDialog(this, throwable.toString());
 			}
 
 		}

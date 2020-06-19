@@ -57,6 +57,8 @@ public class ArraySettingUIFrame extends JFrame {
 					containNullFromArray = true;
 				} else {
 					Object obj = ObjectPool.getInstance().get(selectedIndex - 1);
+					System.out.println("display :" + ObjectPool.getInstance().getDisplayName(obj));
+					System.out.println(i);
 					Array.set(array, i, obj);
 				}
 			}

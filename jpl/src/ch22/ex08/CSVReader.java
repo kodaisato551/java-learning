@@ -12,10 +12,7 @@ public class CSVReader {
 
         Scanner scanner = new Scanner(source);
         List<String[]> vals = new ArrayList<>();
-        StringBuilder exp = new StringBuilder().append("^(.*)");
-        for (int i = 1; i < cellSize; i++) {
-            exp.append(",(.*)");
-        }
+        String exp = "^([^,]*),([^,]*),([^,]*),([^,]*)$";
         Pattern pattern = Pattern.compile(exp.toString(), Pattern.MULTILINE);
 
         while (scanner.hasNextLine()) {
