@@ -1,5 +1,6 @@
 package interpret.ui;
 
+import interpret.Sample;
 import interpret.data.ObjectPool;
 import interpret.setting.Consts;
 import interpret.util.LexicalAnalyzer;
@@ -58,7 +59,7 @@ class InvokeUIFrame extends JFrame {
             }
 
             Method met = methods[index];
-            paramList = LexicalAnalyzer.findParams(met.toString());
+			paramList = LexicalAnalyzer.findParams(met);
             deleteComponentFromPanel(methodParamListPanel);
             setCompToParamPanel(methodParamListPanel, paramList);
         } catch (IndexOutOfBoundsException ignore) {
@@ -138,9 +139,9 @@ class InvokeUIFrame extends JFrame {
 	}
 
 	public static void main(String[] args) throws Throwable {
-        Object obj = "sato";
-        ObjectPool.getInstance().add(obj);
-        InvokeUIFrame frame = new InvokeUIFrame(obj);
+		Sample sample = new Sample();
+		ObjectPool.getInstance().add(sample);
+		InvokeUIFrame frame = new InvokeUIFrame(sample);
 		frame.setVisible(true);
 	}
 

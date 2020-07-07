@@ -3,6 +3,7 @@ package interpret.util;
 import interpret.data.ObjectPool;
 
 import javax.swing.*;
+import java.lang.reflect.Executable;
 import java.util.*;
 
 /**
@@ -44,6 +45,18 @@ public class LexicalAnalyzer {
 	};
 
 
+	/**
+	 * メソッド・コンストラクタのSignitureから引数を抽出しStringのリストとして返す
+	 * <p>
+	 * 例：
+	 * input>
+	 * 　"public void method(String v1,int v2,double[] v3)"
+	 * output>
+	 * java.lang.String,int,[Ldouble
+	 *
+	 * @param signatureString
+	 * @return
+	 */
 	public static List<String> findParams(String signatureString) {
 		Objects.requireNonNull(signatureString);
 		List<String> paramNames = new ArrayList<>(Arrays.asList(signatureString.split("[(,]", 0)));
@@ -55,10 +68,29 @@ public class LexicalAnalyzer {
 		paramNames.remove(0);// delete first elem prefix
 
 		return paramNames;
-
 	}
 
-	private static List<Class<?>> convertClassObjFromString(List<String> paramNames) throws ClassNotFoundException {
+	/**
+	 * @param methodOrConstructor Method,Constructorに応じて
+	 * @return
+	 */
+	public static List<String> findParams(Executable methodOrConstructor) {
+		List<String> paramNames = new ArrayList<>();
+		for (Class<?> clazz : methodOrConstructor.getParameterTypes()) {
+			paramNames.add(clazz.getName());
+		}
+		return paramNames;
+	}
+
+	/**
+	 * パラメータの名前（String）を受け取りClass型のリストに変換する
+	 *
+	 * @param paramNames
+	 * @return
+	 * @throws ClassNotFoundException
+	 */
+	private static List<Class<?>> convertClassObjFromString(List<String> paramNames)
+			throws ClassNotFoundException {
 		List<Class<?>> classes = new ArrayList<>();
 		for (String str : paramNames) {
 			if (LexicalAnalyzer.primitiveConverter.get(str) != null) {
@@ -66,7 +98,12 @@ public class LexicalAnalyzer {
 			} else if (LexicalAnalyzer.primitiveArrayConverter.get(str) != null) {
 				classes.add(LexicalAnalyzer.primitiveArrayConverter.get(str));
 			} else {
-				classes.add(Class.forName(str));
+				try {
+					classes.add(Class.forName(str));
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+					throw new ClassNotFoundException();
+				}
 			}
 		}
 		return classes;
@@ -75,14 +112,13 @@ public class LexicalAnalyzer {
 	/**
 	 * String　で受け取ったクラス情報と実態をもとに適切なオブジェクトに変換する
 	 *
-	 * @param paramClassNameList　
-	 * @param inputs
+	 * @param paramClassNameList　コンストラクタ、メソッドの引数の型のStringのリスト
+	 * @param inputs　各パラメータの入力JtextFieldのリスト
 	 * @return
 	 * @throws ClassNotFoundException,NumberFormatException
 	 */
 	public static Object[] parse(List<String> paramClassNameList, List<JTextField> inputs)
 			throws ClassNotFoundException, NumberFormatException {
-
 		if (paramClassNameList == null) {
 			return null;
 		}
@@ -113,6 +149,7 @@ public class LexicalAnalyzer {
 
 		if (clazz.isArray()) {
 			String[] tmp = value.split(",");
+			System.out.println(tmp);
 			if (clazz == int[].class) {
 				List<Integer> list = new ArrayList<>();
 				for (String str : tmp) {

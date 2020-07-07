@@ -82,7 +82,7 @@ public class CreateInstanceUIFrame extends JFrame {
 			return;
 		}
 		Constructor<?> con = constructors[selectedIndex];
-		paramList = LexicalAnalyzer.findParams(con.toString());
+		paramList = LexicalAnalyzer.findParams(con);
 		deleteComponentFromPanel(dynamicParamPanel);
 		setCompToParamPanel(dynamicParamPanel, paramList);
 	};

@@ -50,13 +50,12 @@ public class ArraySettingUIFrame extends JFrame {
 			Object array = Array.newInstance(clazz, arraySize);
 			boolean containNullFromArray = false;
 			for (int i = 0; i < arraySize; i++) {
-				int selectedIndex = comboBoxList.get(i).getSelectedIndex();
-				System.out.println("item selected index : " + selectedIndex);
-				if (selectedIndex == 0) {
-
+				int comboBoxSelectedIndex = comboBoxList.get(i).getSelectedIndex();
+				System.out.println("item selected index : " + comboBoxSelectedIndex);
+				if (comboBoxSelectedIndex == 0) {
 					containNullFromArray = true;
 				} else {
-					Object obj = ObjectPool.getInstance().get(selectedIndex - 1);
+					Object obj = ObjectPool.getInstance().get(comboBoxSelectedIndex - 1);
 					System.out.println("display :" + ObjectPool.getInstance().getDisplayName(obj));
 					System.out.println(i);
 					Array.set(array, i, obj);
