@@ -1,5 +1,7 @@
 package dc2_4.setting;
 
+import dc2_3.setting.DefaultProperties;
+
 import java.awt.*;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -10,15 +12,32 @@ public class SupportedSettings {
     public static final List<String> FONT_TYPE_LIST = Arrays
             .asList(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
 
+    // Font size
+    public static final Map<String, Integer> FONT_SIZE_MAP = new HashMap<>();
 
-    public static final Map<String, Color> COLOR_MAP = new HashMap<>();
+
+    // Supported color
+    public static final Map<String, Color> SUPPORTED_COLOR = new HashMap<>();
+
 
     static {
-        COLOR_MAP.put("White", Color.WHITE);
-        COLOR_MAP.put("LightGray", Color.WHITE);
-        COLOR_MAP.put("Gray", Color.GRAY);
-        COLOR_MAP.put("DarkGray", Color.DARK_GRAY);
+        FONT_SIZE_MAP.put("Small", dc2_3.setting.DefaultProperties.WINDOW_FONT_SIZE / 2);
+        FONT_SIZE_MAP.put("Medium", dc2_3.setting.DefaultProperties.WINDOW_FONT_SIZE);
+        FONT_SIZE_MAP.put("Large", DefaultProperties.WINDOW_FONT_SIZE * 2);
+
+        SUPPORTED_COLOR.put("Black", Color.BLACK);
+        SUPPORTED_COLOR.put("White", Color.WHITE);
+        SUPPORTED_COLOR.put("Gray", Color.GRAY);
+        SUPPORTED_COLOR.put("Blue", Color.BLUE);
+        SUPPORTED_COLOR.put("Cyan", Color.CYAN);
+        SUPPORTED_COLOR.put("Dark Gray", Color.DARK_GRAY);
+        SUPPORTED_COLOR.put("Green", Color.GREEN);
+        SUPPORTED_COLOR.put("Yellow", Color.YELLOW);
+        SUPPORTED_COLOR.put("Magenta", Color.MAGENTA);
+        SUPPORTED_COLOR.put("Light Gray", Color.LIGHT_GRAY);
+        SUPPORTED_COLOR.put("Orange", Color.ORANGE);
+        SUPPORTED_COLOR.put("Red", Color.RED);
+        SUPPORTED_COLOR.put("Pink", Color.PINK);
+
     }
-
-
 }
