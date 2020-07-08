@@ -1,8 +1,8 @@
 package dc2_4.ui.dialog;
 
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,27 +32,19 @@ public class SettingItemPanel<T> extends JPanel {
         add(supportedSettingJList);
     }
 
-
-    public static class ColorPanel extends JPanel {
-        private Color color;
-        private String colorName;
-
-        //ui
-        private JPanel colorTip;
-
-        ColorPanel(Color color, String colorName) {
-            this.color = color;
-            this.colorName = colorName;
-            setLayout(new FlowLayout());
-            colorTip.setBorder(new BevelBorder(BevelBorder.LOWERED));
-            colorTip.setBackground(color);
-            add(colorTip);
-            add(new JLabel(colorName));
-        }
-    }
-
     public static void main(String[] args) {
+        JFrame frame = new JFrame();
+        frame.setVisible(true);
 
+        ColorPanel colorPanel = new ColorPanel(Color.BLACK, "black");
+        ColorPanel colorPanel2 = new ColorPanel(Color.RED, "red");
+        List<ColorPanel> list = new ArrayList<>();
+
+        list.add(colorPanel);
+        list.add(colorPanel2);
+        SettingItemPanel<ColorPanel> panel = new SettingItemPanel<>("hoge", list);
+
+        frame.add(panel);
     }
 
 
