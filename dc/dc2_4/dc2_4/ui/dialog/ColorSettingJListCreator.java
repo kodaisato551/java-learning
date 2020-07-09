@@ -7,9 +7,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
 
-public class ColorSettingList {
+public class ColorSettingJListCreator {
 
-    public static JList<ColorListItem> createColorJList() {
+    public static JList<ColorListItem> create() {
         DefaultListModel<ColorListItem> model = new DefaultListModel<>();
         for (Map.Entry<String, Color> entry : SupportedSettings.SUPPORTED_COLOR.entrySet()) {
             model.addElement(new ColorListItem(entry.getValue(), entry.getKey()));

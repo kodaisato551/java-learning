@@ -20,12 +20,16 @@ class ColorSettingItemPanelRenderer extends JPanel implements ListCellRenderer<C
         colorTip = new JPanel();
         colorTip.setBorder(new BevelBorder(BevelBorder.LOWERED));
         colorLabel = new JLabel();
+        GridLayout layout = new GridLayout(1, 2);
+        setLayout(layout);
+        add(colorTip);
+        add(colorLabel);
     }
 
     @Override
     public Component getListCellRendererComponent(JList<? extends ColorListItem> list, ColorListItem value, int index, boolean isSelected, boolean cellHasFocus) {
         colorTip.setBackground(value.getColor());
         colorLabel.setText(value.getColorName());
-        return null;
+        return this;
     }
 }
