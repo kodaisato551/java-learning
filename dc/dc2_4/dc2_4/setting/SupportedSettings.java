@@ -3,10 +3,8 @@ package dc2_4.setting;
 import dc2_3.setting.DefaultProperties;
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SupportedSettings {
     public static final List<String> FONT_TYPE_LIST = Arrays
@@ -18,11 +16,11 @@ public class SupportedSettings {
 
     // Supported color
     public static final Map<String, Color> SUPPORTED_COLOR = new HashMap<>();
-
+    public static final List<ColorListItem> COLOR_LIST_ITEMS = new ArrayList<>();
 
     static {
-        FONT_SIZE_MAP.put("Small", dc2_3.setting.DefaultProperties.WINDOW_FONT_SIZE / 2);
-        FONT_SIZE_MAP.put("Medium", dc2_3.setting.DefaultProperties.WINDOW_FONT_SIZE);
+        FONT_SIZE_MAP.put("Small", DefaultProperties.WINDOW_FONT_SIZE / 2);
+        FONT_SIZE_MAP.put("Medium", DefaultProperties.WINDOW_FONT_SIZE);
         FONT_SIZE_MAP.put("Large", DefaultProperties.WINDOW_FONT_SIZE * 2);
 
         SUPPORTED_COLOR.put("Black", Color.BLACK);
@@ -39,5 +37,8 @@ public class SupportedSettings {
         SUPPORTED_COLOR.put("Red", Color.RED);
         SUPPORTED_COLOR.put("Pink", Color.PINK);
 
+        for (Map.Entry<String, Color> entry : SupportedSettings.SUPPORTED_COLOR.entrySet()) {
+            COLOR_LIST_ITEMS.add(new ColorListItem(entry.getValue(), entry.getKey()));
+        }
     }
 }

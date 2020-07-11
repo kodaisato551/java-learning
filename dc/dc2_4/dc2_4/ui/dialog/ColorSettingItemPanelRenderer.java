@@ -10,8 +10,6 @@ import java.awt.*;
  * Color setting items used in Property dialog
  */
 class ColorSettingItemPanelRenderer extends JPanel implements ListCellRenderer<ColorListItem> {
-
-
     //ui
     private JPanel colorTip;
     private JLabel colorLabel;
@@ -27,9 +25,17 @@ class ColorSettingItemPanelRenderer extends JPanel implements ListCellRenderer<C
     }
 
     @Override
-    public Component getListCellRendererComponent(JList<? extends ColorListItem> list, ColorListItem value, int index, boolean isSelected, boolean cellHasFocus) {
+    public Component getListCellRendererComponent(JList<? extends ColorListItem> list, ColorListItem value, int index,
+                                                  boolean isSelected, boolean cellHasFocus) {
         colorTip.setBackground(value.getColor());
         colorLabel.setText(value.getColorName());
+        if (isSelected) {
+            setForeground(Color.red);
+            setBackground(Color.cyan);
+        } else {
+            setForeground(Color.black);
+            setBackground(Color.white);
+        }
         return this;
     }
 }

@@ -16,8 +16,8 @@ public class DefaultProperties {
     public static final Color BG_COLOR = Color.WHITE;
 
     public static final int FONT_TYPE_INDEX = SupportedSettings.FONT_TYPE_LIST.indexOf("Arial");
-
-
+    public static final int FONT_COLOR_INDEX = SupportedSettings.FONT_TYPE_LIST.indexOf("Black");
+    public static final int BG_COLOR_INDEX = SupportedSettings.FONT_TYPE_LIST.indexOf("White");
     private DefaultProperties() {
     }
 }
