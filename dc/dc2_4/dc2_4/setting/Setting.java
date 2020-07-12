@@ -72,7 +72,7 @@ public class Setting {
         fontColor = DefaultProperties.FONT_COLOR;
         bgColor = DefaultProperties.BG_COLOR;
         selectedFontTypeIndex = DefaultProperties.FONT_TYPE_INDEX;
-        selectedFontColorIndex = DefaultProperties.FONT_COLOR_INDEX;
-        selectedBgColorIndex = DefaultProperties.BG_COLOR_INDEX;
+        selectedFontColorIndex = SupportedSettings.COLOR_LIST_ITEMS.indexOf(DefaultProperties.FONT_COLORLISTITEM);
+        selectedBgColorIndex = SupportedSettings.COLOR_LIST_ITEMS.indexOf(DefaultProperties.BG_COLORLISTITEM);
     }
 }

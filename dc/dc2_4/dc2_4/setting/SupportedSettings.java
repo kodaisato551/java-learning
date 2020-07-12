@@ -6,6 +6,9 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
+import static dc2_4.setting.DefaultProperties.BG_COLORLISTITEM;
+import static dc2_4.setting.DefaultProperties.FONT_COLORLISTITEM;
+
 public class SupportedSettings {
     public static final List<String> FONT_TYPE_LIST = Arrays
             .asList(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
@@ -38,7 +41,15 @@ public class SupportedSettings {
         SUPPORTED_COLOR.put("Pink", Color.PINK);
 
         for (Map.Entry<String, Color> entry : SupportedSettings.SUPPORTED_COLOR.entrySet()) {
-            COLOR_LIST_ITEMS.add(new ColorListItem(entry.getValue(), entry.getKey()));
+            if (entry.getValue().equals(Color.BLACK)) {
+                COLOR_LIST_ITEMS.add(FONT_COLORLISTITEM);
+            } else if (entry.getValue().equals(Color.WHITE)) {
+                COLOR_LIST_ITEMS.add(BG_COLORLISTITEM);
+
+            } else {
+                COLOR_LIST_ITEMS.add(new ColorListItem(entry.getValue(), entry.getKey()));
+            }
+
         }
     }
 }

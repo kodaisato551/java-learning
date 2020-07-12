@@ -14,10 +14,14 @@ public class DefaultProperties {
     public static final Font FONT = new Font("Arial", Font.BOLD, WINDOW_FONT_SIZE);
     public static final Color FONT_COLOR = Color.BLACK;
     public static final Color BG_COLOR = Color.WHITE;
+    public static final ColorListItem FONT_COLORLISTITEM = new ColorListItem(FONT_COLOR, "Black");
+    public static final ColorListItem BG_COLORLISTITEM = new ColorListItem(BG_COLOR, "White");
+
 
     public static final int FONT_TYPE_INDEX = SupportedSettings.FONT_TYPE_LIST.indexOf("Arial");
-    public static final int FONT_COLOR_INDEX = SupportedSettings.FONT_TYPE_LIST.indexOf("Black");
-    public static final int BG_COLOR_INDEX = SupportedSettings.FONT_TYPE_LIST.indexOf("White");
+
+    public static final int FONT_COLOR_INDEX = SupportedSettings.COLOR_LIST_ITEMS.indexOf(FONT_COLORLISTITEM);
+    public static final int BG_COLOR_INDEX = SupportedSettings.COLOR_LIST_ITEMS.indexOf(BG_COLORLISTITEM);
     private DefaultProperties() {
     }
 }

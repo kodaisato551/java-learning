@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 
 /**
- * TODO メニューをAWTにしない。
+ * This clock represents Digital Clock.
  */
 public class DCFrame extends JFrame {
 
@@ -32,6 +32,10 @@ public class DCFrame extends JFrame {
         setListeners();
     }
 
+    public static void main(String[] args) {
+        new DCFrame().exec();
+    }
+
     private void setLayouts() {
         menuBar = new JMenuBar();
         menu = new JMenu("Setting");
@@ -45,7 +49,6 @@ public class DCFrame extends JFrame {
         menuItem.addActionListener(GO_PROPERTY_SETTING);
     }
 
-
     /**
      * アプリケーションを実行
      */
@@ -55,10 +58,6 @@ public class DCFrame extends JFrame {
             repaint();
         });
         timer.start();
-    }
-
-    public static void main(String[] args) {
-        new DCFrame().exec();
     }
 
 }

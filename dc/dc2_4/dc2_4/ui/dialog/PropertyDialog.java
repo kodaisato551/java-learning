@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 /**
  * TODO color のデフォルトを設定されている状態にする
  * TODO SettingのcolorのselectedIndexをする
- * TODO　OK,Cancelを追加
  */
 public class PropertyDialog extends JDialog {
 
@@ -33,13 +32,13 @@ public class PropertyDialog extends JDialog {
 
     //backgroundColor
     private JComboBox<ColorListItem> bgColorJComboBox;
+
+    //footerLayout
     private final ActionListener OK = e -> {
         updateSettingForFontTypeAndSize();
         updateSettingForColor();
         dispose();
     };
-    private JLabel bgColorNameLabel;
-    private JPanel bgColorTip;
     //OKButton
     private JButton okButton;
     //cancelButton
@@ -104,19 +103,30 @@ public class PropertyDialog extends JDialog {
 
         //Font Color
         fontColorJComboBox = ColorSettingJComboBoxCreator.create();
-//        fontColorJComboBox.setSelectedIndex(Setting.getInstance().getSelectedFontColorIndex());
+        System.out.println(Setting.getInstance().getSelectedFontColorIndex());
+        fontColorJComboBox.setSelectedIndex(Setting.getInstance().getSelectedFontColorIndex());
         setComponent(fontColorJComboBox, 0, 2);
         setComponent(new JLabel(" Font color"), 1, 2);
 
         //Bg Color
         bgColorJComboBox = ColorSettingJComboBoxCreator.create();
-//        bgColorJComboBox.setSelectedIndex(Setting.getInstance().getSelectedBgColorIndex());
+        bgColorJComboBox.setSelectedIndex(Setting.getInstance().getSelectedBgColorIndex());
         setComponent(bgColorJComboBox, 0, 3);
         setComponent(new JLabel(" BackGround color"), 1, 3);
-
         add(mainPanel, BorderLayout.CENTER);
-        add(footerPanel, BorderLayout.SOUTH);
 
+        setFooterLayout();
+    }
+
+    private void setFooterLayout() {
+        footerPanel = new JPanel();
+        footerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        okButton = new JButton("OK");
+        cancelButton = new JButton("Cancel");
+        footerPanel.add(okButton);
+        footerPanel.add(cancelButton);
+
+        add(footerPanel, BorderLayout.SOUTH);
     }
 
     /**
@@ -134,6 +144,7 @@ public class PropertyDialog extends JDialog {
     }
 
     private void setListeners() {
-
+        okButton.addActionListener(OK);
+        cancelButton.addActionListener(e -> dispose());
     }
 }
