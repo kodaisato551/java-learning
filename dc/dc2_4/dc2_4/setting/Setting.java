@@ -76,6 +76,7 @@ public class Setting {
         selectedFontTypeIndex = DefaultProperties.FONT_TYPE_INDEX;
         selectedFontColorIndex = SupportedSettings.COLOR_LIST_ITEMS.indexOf(DefaultProperties.FONT_COLORLISTITEM);
         selectedBgColorIndex = SupportedSettings.COLOR_LIST_ITEMS.indexOf(DefaultProperties.BG_COLORLISTITEM);
+        currentPoint = new Point(0, 0);
     }
 
     public Point getCurrentPoint() {
@@ -84,6 +85,19 @@ public class Setting {
 
     public void setCurrentPoint(Point currentPoint) {
         this.currentPoint = currentPoint;
+    }
+
+    /**
+     * settingのステータスを表示
+     */
+    public void printStatus(String title) {
+        System.out.println("$$$$$$$ " + title + " $$$$$$$");
+        System.out.println("Font Type : " + currentFont.getFamily());
+        System.out.println("Font Size : " + currentFont.getSize());
+        System.out.println("Font Color : " + SupportedSettings.COLOR_VS_STRING_MAP.get(fontColor));
+        System.out.println("Bg Color : " + SupportedSettings.COLOR_VS_STRING_MAP.get(bgColor));
+        System.out.println("Point X : " + currentPoint.x);
+        System.out.println("Point Y : " + currentPoint.y);
     }
 
 

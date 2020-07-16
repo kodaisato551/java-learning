@@ -31,13 +31,17 @@ public class DCFrame extends JFrame {
         super("Digital Clock");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(DefaultProperties.WINDOW_WIDTH, DefaultProperties.WINDOW_HEIGHT);
-        addWindowCloseEvent();
-        dcPanel = new DCPanel(this);
-        setVisible(true);
-        getContentPane().add(dcPanel);
+        SettingLoader.loadPrefs();
+        setLocation(currentSetting.getCurrentPoint());
+
         setLayouts();
         setListeners();
-        SettingLoader.loadPrefs();
+        addWindowCloseEvent();
+        dcPanel = new DCPanel(this);
+        getContentPane().add(dcPanel);
+        setVisible(true);
+
+
     }
 
     public static void main(String[] args) {
