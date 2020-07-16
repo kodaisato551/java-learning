@@ -11,6 +11,8 @@ public class Setting {
     private int selectedFontColorIndex;
     private int selectedBgColorIndex;
 
+    private Point currentPoint;
+
     private Setting() {
         changeDefaultSetting();
     }
@@ -75,4 +77,14 @@ public class Setting {
         selectedFontColorIndex = SupportedSettings.COLOR_LIST_ITEMS.indexOf(DefaultProperties.FONT_COLORLISTITEM);
         selectedBgColorIndex = SupportedSettings.COLOR_LIST_ITEMS.indexOf(DefaultProperties.BG_COLORLISTITEM);
     }
+
+    public Point getCurrentPoint() {
+        return currentPoint;
+    }
+
+    public void setCurrentPoint(Point currentPoint) {
+        this.currentPoint = currentPoint;
+    }
+
+
 }

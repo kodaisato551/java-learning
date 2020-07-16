@@ -1,10 +1,14 @@
 package dc2_4.ui;
 
 import dc2_4.setting.DefaultProperties;
+import dc2_4.setting.Setting;
+import dc2_4.setting.SettingLoader;
 import dc2_4.ui.dialog.PropertyDialog;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * This clock represents Digital Clock.
@@ -16,6 +20,8 @@ public class DCFrame extends JFrame {
     private JMenuItem menuItem;
     private DCPanel dcPanel;
 
+    private static final Setting currentSetting = Setting.getInstance();
+
     private ActionListener GO_PROPERTY_SETTING = e -> {
         PropertyDialog dialog = new PropertyDialog();
         dialog.setVisible(true);
@@ -25,11 +31,13 @@ public class DCFrame extends JFrame {
         super("Digital Clock");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(DefaultProperties.WINDOW_WIDTH, DefaultProperties.WINDOW_HEIGHT);
+        addWindowCloseEvent();
         dcPanel = new DCPanel(this);
         setVisible(true);
         getContentPane().add(dcPanel);
         setLayouts();
         setListeners();
+        SettingLoader.loadPrefs();
     }
 
     public static void main(String[] args) {
@@ -47,6 +55,20 @@ public class DCFrame extends JFrame {
 
     private void setListeners() {
         menuItem.addActionListener(GO_PROPERTY_SETTING);
+    }
+
+    /**
+     * windowがCloseするイベントを登録する
+     */
+    private void addWindowCloseEvent() {
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                currentSetting.setCurrentPoint(getLocation());
+                SettingLoader.savePrefs();
+                System.exit(0);
+            }
+        });
     }
 
     /**

@@ -79,7 +79,8 @@ public class PropertyDialog extends JDialog {
     }
 
     private void setLayouts() {
-        setBounds(100, 100, 400, 400);
+        setBounds(100, 100, 400, 200);
+        setResizable(false);
         setTitle("Property Dialog");
         setLayout(new BorderLayout());
 

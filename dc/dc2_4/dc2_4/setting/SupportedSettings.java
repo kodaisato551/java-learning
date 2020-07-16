@@ -20,6 +20,7 @@ public class SupportedSettings {
     // Supported color
     public static final Map<String, Color> SUPPORTED_COLOR = new HashMap<>();
     public static final List<ColorListItem> COLOR_LIST_ITEMS = new ArrayList<>();
+    public static final Map<Color, String> COLOR_VS_STRING_MAP = new HashMap<>();
 
     static {
         FONT_SIZE_MAP.put("Small", DefaultProperties.WINDOW_FONT_SIZE / 2);
@@ -49,7 +50,7 @@ public class SupportedSettings {
             } else {
                 COLOR_LIST_ITEMS.add(new ColorListItem(entry.getValue(), entry.getKey()));
             }
-
+            COLOR_VS_STRING_MAP.put(entry.getValue(), entry.getKey());
         }
     }
 }
