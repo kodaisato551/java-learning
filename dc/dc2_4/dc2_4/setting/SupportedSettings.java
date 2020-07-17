@@ -1,7 +1,5 @@
 package dc2_4.setting;
 
-import dc2_3.setting.DefaultProperties;
-
 import java.awt.*;
 import java.util.List;
 import java.util.*;

@@ -41,7 +41,6 @@ public class DCFrame extends JFrame {
         getContentPane().add(dcPanel);
         setVisible(true);
 
-
     }
 
     public static void main(String[] args) {
