@@ -55,9 +55,10 @@ public class ArraySettingUIFrame extends JFrame {
 				if (comboBoxSelectedIndex == 0) {
 					containNullFromArray = true;
 				} else {
-					Object obj = ObjectPool.getInstance().get(comboBoxSelectedIndex - 1);
+					String selectedItem = (String) comboBoxList.get(i).getSelectedItem();
+					Object obj = ObjectPool.getInstance().getObjFromDisplayName(selectedItem);
 					System.out.println("display :" + ObjectPool.getInstance().getDisplayName(obj));
-					System.out.println(i);
+					System.out.println(obj);
 					Array.set(array, i, obj);
 				}
 			}
