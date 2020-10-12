@@ -14,6 +14,6 @@ public class Main {
      * @return
      */
     public static <T> Stream<T> zip(Stream<T> first, Stream<T> second) {
-        return null
+        return null;
     }
 }

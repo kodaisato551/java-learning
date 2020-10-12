@@ -4,7 +4,7 @@ import interpret.ui.CreateInstanceUIFrame;
 
 /**
  * wait()の呼び出して正しく呼び出せない
- *　配列が生成できない
+ *　配列が生成できない >
  *　自分自身が呼べない > 呼べるように修正
  *
  * 障害：
