@@ -1,15 +1,13 @@
-package ch03.ex05;
+package ch03.ex11;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
 /**
- * 次 は、 ColorTransformer の 具体 例 です。 次 の よう に、 画像 の 周り に 枠 を 付加 し ます。
- * 最初 に、 3. 3 節「 関数 型 インタフェース の 選択」 の transform メソッド を、 UnaryOperator < Color > の 代わり に ColorTransformer で 実装 し なさい。
- * それから、 画像 の 周り の 10 ピクセル を 灰色 の 枠 で 置き換える ため に、 その transform メソッド を 適切 な ラムダ 式 で 呼び出し なさい。
- *
- * TODO テスト未実施。メインでもやってないので動くかどうか謎です。
+ * 2 つ の ColorTransformer オブジェクト を 合成 できる static メソッド を 実装 し なさい。
+ * そして、 x 座標 と y 座標 を 無視 する ColorTransformer へ UnaryOperator < Color > を 変える static メソッド を 実装 し なさい。
+ * それから、 変換 によって 明るく なっ た 画像 に 灰色 の 枠 を 追加 する ため に、 実装 し た メソッド を 使用 し なさい（ 灰色 の 枠 に関して は 練習 問題 5 を 参照 し なさい）。
  */
 public class ImageProcessor {
 
@@ -38,6 +36,13 @@ public class ImageProcessor {
             return true;
         }
         return false;
+    }
+
+    public static ColorTransformer combine(ColorTransformer tr1, ColorTransformer tr2) {
+        return (x, y, transColor) -> {
+            Color color = tr1.apply(x, y, transColor);
+            return tr2.apply(x, y, color);
+        };
     }
 
 
