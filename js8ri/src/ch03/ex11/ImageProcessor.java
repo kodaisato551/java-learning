@@ -4,6 +4,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
+import java.util.function.UnaryOperator;
+
 /**
  * 2 つ の ColorTransformer オブジェクト を 合成 できる static メソッド を 実装 し なさい。
  * そして、 x 座標 と y 座標 を 無視 する ColorTransformer へ UnaryOperator < Color > を 変える static メソッド を 実装 し なさい。
@@ -43,6 +45,15 @@ public class ImageProcessor {
             Color color = tr1.apply(x, y, transColor);
             return tr2.apply(x, y, color);
         };
+    }
+
+    /**
+     * unaryoperatorからcolortransformweへの変換
+     *
+     * @return
+     */
+    public static ColorTransformer toColorTransformer(UnaryOperator<Color> unaryOperator) {
+        return (x, y, color) -> unaryOperator.apply(color);
     }
 
 
