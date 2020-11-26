@@ -25,27 +25,13 @@ public class CalenderViewer {
 
     /**
      * 右端を土日にそろえるConsumerの生成
-     * TODO 思ったのと違う..笑
      * @return
      */
     private static Consumer<LocalDate> cal() {
         return w -> {
-//            StringBuilder sb = new StringBuilder();
-//            for (int i = 1; i < w.getDayOfWeek().getValue(); i++) {
-//                sb.append(" ");
-//            }
-//            sb.append(w.getDayOfMonth());
-//            if (w.getDayOfWeek().getValue() == 7) {
-//                sb.append("\n");
-//            }
-//            System.out.print(sb);
-
             if (w.getDayOfMonth() == 1) {
-//                for (int i = 0; i < w.getDayOfWeek().getValue(); i++) {
-//                    System.out.print("  ");
-//                }
-                String formatt = "%" + w.getDayOfWeek().getValue() * 3 + "d";
-                System.out.printf(formatt, w.getDayOfMonth());
+                String format = "%" + w.getDayOfWeek().getValue() * 3 + "d";
+                System.out.printf(format, w.getDayOfMonth());
             } else {
                 System.out.printf("%3d", w.getDayOfMonth());
 
