@@ -18,7 +18,7 @@ import java.util.Date;
  */
 public class DigitalClock extends Application {
 
-    private  Label mLabel = new Label();
+    private final Label mLabel = new Label();
 
     private final EventHandler<ActionEvent> mEventHandler = e->{
         String currentTime = getCurrentTime();
