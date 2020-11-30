@@ -1,2 +1,4 @@
-package ch05.ex06;public class Sample {
+package ch05.ex06;
+
+public class Sample {
 }
