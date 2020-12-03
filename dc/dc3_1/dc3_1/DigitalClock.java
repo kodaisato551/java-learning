@@ -35,7 +35,7 @@ public class DigitalClock extends Application {
         );
         timer.setCycleCount(Timeline.INDEFINITE);
         timer.play();
-        stage.setScene(new Scene(mLabel, 100, 100));
+        stage.setScene(new Scene(mLabel, 100, 200));
         stage.show();
     }
 
