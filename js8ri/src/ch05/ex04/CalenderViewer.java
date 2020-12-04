@@ -20,7 +20,7 @@ public class CalenderViewer {
     public void show() {
         LocalDate date = LocalDate.of(year, month, 1);
         LocalDate endOfMonth = date.plusMonths(1).minusDays(1);//月末
-        date.datesUntil(endOfMonth).forEach(cal());
+        date.datesUntil(endOfMonth).forEach(cal());//java 8にする
     }
 
     /**

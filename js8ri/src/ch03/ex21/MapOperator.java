@@ -20,7 +20,7 @@ public class MapOperator {
      * @return
      */
     static <T, U> Future<U> map(Future<T> future, Function<T, U> function) {
-        return new Future<>() {
+        return new Future<U>() {
             @Override
             public boolean cancel(boolean b) {
                 return false;
