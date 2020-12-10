@@ -1,7 +1,10 @@
 package ch05.ex04;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * ある 月 の カレンダー を 表示 する Unix の cal プログラム と 同じ プログラム を 書き なさい。
@@ -20,7 +23,12 @@ public class CalenderViewer {
     public void show() {
         LocalDate date = LocalDate.of(year, month, 1);
         LocalDate endOfMonth = date.plusMonths(1).minusDays(1);//月末
-        date.datesUntil(endOfMonth).forEach(cal());//java 8にする
+        until(date, endOfMonth).forEach(cal());
+    }
+
+    public Stream<LocalDate> until(LocalDate startDate, LocalDate endDate) {
+        long numOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+        return IntStream.iterate(0, i -> i + 1).limit(numOfDaysBetween).mapToObj(i -> startDate.plusDays(i));
     }
 
     /**

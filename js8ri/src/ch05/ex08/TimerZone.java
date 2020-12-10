@@ -15,7 +15,7 @@ public class TimerZone {
         ZoneId.getAvailableZoneIds().stream().forEach(id -> {
                     ZonedDateTime time =
                             ZonedDateTime.of(now, ZoneId.of(id));
-                    System.out.println(time);
+            System.out.println(id + " : " + time.getOffset());
                 }
         );
     }
