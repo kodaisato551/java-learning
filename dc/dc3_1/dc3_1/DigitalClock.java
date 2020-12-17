@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -24,6 +25,7 @@ public class DigitalClock extends Application {
         String currentTime = getCurrentTime();
         System.out.println("Current Time :: "+ currentTime);
         mLabel.setText(currentTime);
+        mLabel.setFont(new Font("Arial", 30));
     };
 
 
@@ -35,7 +37,7 @@ public class DigitalClock extends Application {
         );
         timer.setCycleCount(Timeline.INDEFINITE);
         timer.play();
-        stage.setScene(new Scene(mLabel, 100, 200));
+        stage.setScene(new Scene(mLabel, 300, 100));
         stage.show();
     }
 
