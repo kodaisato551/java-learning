@@ -8,6 +8,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -20,6 +24,9 @@ import java.util.Date;
 public class DigitalClock extends Application {
 
     private final Label mLabel = new Label();
+    private final MenuBar mMenuBar = new MenuBar();
+    private final Menu mMenu = new Menu("Setting");
+    private final MenuItem mMenuItem = new MenuItem("Properties");
 
     private final EventHandler<ActionEvent> mEventHandler = e -> {
         String currentTime = getCurrentTime();
@@ -28,6 +35,9 @@ public class DigitalClock extends Application {
         mLabel.setFont(DefaultProperties.FONT);
     };
 
+    private final EventHandler<ActionEvent> mPopUpPropDialog = e -> {
+
+    };
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -37,10 +47,19 @@ public class DigitalClock extends Application {
         );
         timer.setCycleCount(Timeline.INDEFINITE);
         timer.play();
-        stage.setScene(new Scene(mLabel, 300, 100));
+        configureLayout(stage);
+        mMenuItem.setOnAction(mPopUpPropDialog);
         stage.show();
     }
 
+    private void configureLayout(Stage stage) {
+        mMenu.getItems().addAll(mMenuItem);
+        mMenuBar.getMenus().addAll(mMenu);
+        BorderPane root = new BorderPane();
+        root.setTop(mMenuBar);
+        root.setCenter(mLabel);
+        stage.setScene(new Scene(root, 300, 100));
+    }
 
     private static String getCurrentTime() {
         Date dateObj = new Date();
