@@ -1,19 +1,26 @@
 package dc3_2;
 
-import dc3_2.setting.DefaultProperties;
+import dc3_2.setting.CurrentSetting;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -32,20 +39,36 @@ public class DigitalClock extends Application {
     private final Menu mMenu = new Menu("Setting");
     private final MenuItem mMenuItem = new MenuItem("Properties");
 
+    private final CurrentSetting mCurrentSetting = CurrentSetting.getInstance();
+
+    public double mWindowHeight;
+    public double mWindowWidth;
+
+    private Scene mScene;
+    private BorderPane mPane;
+    private Stage mStage;
+
     private final EventHandler<ActionEvent> mEventHandler = e -> {
         String currentTime = getCurrentTime();
         System.out.println("Current Time :: " + currentTime);
         mLabel.setText(currentTime);
-        mLabel.setFont(DefaultProperties.FONT);
+        Font font = new Font(mCurrentSetting.getFontStyle(), mCurrentSetting.getFontSize());
+        mLabel.setFont(font);
+        mLabel.setBackground(new Background(new BackgroundFill(mCurrentSetting.getBgColor(), null, null)));
+        mLabel.setTextFill(mCurrentSetting.getFontColor());
+
+        reportSize(currentTime, font);
+        mLabel.setMaxHeight(mScene.getHeight());
+        mLabel.setMaxWidth(mScene.getWidth());
     };
 
     private final EventHandler<ActionEvent> mPopUpPropDialog = e -> {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("dialog_ui.fxml"));
         try {
             Parent parent = fxmlLoader.load();
-
-            Scene scene = new Scene(parent, 300, 200);
+            Scene scene = new Scene(parent);
             Stage stage = new Stage();
+            stage.setResizable(false);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
             stage.showAndWait();
@@ -64,16 +87,42 @@ public class DigitalClock extends Application {
         timer.play();
         configureLayout(stage);
         mMenuItem.setOnAction(mPopUpPropDialog);
+        mStage = stage;
         stage.show();
     }
 
     private void configureLayout(Stage stage) {
         mMenu.getItems().addAll(mMenuItem);
         mMenuBar.getMenus().addAll(mMenu);
-        BorderPane root = new BorderPane();
-        root.setTop(mMenuBar);
-        root.setCenter(mLabel);
-        stage.setScene(new Scene(root, 300, 100));
+        mPane = new BorderPane();
+        mPane.setTop(mMenuBar);
+        mPane.setCenter(mLabel);
+        mScene = new Scene(mPane, 300, 100);
+        mLabel.setMaxHeight(mScene.getHeight());
+        mLabel.setMaxWidth(mScene.getWidth());
+        stage.setScene(mScene);
+    }
+
+    public void reportSize(String s, Font myFont) {
+        Text text = new Text(s);
+        text.setFont(myFont);
+        Bounds tb = text.getBoundsInLocal();
+        Rectangle stencil = new Rectangle(
+                tb.getMinX(), tb.getMinY(), tb.getWidth(), tb.getHeight()
+        );
+
+        Shape intersection = Shape.intersect(text, stencil);
+
+        Bounds ib = intersection.getBoundsInLocal();
+        System.out.println(
+                "Text size: " + ib.getWidth() + ", " + ib.getHeight()
+        );
+        setWindowSize(ib.getWidth(), ib.getHeight());
+    }
+
+    private void setWindowSize(double fontWidth, double fontHeight) {
+        mWindowWidth = fontWidth * 3;
+        mWindowHeight = fontHeight * 3;
     }
 
     private static String getCurrentTime() {

@@ -1,5 +1,6 @@
 package dc3_2;
 
+import dc3_2.setting.CurrentSetting;
 import dc3_2.setting.SupportedSettings;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -27,6 +28,7 @@ public class DialogController implements Initializable {
     @FXML
     private ColorPicker bgColor;
 
+    private CurrentSetting currentSetting = CurrentSetting.getInstance();
     @FXML
     void btnOkClicked(ActionEvent event) {
         System.out.println("btnOKClicked");
@@ -36,6 +38,10 @@ public class DialogController implements Initializable {
         Color bColor = bgColor.getValue();
         System.out.println("Setting : " + "[fontType=" + type + " fontSize=" + size +
                 " ftColor=" + fColor.toString() + " bgColor=" + bColor.toString() + "]");
+        currentSetting.setFontStyle(type);
+        currentSetting.setFontSize(size);
+        currentSetting.setFontColor(fColor);
+        currentSetting.setBgColor(bColor);
         closeStage(event);
     }
 

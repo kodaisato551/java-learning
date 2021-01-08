@@ -2,10 +2,9 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity" prefHeight="400.0"
-            prefWidth="600.0" fx:controller="dc3_2.DialogController" xmlns="http://javafx.com/javafx/8.0.172-ea"
-            xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0"
+            prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="dc3_2.DialogController">
     <center>
         <ScrollPane fitToWidth="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <content>
@@ -14,29 +13,25 @@
                         <HBox alignment="BASELINE_LEFT" prefHeight="100.0" prefWidth="200.0">
                             <children>
                                 <Label prefHeight="17.0" prefWidth="55.0" text="Font Style"/>
-                                <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
                                 <ComboBox fx:id="fontStyle" prefWidth="150.0"/>
                             </children>
                         </HBox>
                         <HBox alignment="BASELINE_LEFT" prefHeight="100.0" prefWidth="200.0">
                             <children>
                                 <Label text="Font Size"/>
-                                <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
                                 <ComboBox fx:id="fontSize" prefWidth="150.0"/>
                             </children>
                         </HBox>
                         <HBox alignment="BASELINE_LEFT" prefHeight="100.0" prefWidth="200.0">
                             <children>
                                 <Label text="Font Color"/>
-                                <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
                                 <ColorPicker fx:id="fontColor"/>
                             </children>
                         </HBox>
                         <HBox alignment="BASELINE_LEFT" prefHeight="100.0" prefWidth="200.0">
                             <children>
                                 <Label text="Background Color"/>
-                                <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
-                                <ColorPicker fx:id="bgColor"/>
+                                <ColorPicker fx:id="bgColor" prefHeight="23.0" prefWidth="125.0"/>
                             </children>
                         </HBox>
                     </children>
