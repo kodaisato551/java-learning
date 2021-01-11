@@ -4,10 +4,12 @@ import dc3_2.setting.CurrentSetting;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
+import javafx.geometry.Dimension2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -43,6 +45,8 @@ public class DigitalClock extends Application {
 
     public double mWindowHeight;
     public double mWindowWidth;
+    private Dimension2D mWindowDimension;
+    private DoubleProperty mProperty;
 
     private Scene mScene;
     private BorderPane mPane;
@@ -52,14 +56,21 @@ public class DigitalClock extends Application {
         String currentTime = getCurrentTime();
         System.out.println("Current Time :: " + currentTime);
         mLabel.setText(currentTime);
-        Font font = new Font(mCurrentSetting.getFontStyle(), mCurrentSetting.getFontSize());
-        mLabel.setFont(font);
-        mLabel.setBackground(new Background(new BackgroundFill(mCurrentSetting.getBgColor(), null, null)));
-        mLabel.setTextFill(mCurrentSetting.getFontColor());
-
-        reportSize(currentTime, font);
-        mLabel.setMaxHeight(mScene.getHeight());
-        mLabel.setMaxWidth(mScene.getWidth());
+//        Font font = new Font(mCurrentSetting.getFontStyle(), mCurrentSetting.getFontSize());
+//        mLabel.setFont(font);
+//        mLabel.setBackground(new Background(new BackgroundFill(mCurrentSetting.getBgColor(), null, null)));
+//        mLabel.setTextFill(mCurrentSetting.getFontColor());
+//        setCalculatedWindowSize(currentTime, font);
+//
+//        //window
+//        mProperty = new SimpleDoubleProperty(mCurrentSetting.getFontSize());
+//        mProperty.bind(mScene.widthProperty().add(mScene.heightProperty()).divide(50));
+//
+//        mLabel.setMaxHeight(mScene.getHeight());
+//        mLabel.setMaxWidth(mScene.getWidth());
+        adaptSetting();
+        mLabel.setMaxHeight(mWindowHeight);
+        mLabel.setMaxWidth(mWindowWidth);
     };
 
     private final EventHandler<ActionEvent> mPopUpPropDialog = e -> {
@@ -80,14 +91,14 @@ public class DigitalClock extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
+        configureLayout(stage);
+        mMenuItem.setOnAction(mPopUpPropDialog);
+        mStage = stage;
         Timeline timer = new Timeline(
                 new KeyFrame(Duration.millis(1000), mEventHandler)
         );
         timer.setCycleCount(Timeline.INDEFINITE);
         timer.play();
-        configureLayout(stage);
-        mMenuItem.setOnAction(mPopUpPropDialog);
-        mStage = stage;
         stage.show();
     }
 
@@ -97,14 +108,30 @@ public class DigitalClock extends Application {
         mPane = new BorderPane();
         mPane.setTop(mMenuBar);
         mPane.setCenter(mLabel);
-        mScene = new Scene(mPane, 300, 100);
-        mLabel.setMaxHeight(mScene.getHeight());
-        mLabel.setMaxWidth(mScene.getWidth());
+        adaptSetting();
+        mScene = new Scene(mPane, mWindowWidth, mWindowHeight);
+        mLabel.setMaxHeight(mWindowHeight);
+        mLabel.setMaxWidth(mWindowWidth);
         stage.setScene(mScene);
     }
 
-    public void reportSize(String s, Font myFont) {
-        Text text = new Text(s);
+    private void adaptSetting() {
+        Font font = new Font(mCurrentSetting.getFontStyle(), mCurrentSetting.getFontSize());
+        mLabel.setFont(font);
+        mLabel.setBackground(new Background(new BackgroundFill(mCurrentSetting.getBgColor(), null, null)));
+        mLabel.setTextFill(mCurrentSetting.getFontColor());
+        setCalculatedWindowSize(font);
+
+//        //window
+//        mProperty = new SimpleDoubleProperty(mCurrentSetting.getFontSize());
+//        mProperty.bind(mScene.widthProperty().add(mScene.heightProperty()).divide(50));
+
+
+    }
+
+
+    public void setCalculatedWindowSize(Font myFont) {
+        Text text = new Text("yyyy/MM/dd HH:mm:ss");
         text.setFont(myFont);
         Bounds tb = text.getBoundsInLocal();
         Rectangle stencil = new Rectangle(
@@ -121,8 +148,8 @@ public class DigitalClock extends Application {
     }
 
     private void setWindowSize(double fontWidth, double fontHeight) {
-        mWindowWidth = fontWidth * 3;
-        mWindowHeight = fontHeight * 3;
+        mWindowWidth = fontWidth + 100;
+        mWindowHeight = fontHeight + 50;
     }
 
     private static String getCurrentTime() {
