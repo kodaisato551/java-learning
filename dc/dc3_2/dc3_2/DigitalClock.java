@@ -16,9 +16,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
@@ -32,7 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- *
+ * ウインドウのリサイズはできませんでした。
  */
 public class DigitalClock extends Application {
 
@@ -49,8 +50,9 @@ public class DigitalClock extends Application {
     private DoubleProperty mProperty;
 
     private Scene mScene;
-    private BorderPane mPane;
+    private AnchorPane mPane;
     private Stage mStage;
+    private VBox root;
 
     private final EventHandler<ActionEvent> mEventHandler = e -> {
         String currentTime = getCurrentTime();
@@ -69,8 +71,6 @@ public class DigitalClock extends Application {
 //        mLabel.setMaxHeight(mScene.getHeight());
 //        mLabel.setMaxWidth(mScene.getWidth());
         adaptSetting();
-        mLabel.setMaxHeight(mWindowHeight);
-        mLabel.setMaxWidth(mWindowWidth);
     };
 
     private final EventHandler<ActionEvent> mPopUpPropDialog = e -> {
@@ -103,30 +103,30 @@ public class DigitalClock extends Application {
     }
 
     private void configureLayout(Stage stage) {
+        root = new VBox(2.0);
         mMenu.getItems().addAll(mMenuItem);
         mMenuBar.getMenus().addAll(mMenu);
-        mPane = new BorderPane();
-        mPane.setTop(mMenuBar);
-        mPane.setCenter(mLabel);
+        root.getChildren().add(mMenuBar);
+        root.setSpacing(10);
+
+        mPane = new AnchorPane();
         adaptSetting();
-        mScene = new Scene(mPane, mWindowWidth, mWindowHeight);
-        mLabel.setMaxHeight(mWindowHeight);
-        mLabel.setMaxWidth(mWindowWidth);
+        mPane.getChildren().add(mLabel);
+        mPane.autosize();
+        root.getChildren().add(mPane);
+
+        mScene = new Scene(root, mWindowWidth, mWindowHeight);
         stage.setScene(mScene);
+        stage.setResizable(false);
     }
 
     private void adaptSetting() {
         Font font = new Font(mCurrentSetting.getFontStyle(), mCurrentSetting.getFontSize());
         mLabel.setFont(font);
-        mLabel.setBackground(new Background(new BackgroundFill(mCurrentSetting.getBgColor(), null, null)));
+        root.setBackground(new Background(new BackgroundFill(mCurrentSetting.getBgColor(), null, null)));
         mLabel.setTextFill(mCurrentSetting.getFontColor());
         setCalculatedWindowSize(font);
-
-//        //window
-//        mProperty = new SimpleDoubleProperty(mCurrentSetting.getFontSize());
-//        mProperty.bind(mScene.widthProperty().add(mScene.heightProperty()).divide(50));
-
-
+        mLabel.setMaxSize(mWindowWidth, mWindowHeight);
     }
 
 
