@@ -14,6 +14,10 @@
       <sourceFolder url="file://$MODULE_DIR$/dc2_4" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/dc3_1" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/dc3_2" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/dc3_3" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/dc3_4" isTestSource="false" />
+
+
 
     </content>
     <orderEntry type="inheritedJdk" />
