@@ -1,3 +1,4 @@
+import javafx.geometry.Dimension2D;
 import javafx.scene.paint.Color;
 
 public class Setting {
@@ -51,9 +52,17 @@ public class Setting {
 
     public void changeDefaultSetting() {
         fontStyle = "Arial";
-        fontSize = 30;
+        fontSize = DefaultProperties.WINDOW_FONT_SIZE;
         fontColor = Color.BLACK;
         bgColor = Color.WHITE;
+        calcPreferredWindowSize();
     }
 
+    public Dimension2D calcPreferredWindowSize() {
+        double width = fontSize * 12;
+        double height = fontSize * 8;
+        return new Dimension2D(width, height);
+    }
 }
+
+

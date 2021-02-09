@@ -1,4 +1,3 @@
-import dc2_3.setting.DefaultProperties;
 import javafx.scene.paint.Color;
 
 import java.awt.*;

@@ -1,6 +1,12 @@
+import javafx.geometry.Dimension2D;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+
+import java.util.Set;
 
 /**
  * メニューのUI設定
@@ -13,16 +19,25 @@ public class PropMenu {
     private static final Menu bgColor = new Menu("Background Color");
     private static final Menu terminate = new Menu("Terminate");
     private static final Setting setting = Setting.getInstance();
+    private final ContextMenu mMenu;
+    private final Stage mStage;
 
-
-    public static ContextMenu create() {
-        ContextMenu menu = new ContextMenu();
+    public PropMenu(Stage stage) {
+        mStage = stage;
+        mMenu = new ContextMenu();
         setupFontType();
-        menu.getItems().addAll(fontType, fontSize, fontColor, bgColor, terminate);
-        return menu;
+        setupFontSize();
+        setupFontColor();
+        setupBgColor();
+        terminate.setOnAction(e -> System.exit(1));
+        mMenu.getItems().addAll(fontType, fontSize, fontColor, bgColor, terminate);
     }
 
-    private static void setupFontType() {
+    public ContextMenu getMenu() {
+        return mMenu;
+    }
+
+    private void setupFontType() {
         MenuItem[] items = new MenuItem[SupportedSettings.FONT_TYPE_LIST.size()];
         for (int i = 0; i < items.length; i++) {
             String name = SupportedSettings.FONT_TYPE_LIST.get(i);
@@ -32,6 +47,56 @@ public class PropMenu {
         fontType.getItems().addAll(items);
     }
 
-    private PropMenu() {
+    private void setupFontSize() {
+        Set<String> fontSizeNames = SupportedSettings.FONT_SIZE_MAP.keySet();
+        MenuItem[] items = new MenuItem[fontSizeNames.size()];
+        int count = 0;
+        for (String name : fontSizeNames) {
+            items[count] = new MenuItem(name);
+            items[count].setOnAction(e -> {
+                setting.setFontSize(SupportedSettings.FONT_SIZE_MAP.get(name));
+                Dimension2D window = setting.calcPreferredWindowSize();
+                mStage.setHeight(window.getHeight());
+                mStage.setWidth(window.getWidth());
+            });
+            count++;
+        }
+        fontSize.getItems().addAll(items);
+
     }
+
+    private void setupFontColor() {
+        Set<String> colors = SupportedSettings.SUPPORTED_COLOR.keySet();
+        MenuItem[] items = new MenuItem[colors.size()];
+        int count = 0;
+        for (String name : colors) {
+            Color color = SupportedSettings.SUPPORTED_COLOR.get(name);
+            Rectangle rectangle = new Rectangle(10, 10);
+            rectangle.setFill(color);
+            items[count] = new MenuItem(name, rectangle);
+            items[count].setOnAction(e -> {
+                setting.setFontColor(color);
+            });
+            count++;
+        }
+        fontColor.getItems().addAll(items);
+    }
+
+    private void setupBgColor() {
+        Set<String> colors = SupportedSettings.SUPPORTED_COLOR.keySet();
+        MenuItem[] items = new MenuItem[colors.size()];
+        int count = 0;
+        for (String name : colors) {
+            Color color = SupportedSettings.SUPPORTED_COLOR.get(name);
+            Rectangle rectangle = new Rectangle(10, 10);
+            rectangle.setFill(color);
+            items[count] = new MenuItem(name, rectangle);
+            items[count].setOnAction(e -> {
+                setting.setBgColor(color);
+            });
+            count++;
+        }
+        bgColor.getItems().addAll(items);
+    }
+
 }
