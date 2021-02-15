@@ -1,0 +1,6 @@
+apple
+banana
+cap
+doctor
+eco
+fun
