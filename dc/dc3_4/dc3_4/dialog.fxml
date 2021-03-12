@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0"
+            prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="dc3_2.DialogController">
+    <center>
+        <ScrollPane fitToWidth="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <content>
+                <VBox prefHeight="200.0" prefWidth="100.0">
+                    <children>
+                        <HBox alignment="BASELINE_LEFT" prefHeight="100.0" prefWidth="200.0">
+                            <children>
+                                <Label prefHeight="17.0" prefWidth="55.0" text="Font Style"/>
+                                <ComboBox fx:id="fontStyle" prefWidth="150.0"/>
+                            </children>
+                        </HBox>
+                        <HBox alignment="BASELINE_LEFT" prefHeight="100.0" prefWidth="200.0">
+                            <children>
+                                <Label text="Font Size"/>
+                                <ComboBox fx:id="fontSize" prefWidth="150.0"/>
+                            </children>
+                        </HBox>
+                        <HBox alignment="BASELINE_LEFT" prefHeight="100.0" prefWidth="200.0">
+                            <children>
+                                <Label text="Font Color"/>
+                                <ColorPicker fx:id="fontColor"/>
+                            </children>
+                        </HBox>
+                        <HBox alignment="BASELINE_LEFT" prefHeight="100.0" prefWidth="200.0">
+                            <children>
+                                <Label text="Background Color"/>
+                                <ColorPicker fx:id="bgColor" prefHeight="23.0" prefWidth="125.0"/>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+    <bottom>
+        <HBox alignment="BASELINE_RIGHT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button mnemonicParsing="false" text="Cancel"/>
+                <Button mnemonicParsing="false" onAction="#btnOkClicked" text="OK"/>
+            </children>
+        </HBox>
+    </bottom>
+</BorderPane>
