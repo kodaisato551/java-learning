@@ -1,7 +1,4 @@
 package dc3_4;
-
-import dc2_3.setting.SupportedSettings;
-
 import java.awt.*;
 
 

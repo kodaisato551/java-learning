@@ -1,6 +1,5 @@
 package dc3_4;
 
-import dc3_2.setting.CurrentSetting;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -30,7 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * ウインドウのリサイズはできませんでした。
+ * windowの表示位置の反映はまだ出来てない。。
  */
 public class DigitalClock extends Application {
 
@@ -39,7 +38,7 @@ public class DigitalClock extends Application {
     private final Menu mMenu = new Menu("Setting");
     private final MenuItem mMenuItem = new MenuItem("Properties");
 
-    private final CurrentSetting mCurrentSetting = CurrentSetting.getInstance();
+    private final Setting mCurrentSetting = Setting.getInstance();
 
     public double mWindowHeight;
     public double mWindowWidth;
@@ -50,7 +49,7 @@ public class DigitalClock extends Application {
 
     private final EventHandler<ActionEvent> mEventHandler = e -> {
         String currentTime = getCurrentTime();
-        System.out.println("Current Time :: " + currentTime);
+//        System.out.println("Current Time :: " + currentTime);
         mLabel.setText(currentTime);
         adaptSetting();
     };
@@ -92,6 +91,15 @@ public class DigitalClock extends Application {
         stage.setScene(mScene);
         stage.setResizable(false);
         mStage = stage;
+        SettingLoader.loadPrefs();
+        stage.showingProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue && !newValue) {
+                SettingLoader.savePrefs();
+            }
+        });
+        mStage.setX(mCurrentSetting.getCurrentPoint().x);
+        mStage.setX(mCurrentSetting.getCurrentPoint().y);
+
         adaptSetting();
     }
 
@@ -117,15 +125,15 @@ public class DigitalClock extends Application {
         Shape intersection = Shape.intersect(text, stencil);
 
         Bounds ib = intersection.getBoundsInLocal();
-        System.out.println(
-                "Text size: " + ib.getWidth() + ", " + ib.getHeight()
-        );
+//        System.out.println(
+//                "Text size: " + ib.getWidth() + ", " + ib.getHeight()
+//        );
         setWindowSize(ib.getWidth(), ib.getHeight());
     }
 
     private void setWindowSize(double fontWidth, double fontHeight) {
         mWindowWidth = fontWidth + 100;
-        mWindowHeight = fontHeight + 50;
+        mWindowHeight = fontHeight + 100;
     }
 
     private static String getCurrentTime() {

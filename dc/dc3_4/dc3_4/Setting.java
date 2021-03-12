@@ -1,7 +1,10 @@
 package dc3_4;
 
+import dc2_4.setting.SupportedSettings;
 import javafx.geometry.Dimension2D;
 import javafx.scene.paint.Color;
+
+import java.awt.*;
 
 public class Setting {
 
@@ -11,6 +14,7 @@ public class Setting {
     private Color bgColor;
 
     private static final Setting instance = new Setting();
+    private Point currentPoint;
 
     public static Setting getInstance() {
         return instance;
@@ -60,11 +64,33 @@ public class Setting {
         calcPreferredWindowSize();
     }
 
+    public Point getCurrentPoint() {
+        return currentPoint;
+    }
+
+    public void setCurrentPoint(Point currentPoint) {
+        this.currentPoint = currentPoint;
+    }
+
     public Dimension2D calcPreferredWindowSize() {
         double width = fontSize * 12;
         double height = fontSize * 8;
         return new Dimension2D(width, height);
     }
+
+    /**
+     * settingのステータスを表示
+     */
+    public void printStatus(String title) {
+        System.out.println("$$$$$$$ " + title + " $$$$$$$");
+        System.out.println("Font Type : " + fontStyle);
+        System.out.println("Font Size : " + fontSize);
+        System.out.println("Font Color : " + dc2_4.setting.SupportedSettings.COLOR_VS_STRING_MAP.get(fontColor));
+        System.out.println("Bg Color : " + SupportedSettings.COLOR_VS_STRING_MAP.get(bgColor));
+        System.out.println("Point X : " + currentPoint.x);
+        System.out.println("Point Y : " + currentPoint.y);
+    }
+
 }
 
 

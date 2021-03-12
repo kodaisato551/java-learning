@@ -11,7 +11,6 @@ public class SupportedSettings {
 
     // Font size setting
     public static final Map<String, Integer> FONT_SIZE_MAP = new HashMap<>();
-    
 
     public static final Map<String, Color> COLOR_MAP = new HashMap<>();
 
