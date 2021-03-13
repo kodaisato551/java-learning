@@ -4,8 +4,6 @@ import dc2_4.setting.SupportedSettings;
 import javafx.geometry.Dimension2D;
 import javafx.scene.paint.Color;
 
-import java.awt.*;
-
 public class Setting {
 
     private String fontStyle;
@@ -14,7 +12,7 @@ public class Setting {
     private Color bgColor;
 
     private static final Setting instance = new Setting();
-    private Point currentPoint;
+    private Dimension2D currentPoint;
 
     public static Setting getInstance() {
         return instance;
@@ -64,11 +62,11 @@ public class Setting {
         calcPreferredWindowSize();
     }
 
-    public Point getCurrentPoint() {
+    public Dimension2D getCurrentPoint() {
         return currentPoint;
     }
 
-    public void setCurrentPoint(Point currentPoint) {
+    public void setCurrentPoint(Dimension2D currentPoint) {
         this.currentPoint = currentPoint;
     }
 
@@ -87,8 +85,8 @@ public class Setting {
         System.out.println("Font Size : " + fontSize);
         System.out.println("Font Color : " + dc2_4.setting.SupportedSettings.COLOR_VS_STRING_MAP.get(fontColor));
         System.out.println("Bg Color : " + SupportedSettings.COLOR_VS_STRING_MAP.get(bgColor));
-        System.out.println("Point X : " + currentPoint.x);
-        System.out.println("Point Y : " + currentPoint.y);
+        System.out.println("Point X : " + currentPoint.getWidth());
+        System.out.println("Point Y : " + currentPoint.getHeight());
     }
 
 }

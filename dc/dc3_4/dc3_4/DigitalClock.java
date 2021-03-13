@@ -94,11 +94,12 @@ public class DigitalClock extends Application {
         SettingLoader.loadPrefs();
         stage.showingProperty().addListener((observable, oldValue, newValue) -> {
             if (oldValue && !newValue) {
-                SettingLoader.savePrefs();
+                System.out.println("shut down.. save prefs");
+                SettingLoader.savePrefs(mStage);
             }
         });
-        mStage.setX(mCurrentSetting.getCurrentPoint().x);
-        mStage.setX(mCurrentSetting.getCurrentPoint().y);
+        mStage.setX(mCurrentSetting.getCurrentPoint().getWidth());
+        mStage.setY(mCurrentSetting.getCurrentPoint().getHeight());
 
         adaptSetting();
     }
