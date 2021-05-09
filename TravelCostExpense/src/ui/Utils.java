@@ -1,7 +1,9 @@
+package ui;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-class Utils {
+public class Utils {
 
     private static final SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
 
