@@ -43,6 +43,9 @@ public class MainPanel extends JPanel implements Runnable,
     public void run() {
         while (true) {
             ball.move();
+            if (racket.collideWith(ball)) {
+                ball.boundY();
+            }
             repaint();
             try {
                 Thread.sleep(20);
