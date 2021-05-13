@@ -41,6 +41,21 @@ public class Ball {
     }
 
     /**
+     * 斜めにバウンド
+     */
+    public void boundXY() {
+        vx = -vx;
+        vy = -vy;
+    }
+
+    /**
+     * x軸方向にバウンド
+     */
+    public void boundX() {
+        vx = -vx;
+    }
+
+    /**
      * Y軸方向にバウンド
      */
     public void boundY() {
