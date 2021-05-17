@@ -13,17 +13,20 @@ public class MainPanel extends JPanel implements Runnable,
 
     private static final int NUM_BLOCK_ROW = 10;
     private static final int NUM_BLOCK_COL = 7;
-    private static final int NUM_BLOCK = NUM_BLOCK_ROW * NUM_BLOCK_COL;
     private Block[][] blocks = new Block[NUM_BLOCK_ROW][NUM_BLOCK_COL];
 
     public MainPanel() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         addMouseMotionListener(this);
+        initGameFields();
+        game = new Thread(this);
+        game.start();
+    }
+
+    private void initGameFields(){
         racket = new Racket();
         ball = new Ball();
-        game = new Thread(this);
         createBlocks();
-        game.start();
     }
 
     private void createBlocks() {
@@ -71,11 +74,10 @@ public class MainPanel extends JPanel implements Runnable,
                     continue;
                 }
                 Direction direction = blocks[i][j].collideWith(ball);
-                if (direction.equals(Direction.NO_COLLISION)) {
-                    break;
-                } else {
+                if(!direction.equals(Direction.NO_COLLISION)){
                     blocks[i][j].delete();
                     reflection(direction);
+                    return;
                 }
             }
         }
@@ -83,9 +85,19 @@ public class MainPanel extends JPanel implements Runnable,
 
     private void reflection(Direction direction) {
         switch (direction) {
-            case DOWN, UP -> ball.boundY();
-            case LEFT, RIGHT -> ball.boundX();
-            case UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT -> ball.boundXY();
+            case DOWN:
+            case UP:
+                ball.boundY();
+                break;
+            case LEFT:
+            case RIGHT:
+                ball.boundX();
+                break;
+            case UP_LEFT:
+            case UP_RIGHT:
+            case DOWN_LEFT:
+            case DOWN_RIGHT:
+                ball.boundXY();
         }
     }
 
@@ -93,6 +105,9 @@ public class MainPanel extends JPanel implements Runnable,
     public void run() {
         while (true) {
             ball.move();
+            if (ball.isGameOver()){
+                popUpRestartGame();
+            }
             if (racket.collideWith(ball)) {
                 ball.boundY();
             }
@@ -103,6 +118,17 @@ public class MainPanel extends JPanel implements Runnable,
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void popUpRestartGame(){
+        int option = JOptionPane.showConfirmDialog(this,"ゲームを終了しますか？(Yes:終了/No:再挑戦)",
+                "Finish",JOptionPane.YES_NO_OPTION);
+
+        if (option == JOptionPane.YES_OPTION){
+            System.exit(1);
+        }else if (option == JOptionPane.NO_OPTION){
+            initGameFields();
         }
     }
 }

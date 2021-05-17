@@ -6,11 +6,12 @@ public class Ball {
     private int x, y;//ball location
     private int vx, vy;//velocity of ball
     private Random rand;
+    private boolean isGameOver;
+
 
     public Ball() {
-        rand = new Random(System.currentTimeMillis());
-        x = rand.nextInt(MainPanel.WIDTH - SIZE);
-        y = 0;
+        x = (MainPanel.WIDTH - SIZE) / 2;
+        y = (MainPanel.HEIGHT - Racket.HEIGHT - SIZE * 2);
         vx = 5;
         vy = 5;
     }
@@ -32,10 +33,14 @@ public class Ball {
     public void move() {
         x += vx;
         y += vy;
+
+        if (y > MainPanel.HEIGHT - SIZE){
+            isGameOver = true;
+        }
         if (x < 0 || x > MainPanel.WIDTH - SIZE) {
             vx = -vx;
         }
-        if (y < 0 || y > MainPanel.HEIGHT - SIZE) {
+        if (y < 0) {
             vy = -vy;
         }
     }
@@ -72,5 +77,9 @@ public class Ball {
 
     public int getY() {
         return y;
+    }
+
+    public boolean isGameOver() {
+        return isGameOver;
     }
 }
