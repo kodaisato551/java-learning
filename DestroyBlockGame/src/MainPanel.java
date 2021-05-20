@@ -15,6 +15,8 @@ public class MainPanel extends JPanel implements Runnable,
     private static final int NUM_BLOCK_COL = 7;
     private Block[][] blocks = new Block[NUM_BLOCK_ROW][NUM_BLOCK_COL];
 
+    private int blockBaseLineY;
+
     public MainPanel() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         addMouseMotionListener(this);
@@ -24,9 +26,9 @@ public class MainPanel extends JPanel implements Runnable,
     }
 
     private void initGameFields(){
-        racket = new Racket();
-        ball = new Ball();
         createBlocks();
+        racket = new Racket();
+        ball = new Ball(blockBaseLineY);
     }
 
     private void createBlocks() {
@@ -37,6 +39,7 @@ public class MainPanel extends JPanel implements Runnable,
                 blocks[i][j] = new Block(x, y);
             }
         }
+        blockBaseLineY = blocks[NUM_BLOCK_ROW - 1][0].getY();
     }
 
     @Override
@@ -122,7 +125,7 @@ public class MainPanel extends JPanel implements Runnable,
     }
 
     private void popUpRestartGame(){
-        int option = JOptionPane.showConfirmDialog(this,"ゲームを終了しますか？(Yes:終了/No:再挑戦)",
+        int option = JOptionPane.showConfirmDialog(this,"残念。ゲームを終了しますか？(Yes:終了/No:再挑戦)",
                 "Finish",JOptionPane.YES_NO_OPTION);
 
         if (option == JOptionPane.YES_OPTION){

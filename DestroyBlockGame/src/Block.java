@@ -27,7 +27,7 @@ public class Block {
      * @param g
      */
     public void draw(Graphics g) {
-        g.setColor(Color.CYAN);
+        g.setColor(Color.green);
         g.fillRect(x, y, WIDTH, HEIGHT);
 
         // 枠線を描画
@@ -83,5 +83,10 @@ public class Block {
         }
 
         return Direction.NO_COLLISION;
+    }
+
+
+    public int getY() {
+        return y;
     }
 }

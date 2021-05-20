@@ -1,19 +1,35 @@
 import java.awt.*;
-import java.util.Random;
 
 public class Ball {
     private static final int SIZE = 8;
-    private int x, y;//ball location
-    private int vx, vy;//velocity of ball
-    private Random rand;
+    private int x;
+    private int y;
+    private int vx;
+    private int vy;
     private boolean isGameOver;
 
+    private final int blockBaseLineY;
 
-    public Ball() {
+    public Ball(int blockBaseLineY) {
+        this.blockBaseLineY = blockBaseLineY;
         x = (MainPanel.WIDTH - SIZE) / 2;
-        y = (MainPanel.HEIGHT - Racket.HEIGHT - SIZE * 2);
+//        y = (MainPanel.HEIGHT - Racket.HEIGHT - SIZE * 2);
+        setBallLocation();
+        y = (blockBaseLineY + MainPanel.HEIGHT)/2;
         vx = 5;
         vy = 5;
+    }
+
+
+    /**
+     * ballの初期位置の計算
+     */
+    private void setBallLocation(){
+        x = getRandInt(SIZE , MainPanel.WIDTH-SIZE);
+    }
+
+    private int getRandInt(int min, int max){
+        return (int) (Math.random() * (max-min)) + min;
     }
 
     /**
