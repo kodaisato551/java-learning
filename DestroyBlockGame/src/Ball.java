@@ -14,7 +14,7 @@ public class Ball {
         this.blockBaseLineY = blockBaseLineY;
         x = (MainPanel.WIDTH - SIZE) / 2;
 //        y = (MainPanel.HEIGHT - Racket.HEIGHT - SIZE * 2);
-        setBallLocation();
+//        setBallLocation();
         y = (blockBaseLineY + MainPanel.HEIGHT)/2;
         vx = 5;
         vy = 5;
@@ -25,12 +25,10 @@ public class Ball {
      * ballの初期位置の計算
      */
     private void setBallLocation(){
-        x = getRandInt(SIZE , MainPanel.WIDTH-SIZE);
+        x = Util.getRandInt(SIZE , MainPanel.WIDTH-SIZE);
     }
 
-    private int getRandInt(int min, int max){
-        return (int) (Math.random() * (max-min)) + min;
-    }
+
 
     /**
      * ボールを描画

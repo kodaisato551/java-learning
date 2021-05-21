@@ -8,14 +8,16 @@ public class MainPanel extends JPanel implements Runnable,
     private Racket racket;
     private Ball ball;
     private Thread game;
-    public static final int WIDTH = 360;
-    public static final int HEIGHT = 480;
+    public static final int WIDTH = 400;
+    public static final int HEIGHT = 500;
 
-    private static final int NUM_BLOCK_ROW = 10;
+    private static final int NUM_BLOCK_ROW = 15;
     private static final int NUM_BLOCK_COL = 7;
+    private static final int NUM_BLOCK = NUM_BLOCK_COL * NUM_BLOCK_ROW;
     private Block[][] blocks = new Block[NUM_BLOCK_ROW][NUM_BLOCK_COL];
 
     private int blockBaseLineY;
+    private int deletedBlock;
 
     public MainPanel() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -71,14 +73,17 @@ public class MainPanel extends JPanel implements Runnable,
     }
 
     private void destroyBlock() {
+        deletedBlock = 0;
         for (int i = 0; i < NUM_BLOCK_ROW; i++) {
             for (int j = 0; j < NUM_BLOCK_COL; j++) {
                 if (blocks[i][j].isDeleted()) {
+                    deletedBlock++;
                     continue;
                 }
                 Direction direction = blocks[i][j].collideWith(ball);
                 if(!direction.equals(Direction.NO_COLLISION)){
                     blocks[i][j].delete();
+                    deletedBlock++;
                     reflection(direction);
                     return;
                 }
@@ -109,12 +114,15 @@ public class MainPanel extends JPanel implements Runnable,
         while (true) {
             ball.move();
             if (ball.isGameOver()){
-                popUpRestartGame();
+                popUpDialog("残念.");
             }
             if (racket.collideWith(ball)) {
                 ball.boundY();
             }
             destroyBlock();
+            if (deletedBlock == NUM_BLOCK){
+                popUpDialog("成功.");
+            }
             repaint();
             try {
                 Thread.sleep(20);
@@ -124,8 +132,8 @@ public class MainPanel extends JPanel implements Runnable,
         }
     }
 
-    private void popUpRestartGame(){
-        int option = JOptionPane.showConfirmDialog(this,"残念。ゲームを終了しますか？(Yes:終了/No:再挑戦)",
+    private void popUpDialog(String message){
+        int option = JOptionPane.showConfirmDialog(this,message + "ゲームを終了しますか？(Yes:終了/No:再挑戦)",
                 "Finish",JOptionPane.YES_NO_OPTION);
 
         if (option == JOptionPane.YES_OPTION){

@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class Block {
     public static final int WIDTH = 40;
-    public static final int HEIGHT = 16;
+    public static final int HEIGHT = 15;
     private final int x;
     private final int y;
     private boolean isDeleted;
@@ -14,7 +14,12 @@ public class Block {
         this.x = x;
         this.y = y;
         block = new Rectangle(x, y, WIDTH, HEIGHT);
-        isDeleted = false;
+       int rand =  Util.getRandInt(0,2);
+       if (rand == 0){
+           isDeleted = false;
+       }else{
+           isDeleted = true;
+       }
     }
 
     public boolean isDeleted() {
