@@ -25,7 +25,7 @@ public class Executor extends JFrame {
     private void setHeader(){
         for (int i = 0;i < spacingSize - 1; i++){
             JPanel spacing = new JPanel();
-            spacing.setBackground(Color.BLACK);
+            spacing.setBackground(Color.LIGHT_GRAY);
             headerPanel.add(spacing);
         }
         headerPanel.add(dcPanel);

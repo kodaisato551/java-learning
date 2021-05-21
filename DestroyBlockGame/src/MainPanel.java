@@ -58,7 +58,7 @@ public class MainPanel extends JPanel implements Runnable,
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(Color.BLACK);
+        g.setColor(Color.LIGHT_GRAY);
         g.fillRect(0, 0, WIDTH, HEIGHT);
         racket.draw(g);
         ball.draw(g);
